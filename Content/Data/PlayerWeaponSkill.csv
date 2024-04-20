@@ -1,0 +1,4 @@
+---,WeaponNum,L_SkillNum,R_SkillNum,ThrowSkillNum
+Punch,"0","2","3","0"
+DefaultSword,"1","5","7","15"
+DefaultAxe,"2","8","10","15"
