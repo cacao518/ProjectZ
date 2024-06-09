@@ -10,7 +10,7 @@ public class ProjectZ : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "Landscape", "Niagara", "Water", "UMG", "GameplayTasks", "AIModule", "NavigationSystem" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "Landscape", "Niagara", "Water", "UMG", "GameplayTasks", "AIModule", "NavigationSystem", "GameplayCameras" });
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

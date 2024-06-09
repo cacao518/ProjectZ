@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-//#include "MatineeCameraShake.h"
+#include "MatineeCameraShake.h"
 #include "CameraShakeEffect.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECTZ_API UCameraShakeEffect : public UObject //public UMatineeCameraShake
+class PROJECTZ_API UCameraShakeEffect : public UMatineeCameraShake
 {
 	GENERATED_BODY()
 
