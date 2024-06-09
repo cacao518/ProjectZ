@@ -43,8 +43,8 @@ void AMyPlayerController::BeginPlay()
 	InputComponent->BindAxis( "TurnRate", this, &AMyPlayerController::TurnAtRate );
 	InputComponent->BindAxis( "LookUpRate", this, &AMyPlayerController::LookUpAtRate );
 
-	InputComponent->BindAxis( "Turn", MyPlayer, &APawn::AddControllerYawInput );
-	InputComponent->BindAxis( "LookUp", MyPlayer, &APawn::AddControllerPitchInput );
+	//InputComponent->BindAxis( "Turn", MyPlayer, &APawn::AddControllerYawInput );
+	//InputComponent->BindAxis( "LookUp", MyPlayer, &APawn::AddControllerPitchInput );
 
 	InputComponent->BindAction( "Shift",      IE_Pressed, this, &AMyPlayerController::JumpStart );
 	InputComponent->BindAction( "Shift",      IE_Released, this, &AMyPlayerController::JumpStop );

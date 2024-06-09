@@ -389,7 +389,8 @@ void UCharacterComp::_ProcessHit( AActor* InOtherActor )
 	{
 		float addTimeToDamage = totalDamage / Stat.Hpm;
 		float subTimeToMyStrength = Stat.Strength * 0.01f;
-		MontagePlay( HitAnim, 1.0f - addTimeToDamage + subTimeToMyStrength );
+		float hitPlayRate = FMath::Clamp( 1.f - addTimeToDamage + subTimeToMyStrength, 0.3f, 1.f );
+		MontagePlay( HitAnim, hitPlayRate );
 		LookAt( Cast<ACharacter>( InOtherActor ) );
 
 		// ³Ë¹é
