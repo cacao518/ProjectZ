@@ -80,6 +80,7 @@ enum class EInputKeyType : uint8
 	BOTH_MOUSE            UMETA( DisplayName = "BothMouse" ),
 	SPACE                 UMETA( DisplayName = "Space" ),
 	SHIFT                 UMETA( DisplayName = "Shift" ),
+	ALT                   UMETA( DisplayName = "Alt" ),
 	Tab                   UMETA( DisplayName = "Tab" ),
 	F                     UMETA( DisplayName = "F" ),
 	R                     UMETA( DisplayName = "R" ),
@@ -360,7 +361,8 @@ namespace Const
 { 
     // Common
 	constexpr float ANIM_LERP_MULITPLIER      = 5.f;       // 애니메이션 중 이동 속도 보간 값
-	constexpr float DEFAULT_MOVE_SPEED        = 450.f;     // 기본 이동속도
+	constexpr float DEFAULT_MOVE_SPEED        = 600.f;     // 기본 이동속도
+	constexpr float DEFAULT_DASH_SPEED		  = 1500.f;    // 기본 대쉬 이동속도
 	constexpr float DEFAULT_JUMP_POWER        = 750.f;     // 기본 점프력
 	constexpr float DEFAULT_ROTATION_RATE     = 1000.f;    // 기본 캐릭터 방향 전환 비율
 	constexpr float FLY_ROTATION_RATE         = 100.f;     // 날기 캐릭터 방향 전환 비율

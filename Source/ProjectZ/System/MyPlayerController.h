@@ -52,6 +52,8 @@ public:
 	void LookUpAtRate( float Rate );
 	void JumpStart();
 	void JumpStop();
+	void DashStart();
+	void DashStop();
 
 	void ProcessLeftMouse();
 	void ProcessRightMouse();

@@ -33,8 +33,9 @@ private:
 	CooltimeMap        CoolingSkills;           // 쿨타임 돌고 있는 스킬 정보		
 	const FSkillInfo*  CurSkillInfo;            // 현재 스킬 정보     
 
-	bool               IsForceMove;             // 강제 이동 여부(스킬 이동, 넉백)
 	bool               IsEnableDerivedKey;      // 추가 키 입력 가능한지 여부
+	bool               IsForceMove;             // 강제 이동 여부(스킬 이동, 넉백)
+	bool               IsDash;                  // 대쉬 중 여부
 	bool               LandOnce;                // 착지 체크 변수
 
 	float              HoldTime;                // 역경직 시간 누적
@@ -88,6 +89,9 @@ public:
 
 	// 이동할 위치를 셋팅한다.
 	void SetMovePos( float InMovePower, bool InIsKnockBack = false );
+
+	// 대쉬 여부를 설정한다.
+	void SetIsDash( bool InDash ){ IsDash = InDash; };
 
 	///////////////////////////////////////////////////////////////////////
 	// Getter

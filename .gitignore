@@ -74,8 +74,4 @@ Plugins/*/Intermediate/*
 DerivedDataCache/*
 
 # Content
-Content/Collections/*
-Content/Developers/*
-Content/StarterContent/*
-Content/ExternalAssets/*
-Content/Shader/*
+Content/*

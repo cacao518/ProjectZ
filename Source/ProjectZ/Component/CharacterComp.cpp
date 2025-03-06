@@ -93,6 +93,7 @@ void UCharacterComp::ResetInfo( bool InForceReset )
 		MontagePlayTime = 0;
 	}
 }
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 몽타주를 플레이한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,8 +136,19 @@ bool UCharacterComp::SkillPlay( int InSkillNum )
 		return false;
 
 	// 파생스킬을 발동 시킬 것인지 확인
-	if ( skillInfo->DerivedSkillNum != 0 && IsEnableDerivedKey )
-		return SkillPlay( skillInfo->DerivedSkillNum );
+	if( CurSkillInfo )
+	{
+		if( skillInfo->DerivedSkillNum != 0 && IsEnableDerivedKey )
+		{
+			if( CurSkillInfo->Num == skillInfo->Num )
+			{
+				IsEnableDerivedKey = false;
+			}
+
+			return SkillPlay( skillInfo->DerivedSkillNum );
+		}
+
+	}
 
 	// Mp 확인
 	if( skillInfo->CostMP > Stat.Mp )
@@ -471,7 +483,7 @@ void UCharacterComp::_ProcessMove()
 
 	if( AnimState == EAnimState::IDLE_RUN || AnimState == EAnimState::JUMP )
 	{
-		characterMovement->MaxWalkSpeed = Stat.MoveSpeed * Const::DEFAULT_MOVE_SPEED;
+		characterMovement->MaxWalkSpeed = Stat.MoveSpeed * ( IsDash ? Const::DEFAULT_DASH_SPEED : Const::DEFAULT_MOVE_SPEED );
 	}
 	else
 	{

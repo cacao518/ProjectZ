@@ -46,8 +46,10 @@ void AMyPlayerController::BeginPlay()
 	//InputComponent->BindAxis( "Turn", MyPlayer, &APawn::AddControllerYawInput );
 	//InputComponent->BindAxis( "LookUp", MyPlayer, &APawn::AddControllerPitchInput );
 
-	InputComponent->BindAction( "Shift",      IE_Pressed, this, &AMyPlayerController::JumpStart );
-	InputComponent->BindAction( "Shift",      IE_Released, this, &AMyPlayerController::JumpStop );
+	InputComponent->BindAction( "Alt",      IE_Pressed, this, &AMyPlayerController::JumpStart );
+	InputComponent->BindAction( "Alt",      IE_Released, this, &AMyPlayerController::JumpStop );
+	InputComponent->BindAction( "Shift",    IE_Pressed, this, &AMyPlayerController::DashStart );
+	InputComponent->BindAction( "Shift",    IE_Released, this, &AMyPlayerController::DashStop );
 
 	InputComponent->BindAction( "Space",      IE_Pressed, this, &AMyPlayerController::ProcessSpace);
 	InputComponent->BindAction( "Tab",        IE_Pressed, this, &AMyPlayerController::ProcessTab );
@@ -173,6 +175,24 @@ void AMyPlayerController::JumpStop()
 {
 	if( MyPlayer )
 		MyPlayer->StopJumping();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief DashStart
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AMyPlayerController::DashStart()
+{
+	if( CharacterComp && CharacterComp->GetAnimState() == EAnimState::IDLE_RUN )
+		CharacterComp->SetIsDash( true );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief DashStop
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AMyPlayerController::DashStop()
+{
+	if( CharacterComp && CharacterComp->GetAnimState() == EAnimState::IDLE_RUN )
+		CharacterComp->SetIsDash( false );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
