@@ -43,8 +43,8 @@ void AMyPlayerController::BeginPlay()
 	InputComponent->BindAxis( "TurnRate", this, &AMyPlayerController::TurnAtRate );
 	InputComponent->BindAxis( "LookUpRate", this, &AMyPlayerController::LookUpAtRate );
 
-	//InputComponent->BindAxis( "Turn", MyPlayer, &APawn::AddControllerYawInput );
-	//InputComponent->BindAxis( "LookUp", MyPlayer, &APawn::AddControllerPitchInput );
+	InputComponent->BindAxis( "Turn", MyPlayer, &APawn::AddControllerYawInput );
+	InputComponent->BindAxis( "LookUp", MyPlayer, &APawn::AddControllerPitchInput );
 
 	InputComponent->BindAction( "Alt",      IE_Pressed, this, &AMyPlayerController::JumpStart );
 	InputComponent->BindAction( "Alt",      IE_Released, this, &AMyPlayerController::JumpStop );
@@ -191,7 +191,7 @@ void AMyPlayerController::DashStart()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AMyPlayerController::DashStop()
 {
-	if( CharacterComp && CharacterComp->GetAnimState() == EAnimState::IDLE_RUN )
+	if( CharacterComp )
 		CharacterComp->SetIsDash( false );
 }
 
