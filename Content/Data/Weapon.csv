@@ -1,4 +1,0 @@
----,Num,State,DurabilityMax,CoolTime,ComponentName,ThorwingBPPath
-DefaultSword,"1","SWORD","10","10.000000","Sword","/Game/Blueprints/Projectile/BP_PROJ_Sword"
-DefaultAxe,"2","AXE","7","10.000000","Axe","/Game/Blueprints/Projectile/BP_PROJ_Axe"
-DefaultSpear,"3","SPEAR","8","10.000000","Spear","/Game/Blueprints/Projectile/BP_PROJ_Axe"
