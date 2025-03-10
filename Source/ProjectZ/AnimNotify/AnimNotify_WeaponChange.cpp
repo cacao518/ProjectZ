@@ -17,5 +17,5 @@ void UAnimNotify_WeaponChange::Notify( USkeletalMeshComponent* MeshComp, UAnimSe
 	UWeaponComp* weaponComp = Cast<UWeaponComp>( MeshComp->GetOwner()->FindComponentByClass<UWeaponComp>() );
 	if( !weaponComp ) return;
 
-	weaponComp->EquipWeapon( WeaponState );
+	weaponComp->EquipWeapon( WeaponNum );
 }

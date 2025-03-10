@@ -59,14 +59,11 @@ enum class EMaterialState : uint8
 	MAX,
 };
 
-// 무기 상태
+// 무기 종류
 UENUM( BlueprintType )
-enum class EWeaponState : uint8
+enum class EWeaponType : uint8
 {
 	DEFAULT          UMETA( DisplayName = "Default" ),
-	SWORD            UMETA( DisplayName = "Sword" ),
-	AXE              UMETA( DisplayName = "Axe" ),
-	SPEAR            UMETA( DisplayName = "Spear" ),
 
 	MAX,
 };
@@ -247,13 +244,7 @@ public:
 	int Num;                    // 식별자
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	EWeaponState State;         // 무기 종류
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int   DurabilityMax;        // 무기 내구도 최대
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float CoolTime;            // 무기 생성 쿨타임
+	EWeaponType Type;         // 무기 종류
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FName ComponentName;        // 스테틱 메쉬 컴포넌트 이름

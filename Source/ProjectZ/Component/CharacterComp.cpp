@@ -200,7 +200,7 @@ void UCharacterComp::OnAttackSuccess()
 	if( !WeaponComp )
 		return;
 
-	WeaponComp->SubWeaponDurability();
+	//WeaponComp->SubWeaponDurability();
 
 	// 역경직 시간 추가
 	HoldTime += Const::HOLD_TIME_INCREASE_VALUE;

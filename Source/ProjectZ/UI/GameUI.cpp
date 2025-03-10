@@ -70,12 +70,12 @@ void UGameUI::_UpdateProgressBar()
 	if( ProgressBarMP )
 		ProgressBarMP->SetPercent( MyPlayerCharComp->Stat.Mp / MyPlayerCharComp->Stat.Mpm );
 
-	if( ProgressBarWeapon1 )
-		ProgressBarWeapon1->SetPercent( MyPlayerWeaponComp->GetWeaponCoolTimePercent( EWeaponState::SWORD ) );
+	//if( ProgressBarWeapon1 )
+	//	ProgressBarWeapon1->SetPercent( MyPlayerWeaponComp->GetWeaponCoolTimePercent( EWeaponState::SWORD ) );
 
-	if( ProgressBarWeapon2 )
-		ProgressBarWeapon2->SetPercent( MyPlayerWeaponComp->GetWeaponCoolTimePercent( EWeaponState::AXE ) );
+	//if( ProgressBarWeapon2 )
+	//	ProgressBarWeapon2->SetPercent( MyPlayerWeaponComp->GetWeaponCoolTimePercent( EWeaponState::AXE ) );
 
-	if( ProgressBarWeapon3 )
-		ProgressBarWeapon3->SetPercent( MyPlayerWeaponComp->GetWeaponCoolTimePercent( EWeaponState::SPEAR ) );
+	//if( ProgressBarWeapon3 )
+	//	ProgressBarWeapon3->SetPercent( MyPlayerWeaponComp->GetWeaponCoolTimePercent( EWeaponState::SPEAR ) );
 }

@@ -17,7 +17,7 @@ class PROJECTZ_API UAnimNotify_WeaponChange : public UAnimNotify
 	
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
-	EWeaponState WeaponState;
+	int32 WeaponNum;
 
 public:
 	virtual FString GetNotifyName_Implementation() const override;

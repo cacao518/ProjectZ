@@ -326,7 +326,7 @@ void AMyPlayerController::ProcessTab()
 	if ( !WeaponComp )
 		return;
 
-	if ( WeaponComp->GetWeaponState() == EWeaponState::DEFAULT )
+	if ( WeaponComp->GetWeaponType() == EWeaponType::DEFAULT )
 		return;
 
 	const auto& skillInfo = GetDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetCurWeaponNum() );
@@ -374,8 +374,8 @@ void AMyPlayerController::Process1()
 	if( !WeaponComp )
 		return;
 
-	if( !( WeaponComp->CanWeaponComp( EWeaponState::SWORD ) ) )
-		return;
+	//if( !( WeaponComp->CanWeaponComp( EWeaponState::SWORD ) ) )
+	//	return;
 
 	const auto& skillInfo = GetDataInfoManager().GetPlayerDefaultSkillInfos().Find( EInputKeyType::Num1 );
 	if ( !skillInfo )
@@ -392,8 +392,8 @@ void AMyPlayerController::Process2()
 	if( !WeaponComp )
 		return;
 
-	if( !( WeaponComp->CanWeaponComp( EWeaponState::AXE ) ) )
-		return;
+	//if( !( WeaponComp->CanWeaponComp( EWeaponState::AXE ) ) )
+	//	return;
 
 	const auto& skillInfo = GetDataInfoManager().GetPlayerDefaultSkillInfos().Find( EInputKeyType::Num2 );
 	if( !skillInfo )
@@ -410,8 +410,8 @@ void AMyPlayerController::Process3()
 	if( !WeaponComp )
 		return;
 
-	if( !( WeaponComp->CanWeaponComp( EWeaponState::SPEAR ) ) )
-		return;
+	//if( !( WeaponComp->CanWeaponComp( EWeaponState::SPEAR ) ) )
+	//	return;
 
 	const auto& skillInfo = GetDataInfoManager().GetPlayerDefaultSkillInfos().Find( EInputKeyType::Num3 );
 	if( !skillInfo )
