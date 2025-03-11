@@ -196,7 +196,7 @@ bool UCharacterComp::SkillPlay( int InSkillNum )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UCharacterComp::OnAttackSuccess()
 {
-	auto WeaponComp = OwningActor ? Cast<UWeaponComp>( OwningActor->FindComponentByClass<UWeaponComp>() ) : nullptr;
+	auto WeaponComp = OwningActor ? OwningActor->FindComponentByClass<UWeaponComp>() : nullptr;
 	if( !WeaponComp )
 		return;
 
@@ -369,12 +369,12 @@ void UCharacterComp::_ProcessDie()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UCharacterComp::_ProcessHit( AActor* InOtherActor )
 {
-	auto othetObjectComp = InOtherActor ? Cast<UObjectComp>( InOtherActor->FindComponentByClass<UObjectComp>() ) : nullptr;
+	auto othetObjectComp = InOtherActor ? InOtherActor->FindComponentByClass<UObjectComp>() : nullptr;
 	if( !othetObjectComp )
 		return;
 
-	auto othetMatComp = InOtherActor ? Cast<UMaterialComp>( InOtherActor->FindComponentByClass<UMaterialComp>() ) : nullptr;
-	auto myMatComp    = OwningActor  ? Cast<UMaterialComp>( OwningActor->FindComponentByClass<UMaterialComp>() ) : nullptr;
+	auto othetMatComp = InOtherActor ? InOtherActor->FindComponentByClass<UMaterialComp>() : nullptr;
+	auto myMatComp    = OwningActor  ? OwningActor->FindComponentByClass<UMaterialComp>() : nullptr;
 
 	if ( othetObjectComp->GetTeamType() == ETeamType::MAX || TeamType == ETeamType::MAX )
 		return;
@@ -453,18 +453,36 @@ void UCharacterComp::_AnimStateChange()
 	if( !animInstance )
 		return;
 
+	EAnimState nextState = AnimState;
+
 	if( auto curMontage = animInstance->GetCurrentActiveMontage() )
 	{
-		AnimState = EAnimState::COMMON_ACTION;
+		nextState = EAnimState::COMMON_ACTION;
 	}
 	else
 	{
 		if( auto moveComponent = OwningCharacter->GetMovementComponent(); moveComponent )
-			moveComponent->IsFalling() ? AnimState = EAnimState::JUMP : AnimState = EAnimState::IDLE_RUN;
+			moveComponent->IsFalling() ? nextState = EAnimState::JUMP : nextState = EAnimState::IDLE_RUN;
 	}
 
-	animInstance->AnimState = AnimState;
-	animInstance->AnimSubState = CurSkillInfo ? CurSkillInfo->AnimSubState : EAnimSubState::DEFAULT;
+	if( nextState != AnimState )
+	{
+		AnimState = nextState;
+		animInstance->AnimState = AnimState;
+		animInstance->AnimSubState = CurSkillInfo ? CurSkillInfo->AnimSubState : EAnimSubState::DEFAULT;
+
+		if( auto weaponComp = OwningActor->FindComponentByClass<UWeaponComp>() )
+		{
+			if( AnimState == EAnimState::COMMON_ACTION )
+			{
+				CurSkillInfo && CurSkillInfo->EquipSubWeapon ? weaponComp->EquipSubWeapon() : weaponComp->UnEquipSubWeapon();
+			}
+			else
+			{
+				weaponComp->UnEquipSubWeapon();
+			}
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

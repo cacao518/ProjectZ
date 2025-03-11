@@ -290,6 +290,9 @@ public:
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	bool LockOnLookAt;                                 // 락온 상태에서 스킬 시전 시 바라볼 것인지 여부 
+	
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	bool EquipSubWeapon;                               // 보조 무기 장착 여부
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FString AnimPath;                                  // 몽타주 경로
