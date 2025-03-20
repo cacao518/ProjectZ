@@ -2,12 +2,12 @@
 
 
 #include "GameUI.h"
-#include "../Component/ObjectComp.h"
-#include "../Component/WeaponComp.h"
-#include "../Component/CharacterComp.h"
-#include "../Actor/CharacterPC.h"
-#include "../System/MyAnimInstance.h"
-#include "../System/MyGameInstance.h"
+#include "Component/GgObjectComp.h"
+#include "Component/GgWeaponComp.h"
+#include "Component/GgCharacterComp.h"
+#include "Actor/GgCharacterPC.h"
+#include "System/GgAnimInstance.h"
+#include "System/GgGameInstance.h"
 #include "Components/ProgressBar.h"
 
 
@@ -38,7 +38,7 @@ void UGameUI::BeginDestroy()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief UI ª˝º∫ øœ∑·µ ¿ª æÀ∏∞¥Ÿ.
+//// @brief UI ÏÉùÏÑ± ÏôÑÎ£åÎê®ÏùÑ ÏïåÎ¶∞Îã§.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGameUI::OnCreated()
 {
@@ -48,16 +48,16 @@ void UGameUI::OnCreated()
 	ProgressBarWeapon2 = Cast<UProgressBar>( GetWidgetFromName( TEXT( "ProgressBarWeapon2" ) ) );
 	ProgressBarWeapon3 = Cast<UProgressBar>( GetWidgetFromName( TEXT( "ProgressBarWeapon3" ) ) );
 
-	ACharacterPC* myPlayer = GetMyGameInstance().GetMyPlayer();
+	AGgCharacterPC* myPlayer = GetGgGameInstance().GetMyPlayer();
 	if( !myPlayer )
 		return;
 
-	MyPlayerCharComp   = Cast<UCharacterComp>( myPlayer->FindComponentByClass<UCharacterComp>() );
-	MyPlayerWeaponComp = Cast<UWeaponComp>( myPlayer->FindComponentByClass<UWeaponComp>() );
+	MyPlayerCharComp   = myPlayer->FindComponentByClass<UGgCharacterComp>();
+	MyPlayerWeaponComp = myPlayer->FindComponentByClass<UGgWeaponComp>();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief «¡∑Œ±◊∑πΩ∫πŸ∏¶ æ˜µ•¿Ã∆Æ«—¥Ÿ.
+//// @brief ÌîÑÎ°úÍ∑∏Î†àÏä§Î∞îÎ•º ÏóÖÎç∞Ïù¥Ìä∏ÌïúÎã§.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGameUI::_UpdateProgressBar()
 {
@@ -71,11 +71,11 @@ void UGameUI::_UpdateProgressBar()
 		ProgressBarMP->SetPercent( MyPlayerCharComp->Stat.Mp / MyPlayerCharComp->Stat.Mpm );
 
 	//if( ProgressBarWeapon1 )
-	//	ProgressBarWeapon1->SetPercent( MyPlayerWeaponComp->GetWeaponCoolTimePercent( EWeaponState::SWORD ) );
+	//	ProgressBarWeapon1->SetPercent( MyPlayerGgWeaponComp->GetWeaponCoolTimePercent( EWeaponState::SWORD ) );
 
 	//if( ProgressBarWeapon2 )
-	//	ProgressBarWeapon2->SetPercent( MyPlayerWeaponComp->GetWeaponCoolTimePercent( EWeaponState::AXE ) );
+	//	ProgressBarWeapon2->SetPercent( MyPlayerGgWeaponComp->GetWeaponCoolTimePercent( EWeaponState::AXE ) );
 
 	//if( ProgressBarWeapon3 )
-	//	ProgressBarWeapon3->SetPercent( MyPlayerWeaponComp->GetWeaponCoolTimePercent( EWeaponState::SPEAR ) );
+	//	ProgressBarWeapon3->SetPercent( MyPlayerGgWeaponComp->GetWeaponCoolTimePercent( EWeaponState::SPEAR ) );
 }

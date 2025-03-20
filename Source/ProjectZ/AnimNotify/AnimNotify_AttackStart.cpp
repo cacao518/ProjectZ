@@ -2,7 +2,7 @@
 
 
 #include "AnimNotify_AttackStart.h"
-#include "../Component/ObjectComp.h"
+#include "Component/GgObjectComp.h"
 
 FString UAnimNotify_AttackStart::GetNotifyName_Implementation() const
 {
@@ -14,9 +14,9 @@ void UAnimNotify_AttackStart::Notify( USkeletalMeshComponent* MeshComp, UAnimSeq
 	if( !MeshComp || !( MeshComp->GetOwner() ) )
 		return;
 
-	UObjectComp* obj = Cast<UObjectComp>( MeshComp->GetOwner()->FindComponentByClass<UObjectComp>() );
+	UGgObjectComp* obj = MeshComp->GetOwner()->FindComponentByClass<UGgObjectComp>();
 	if( !obj ) return;
 
-	obj->SetAttackCollInfo( FCollisionInfo( Size, Pos, Power, KnockBackPower ) );
+	obj->SetAttackCollData( FCollisionData( Size, Pos, Power, KnockBackPower ) );
 	obj->SetIsEnabledAttackColl( true );
 }

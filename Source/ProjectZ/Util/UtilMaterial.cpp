@@ -4,13 +4,13 @@
 #include "WaterBodyComponent.h"
 #include "Landscape.h"
 #include "GameFramework/Character.h"
-#include "../System/MyGameInstance.h"
-#include "../Manager/DataInfoManager.h"
+#include "System/GgGameInstance.h"
+#include "Manager/GgDataInfoManager.h"
 
 namespace UtilMaterial
 {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	//// @briefActor ¹ß ¹Ø¿¡ ÀÖ´Â MaterialInterfaceÀ» ¾Ë¾Æ³½´Ù.
+	//// @briefActor ë°œ ë°‘ì— ìˆëŠ” MaterialInterfaceì„ ì•Œì•„ë‚¸ë‹¤.
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	UMaterialInterface* GetSteppedMatrialInterface( AActor* InActor )
 	{
@@ -28,10 +28,10 @@ namespace UtilMaterial
 			10.f
 		);*/
 
-		// Äõ¸® º¯¼ö ¼³Á¤
-		FCollisionQueryParams TraceParameters( FName( TEXT( "" ) ), false, InActor ); //Tag, Bool Trace Complex, Ignore ¾×ÅÍ (ÀÚ½Å Á¦¿Ü)
+		// ì¿¼ë¦¬ ë³€ìˆ˜ ì„¤ì •
+		FCollisionQueryParams TraceParameters( FName( TEXT( "" ) ), false, InActor ); //Tag, Bool Trace Complex, Ignore ì•¡í„° (ìì‹  ì œì™¸)
 		FHitResult hitResult;
-		GetMyGameInstance().GetWorld()->LineTraceSingleByObjectType(
+		GetGgGameInstance().GetWorld()->LineTraceSingleByObjectType(
 			OUT hitResult,
 			LineTraceStart,
 			LineTraceEnd,
@@ -53,13 +53,13 @@ namespace UtilMaterial
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	//// @brief Actor°¡ °¡Áö°í ÀÖ´Â MaterialInterface¸¦ ¾Ë¾Æ³½´Ù.
+	//// @brief Actorê°€ ê°€ì§€ê³  ìˆëŠ” MaterialInterfaceë¥¼ ì•Œì•„ë‚¸ë‹¤.
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	UMaterialInterface* GetMatrialInterface( AActor* InActor )
 	{
 		UMaterialInterface* matInterface = nullptr;
 
-		// ¸ó½ºÅÍ³ª ÇÃ·¹ÀÌ¾î
+		// ëª¬ìŠ¤í„°ë‚˜ í”Œë ˆì´ì–´
 		if ( Cast<ACharacter>( InActor ) )
 		{
 			/*auto meshOnTile = Cast<ACharacter>( OtherActor )->GetMesh();
@@ -70,16 +70,16 @@ namespace UtilMaterial
 		}
 		else
 		{
-			// ½ºÅ×Æ½ ¸Å½¬
+			// ìŠ¤í…Œí‹± ë§¤ì‰¬
 			auto staticMesh = Cast<UStaticMeshComponent>( InActor->GetComponentByClass( UStaticMeshComponent::StaticClass() ) );
 			if ( staticMesh )
 				matInterface = staticMesh->GetMaterial( 0 );
 
-			// ¿öÅÍ ¹Ùµğ
+			// ì›Œí„° ë°”ë””
 			auto waterBody = Cast<UWaterBodyComponent>( InActor->GetComponentByClass( UWaterBodyComponent::StaticClass() ) );
 			if ( waterBody )
 			{
-				const auto& waterMatInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::WATER );
+				const auto& waterMatInfo = GetGgDataInfoManager().GetMaterialInfos().Find( EMaterialState::WATER );
 				if ( waterMatInfo )
 				{
 					FString path = waterMatInfo->MaterialAssetPaths[ 0 ];
@@ -87,7 +87,7 @@ namespace UtilMaterial
 				}
 			}
 
-			// ·£µå ½ºÄÉÀÌÇÁ
+			// ëœë“œ ìŠ¤ì¼€ì´í”„
 			auto landScape = Cast<ULandscapeComponent>( InActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
 			if( landScape )
 			{
@@ -110,14 +110,14 @@ namespace UtilMaterial
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	//// @brief MaterialInterface¸¦ EMaterialState·Î ¹Ù²ãÁØ´Ù.
+	//// @brief MaterialInterfaceë¥¼ EMaterialStateë¡œ ë°”ê¿”ì¤€ë‹¤.
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	EMaterialState ConvertMatAssetToMatState( UMaterialInterface* InMaterial )
 	{
 		if ( !InMaterial )
 			return EMaterialState::DEFAULT;
 
-		for ( const auto& [state, matInfo] : GetDataInfoManager().GetMaterialInfos() )
+		for ( const auto& [state, matInfo] : GetGgDataInfoManager().GetMaterialInfos() )
 		{
 			if ( matInfo.MaterialAssetPaths.Find( InMaterial->GetPathName() ) != INDEX_NONE )
 				return state;

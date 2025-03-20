@@ -9,8 +9,8 @@
 
 
 class UProgressBar;
-class UCharacterComp;
-class UWeaponComp;
+class UGgCharacterComp;
+class UGgWeaponComp;
 
 
 UCLASS()
@@ -19,15 +19,15 @@ class PROJECTZ_API UGameUI : public UUIBase
 	GENERATED_BODY()
 	
 private:
-	UProgressBar* ProgressBarHP;         // HP ÇÁ·Î±×·¹½º¹Ù
-	UProgressBar* ProgressBarMP;         // MP ÇÁ·Î±×·¹½º¹Ù
+	UProgressBar* ProgressBarHP;         // HP í”„ë¡œê·¸ë ˆìŠ¤ë°”
+	UProgressBar* ProgressBarMP;         // MP í”„ë¡œê·¸ë ˆìŠ¤ë°”
 
-	UProgressBar* ProgressBarWeapon1;    // ¹«±â1 ÄğÅ¸ÀÓ ÇÁ·Î±×·¹½º¹Ù
-	UProgressBar* ProgressBarWeapon2;    // ¹«±â2 ÄğÅ¸ÀÓ ÇÁ·Î±×·¹½º¹Ù
-	UProgressBar* ProgressBarWeapon3;    // ¹«±â3 ÄğÅ¸ÀÓ ÇÁ·Î±×·¹½º¹Ù
+	UProgressBar* ProgressBarWeapon1;    // ë¬´ê¸°1 ì¿¨íƒ€ì„ í”„ë¡œê·¸ë ˆìŠ¤ë°”
+	UProgressBar* ProgressBarWeapon2;    // ë¬´ê¸°2 ì¿¨íƒ€ì„ í”„ë¡œê·¸ë ˆìŠ¤ë°”
+	UProgressBar* ProgressBarWeapon3;    // ë¬´ê¸°3 ì¿¨íƒ€ì„ í”„ë¡œê·¸ë ˆìŠ¤ë°”
 
-	UCharacterComp* MyPlayerCharComp;    // ³»Ä³¸¯ÅÍ CharacterComp
-	UWeaponComp* MyPlayerWeaponComp;     // ³»Ä³¸¯ÅÍ CharacterComp
+	UGgCharacterComp* MyPlayerCharComp;    // ë‚´ìºë¦­í„° CharacterComp
+	UGgWeaponComp* MyPlayerWeaponComp;     // ë‚´ìºë¦­í„° CharacterComp
 
 public:
 	// NativeConstruct
@@ -40,10 +40,10 @@ public:
 	virtual void BeginDestroy() override;
 
 protected:
-	// UI »ı¼º ¿Ï·áµÊÀ» ¾Ë¸°´Ù.
+	// UI ìƒì„± ì™„ë£Œë¨ì„ ì•Œë¦°ë‹¤.
 	virtual void OnCreated() override;
 
 private:
-	// ÇÁ·Î±×·¹½º¹Ù¸¦ ¾÷µ¥ÀÌÆ®ÇÑ´Ù.
+	// í”„ë¡œê·¸ë ˆìŠ¤ë°”ë¥¼ ì—…ë°ì´íŠ¸í•œë‹¤.
 	void _UpdateProgressBar();
 };

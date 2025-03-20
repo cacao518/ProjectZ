@@ -2,15 +2,15 @@
 
 
 #include "BTS_Detect.h"
+#include "Engine/OverlapResult.h"
 #include "GameFramework/Character.h"
-#include "../System/MonsterAIController.h"
-#include "../Actor/CharacterNPC.h"
-#include "../Component/CharacterComp.h"
-#include "../Component/MaterialComp.h"
-#include "../Util/UtilMaterial.h"
+#include "System/GgAIController.h"
+#include "Actor/GgCharacterNPC.h"
+#include "Component/GgCharacterComp.h"
+#include "Component/GgMaterialComp.h"
+#include "Util/UtilMaterial.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
-#include <map>
 #include <algorithm>
 
 UBTS_Detect::UBTS_Detect()
@@ -23,11 +23,11 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 {
 	Super::TickNode( OwnerComp, NodeMemory, DeltaSeconds );
 
-	ACharacterNPC* controllingChar = Cast< ACharacterNPC >( OwnerComp.GetAIOwner()->GetPawn() );
+	AGgCharacterNPC* controllingChar = Cast< AGgCharacterNPC >( OwnerComp.GetAIOwner()->GetPawn() );
 	if( !controllingChar )
 		return;
 
-	auto characterComp = Cast<UCharacterComp>( controllingChar->FindComponentByClass<UCharacterComp>() );
+	auto characterComp = Cast<UGgCharacterComp>( controllingChar->FindComponentByClass<UGgCharacterComp>() );
 	if( !characterComp )
 		return;
 
@@ -39,7 +39,7 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 
 	FVector center = controllingChar->GetActorLocation();
 
-	// 600ÀÇ ¹İÁö¸§À» °¡Áø ±¸Ã¼¸¦ ¸¸µé¾î¼­ ¿ÀºêÁ§Æ®¸¦ °¨ÁöÇÑ´Ù.
+	// 600ì˜ ë°˜ì§€ë¦„ì„ ê°€ì§„ êµ¬ì²´ë¥¼ ë§Œë“¤ì–´ì„œ ì˜¤ë¸Œì íŠ¸ë¥¼ ê°ì§€í•œë‹¤.
 	TArray<FOverlapResult> overlapResults;
 	FCollisionQueryParams collisionQueryParam( NAME_None, false, controllingChar );
 	bool bResult = world->OverlapMultiByChannel(
@@ -53,11 +53,11 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 
 	if( !bResult )
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, nullptr );
+		OwnerComp.GetBlackboardComponent()->SetValueAsObject( AGgAIController::TargetKey, nullptr );
 		return;
 	}
 
-	// Á¦ÀÏ °¡±î¿î ÀûÀÌ ¼±ÅÃ µÇµµ·Ï Á¤·Ä
+	// ì œì¼ ê°€ê¹Œìš´ ì ì´ ì„ íƒ ë˜ë„ë¡ ì •ë ¬
 	overlapResults.Sort( [controllingChar]( const auto& A, const auto& B ){
 		return A.GetActor()->GetDistanceTo( controllingChar ) < B.GetActor()->GetDistanceTo( controllingChar );
 		} );
@@ -68,35 +68,35 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		if( !detectedChar )
 			continue;
 
-		auto detectedCharComp = Cast<UCharacterComp>( detectedChar->FindComponentByClass<UCharacterComp>() );
+		auto detectedCharComp = detectedChar->FindComponentByClass<UGgCharacterComp>();
 		if( !detectedCharComp )
 			continue;
 
 		if( detectedCharComp->GetTeamType() == characterComp->GetTeamType() )
 			continue;
 
-		// ¹° »óÅÂ°¡ ¾Æ´Ò °æ¿ì Å½»öÇÑ Àû ¹ß¹Ø¿¡ ±íÀº¹°ÀÌ ÀÖÀ¸¸é °¡Áö ¾Ê´Â´Ù.
+		// ë¬¼ ìƒíƒœê°€ ì•„ë‹ ê²½ìš° íƒìƒ‰í•œ ì  ë°œë°‘ì— ê¹Šì€ë¬¼ì´ ìˆìœ¼ë©´ ê°€ì§€ ì•ŠëŠ”ë‹¤.
 		bool bWater = false;
 
-		auto matComp = Cast<UMaterialComp>( controllingChar->FindComponentByClass<UMaterialComp>() );
+		auto matComp = controllingChar->FindComponentByClass<UGgMaterialComp>();
 		bWater = matComp && ( matComp->GetMatState() == EMaterialState::WATER || matComp->GetMatState() == EMaterialState::DEEPWATER );
 		if ( !bWater )
 		{
 			EMaterialState matState = UtilMaterial::ConvertMatAssetToMatState( UtilMaterial::GetSteppedMatrialInterface( detectedChar ) );
 			if ( matState == EMaterialState::DEEPWATER )
 			{
-				OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, nullptr );
+				OwnerComp.GetBlackboardComponent()->SetValueAsObject( AGgAIController::TargetKey, nullptr );
 				return;
 			}
 		}
 
-		OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, detectedChar );
+		OwnerComp.GetBlackboardComponent()->SetValueAsObject( AGgAIController::TargetKey, detectedChar );
 		return;
 	}
 
-	OwnerComp.GetBlackboardComponent()->SetValueAsObject( AMonsterAIController::TargetKey, nullptr );
+	OwnerComp.GetBlackboardComponent()->SetValueAsObject( AGgAIController::TargetKey, nullptr );
 
-	// µğ¹ö±ë ¿ë.
+	// ë””ë²„ê¹… ìš©.
 	//DrawDebugSphere( world, center, DetectRadius, 16, FColor::Green, false, 0.2f );
 	//DrawDebugPoint( world, detectedChar->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f );
 	//DrawDebugLine( world, controllingPawn->GetActorLocation(), detectedChar->GetActorLocation(), FColor::Blue, false, 0.2f );

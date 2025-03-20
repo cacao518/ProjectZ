@@ -2,8 +2,8 @@
 
 #include "AnimNotify_SpawnActor.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "../Manager/ObjectManager.h"
-#include "../Component/ObjectComp.h"
+#include "Manager/GgObjectManager.h"
+#include "Component/GgObjectComp.h"
 
 FString UAnimNotify_SpawnActor::GetNotifyName_Implementation() const
 {
@@ -15,7 +15,7 @@ void UAnimNotify_SpawnActor::SetProperty( AActor* InOwner )
 	if ( !InOwner )
 		return;
 
-	UObjectComp* objComp = Cast<UObjectComp>( InOwner->FindComponentByClass<UObjectComp>() );
+	UGgObjectComp* objComp = InOwner->FindComponentByClass<UGgObjectComp>();
 	if ( !objComp )
 		return;
 
@@ -36,21 +36,21 @@ void UAnimNotify_SpawnActor::Notify( USkeletalMeshComponent* MeshComp, UAnimSequ
 	if( !MeshComp || !( MeshComp->GetOwner() ) )
 		return;
 
-	if ( !ObjectManager::IsVaild() )
+	if ( !FGgObjectManager::IsVaild() )
 		return;
 
 	AActor* owner = Cast<AActor>( MeshComp->GetOwner() );
 	if ( !owner )
 		return;
 
-	UObjectComp* objComp = Cast<UObjectComp>( owner->FindComponentByClass<UObjectComp>() );
+	UGgObjectComp* objComp = owner->FindComponentByClass<UGgObjectComp>();
 	if ( !objComp )
 		return;
 
 	SetProperty( owner );
 
 	if( SetAsParentTeamType )
-		GetObjectManager().SpawnActor( ResultActor, ResultPos, ResultRotate, objComp->GetTeamType() );
+		GetGgObjectManager().SpawnActor( ResultActor, ResultPos, ResultRotate, objComp->GetTeamType() );
 	else
-		GetObjectManager().SpawnActor( ResultActor, ResultPos, ResultRotate );
+		GetGgObjectManager().SpawnActor( ResultActor, ResultPos, ResultRotate );
 }

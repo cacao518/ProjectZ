@@ -2,7 +2,7 @@
 
 
 #include "AnimNotify_MoveEnd.h"
-#include "../Component/CharacterComp.h"
+#include "Component/GgCharacterComp.h"
 
 FString UAnimNotify_MoveEnd::GetNotifyName_Implementation() const
 {
@@ -14,7 +14,7 @@ void UAnimNotify_MoveEnd::Notify( USkeletalMeshComponent* MeshComp, UAnimSequenc
 	if( !MeshComp || !( MeshComp->GetOwner() ) )
 		return;
 
-	UCharacterComp* obj = Cast<UCharacterComp>( MeshComp->GetOwner()->FindComponentByClass<UCharacterComp>());
+	UGgCharacterComp* obj = MeshComp->GetOwner()->FindComponentByClass<UGgCharacterComp>();
 	if( !obj ) return;
 
 	obj->SetIsForceMove( false );

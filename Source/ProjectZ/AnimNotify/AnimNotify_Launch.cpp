@@ -2,8 +2,8 @@
 
 
 #include "AnimNotify_Launch.h"
-#include "../ETC/SDB.h"
-#include "../Component/CharacterComp.h"
+#include "ETC/SDB.h"
+#include "Component/GgCharacterComp.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -21,10 +21,10 @@ void UAnimNotify_Launch::Notify( USkeletalMeshComponent* MeshComp, UAnimSequence
 	if( !owner )
 		return;
 
-	UCharacterComp* obj = Cast<UCharacterComp>( MeshComp->GetOwner()->FindComponentByClass<UCharacterComp>() );
+	UGgCharacterComp* obj = MeshComp->GetOwner()->FindComponentByClass<UGgCharacterComp>();
 	if ( !obj )
 		return;
 	
-	const FVector vec = ( Const::MAX_MASS - obj->GetStat().Weight ) * Vec;
+	const FVector vec = ( CONST::MAX_MASS - obj->GetStat().Weight ) * Vec;
 	owner->LaunchCharacter( vec, true, true );
 }

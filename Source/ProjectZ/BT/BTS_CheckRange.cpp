@@ -3,10 +3,10 @@
 
 #include "BTS_CheckRange.h"
 #include "GameFramework/Character.h"
-#include "../Actor/CharacterNPC.h"
-#include "../System/MonsterAIController.h"
-#include "../Manager/DataInfoManager.h"
-#include "../Component/CharacterComp.h"
+#include "Actor/GgCharacterNPC.h"
+#include "System/GgAIController.h"
+#include "Manager/GgDataInfoManager.h"
+#include "Component/GgCharacterComp.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
 
@@ -20,21 +20,21 @@ void UBTS_CheckRange::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 {
 	Super::TickNode( OwnerComp, NodeMemory, DeltaSeconds );
 
-	ACharacterNPC* controllingNPC = Cast< ACharacterNPC> ( OwnerComp.GetAIOwner()->GetPawn() );
+	AGgCharacterNPC* controllingNPC = Cast< AGgCharacterNPC> ( OwnerComp.GetAIOwner()->GetPawn() );
 	if( !controllingNPC )
 		return;
 
-	ACharacter* target = Cast<ACharacter>( OwnerComp.GetBlackboardComponent()->GetValueAsObject( AMonsterAIController::TargetKey ) );
+	ACharacter* target = Cast<ACharacter>( OwnerComp.GetBlackboardComponent()->GetValueAsObject( AGgAIController::TargetKey ) );
 	if( !target )
 		return;
 
-	auto characterComp = controllingNPC ? Cast<UCharacterComp>( controllingNPC->FindComponentByClass<UCharacterComp>() ) : nullptr;
+	auto characterComp = controllingNPC ? controllingNPC->FindComponentByClass<UGgCharacterComp>() : nullptr;
 	if( !characterComp )
 		return;
 
 	for( const auto& skillNum : controllingNPC->SkillInfos )
 	{
-		const auto& skillInfo = GetDataInfoManager().GetSkillInfos().Find( skillNum );
+		const auto& skillInfo = GetGgDataInfoManager().GetSkillInfos().Find( skillNum );
 		if ( !skillInfo )
 			continue;
 
@@ -44,11 +44,11 @@ void UBTS_CheckRange::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 		if( target->GetDistanceTo( controllingNPC ) <= skillInfo->ActivateRangeMax &&
 			target->GetDistanceTo( controllingNPC ) >= skillInfo->ActivateRangeMin )
 		{
-			OwnerComp.GetBlackboardComponent()->SetValueAsInt( AMonsterAIController::CurSkillNumKey, skillNum );
+			OwnerComp.GetBlackboardComponent()->SetValueAsInt( AGgAIController::CurSkillNumKey, skillNum );
 			return;
 		}
 	}
 
-	OwnerComp.GetBlackboardComponent()->SetValueAsInt( AMonsterAIController::CurSkillNumKey, 0 );
+	OwnerComp.GetBlackboardComponent()->SetValueAsInt( AGgAIController::CurSkillNumKey, 0 );
 	return;
 }

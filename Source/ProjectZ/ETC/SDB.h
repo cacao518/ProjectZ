@@ -9,7 +9,7 @@
 using namespace std;
 
 
-// ¿ÀºêÁ§Æ® Á¾·ù
+// ì˜¤ë¸Œì íŠ¸ ì¢…ë¥˜
 UENUM( BlueprintType )
 enum class EObjectType : uint8
 {
@@ -20,7 +20,7 @@ enum class EObjectType : uint8
 	MAX,
 };
 
-// ¾Ö´Ï¸ŞÀÌ¼Ç »óÅÂ
+// ì• ë‹ˆë©”ì´ì…˜ ìƒíƒœ
 UENUM( BlueprintType )
 enum class EAnimState : uint8
 {
@@ -32,7 +32,7 @@ enum class EAnimState : uint8
 	MAX,             
 };
 
-// ¾Ö´Ï¸ŞÀÌ¼Ç º¸Á¶ »óÅÂ
+// ì• ë‹ˆë©”ì´ì…˜ ë³´ì¡° ìƒíƒœ
 UENUM( BlueprintType )
 enum class EAnimSubState : uint8
 {
@@ -43,7 +43,7 @@ enum class EAnimSubState : uint8
 	MAX,
 };
 
-// ¹°Áú »óÅÂ
+// ë¬¼ì§ˆ ìƒíƒœ
 UENUM( BlueprintType )
 enum class EMaterialState : uint8
 {
@@ -59,7 +59,7 @@ enum class EMaterialState : uint8
 	MAX,
 };
 
-// ¹«±â Á¾·ù
+// ë¬´ê¸° ì¢…ë¥˜
 UENUM( BlueprintType )
 enum class EWeaponType : uint8
 {
@@ -68,7 +68,7 @@ enum class EWeaponType : uint8
 	MAX,
 };
 
-// ÀÔ·Â Å° Á¾·ù
+// ì…ë ¥ í‚¤ ì¢…ë¥˜
 UENUM( BlueprintType )
 enum class EInputKeyType : uint8
 {
@@ -88,7 +88,7 @@ enum class EInputKeyType : uint8
 	MAX,
 };
 
-// ½ºÅ³ ÇÃ·¹ÀÌ Àç»ı¼Óµµ Á¾·ù
+// ìŠ¤í‚¬ í”Œë ˆì´ ì¬ìƒì†ë„ ì¢…ë¥˜
 UENUM( BlueprintType )
 enum class ESkillPlaySpeedType : uint8
 {
@@ -99,7 +99,7 @@ enum class ESkillPlaySpeedType : uint8
 	MAX,
 };
 
-// ÆÀ Á¾·ù
+// íŒ€ ì¢…ë¥˜
 UENUM( BlueprintType )
 enum class ETeamType : uint8
 {
@@ -112,9 +112,9 @@ enum class ETeamType : uint8
 	MAX,
 };
 
-// Ãæµ¹Ã¼ Á¤º¸
+// ì¶©ëŒì²´ ì •ë³´
 USTRUCT( Atomic, BlueprintType )
-struct FCollisionInfo
+struct FCollisionData
 {
 	GENERATED_BODY()
 
@@ -131,14 +131,14 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float KnockBackPower;
 
-	FCollisionInfo()
+	FCollisionData()
 	{
-		Size = FVector(0,0,0);
-		Pos = FVector(0,0,0);
+		Size = FVector( 0, 0, 0 );
+		Pos = FVector( 0, 0, 0 );
 		Power = 0;
 	};
 
-	FCollisionInfo( FVector InSize, FVector InPos, float InPower, float InKnockBackPower )
+	FCollisionData( FVector InSize, FVector InPos, float InPower, float InKnockBackPower )
 	{
 		Size = InSize;
 		Pos = InPos;
@@ -147,58 +147,71 @@ public:
 	};
 };
 
-// ½ºÅİ Á¤º¸
+// ìŠ¤í…Ÿ ì •ë³´
 USTRUCT( Atomic, BlueprintType )
-struct FStatusInfo
+struct FStatusData
 {
 	GENERATED_BODY()
 
 public:
+	// ë ˆë²¨
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int Level; 	// ·¹º§
+	int Level; 	
 
+	// ì²´ë ¥
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Hp; 	// Ã¼·Â
+	float Hp; 
 
+	// ì²´ë ¥
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Hpm; 	// Ã¼·Â
+	float Hpm;
 
+	// ìŠ¤íƒœë¯¸ë„ˆ
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Mp; 	// ½ºÅÂ¹Ì³Ê
+	float Mp; 	
 
+	// ìŠ¤íƒœë¯¸ë„ˆ
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Mpm; 	// ½ºÅÂ¹Ì³Ê
+	float Mpm; 	
 
+	// ì´ë™ì†ë„ ( 0 ~ 2 )
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float MoveSpeed;	// ÀÌµ¿¼Óµµ ( 0 ~ 2 )
+	float MoveSpeed;
 
+	// ê³µê²©ì†ë„ ( 0 ~ 2 )
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float AttackSpeed;	// °ø°İ¼Óµµ ( 0 ~ 2 )
+	float AttackSpeed;
 
+	// ê³µê²©ë ¥
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float AttackPower;	// °ø°İ·Â
+	float AttackPower;
 
+	// ë°©ì–´ë ¥
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float DefensePower;	// ¹æ¾î·Â
+	float DefensePower;
 
+	// ì í”„ë ¥ ( 0 ~ 2 )
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float JumpPower;	// Á¡ÇÁ·Â ( 0 ~ 2 )
+	float JumpPower;
 
+	// ê°•ì¸í•¨ ( 0 ~ 100 ) ( ê²½ì§ì‹œê°„, ë„‰ë°±ê±°ë¦¬ ê´€ë ¨ ) 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Strength;     // °­ÀÎÇÔ ( 0 ~ 100 ) ( °æÁ÷½Ã°£, ³Ë¹é°Å¸® °ü·Ã ) 
+	float Strength;
 
+	// ë¬´ê²Œ ( 0 ~ 2 )
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Weight;   	// ¹«°Ô ( 0 ~ 2 )
+	float Weight;
 
+	// í­êµ° ì—¬ë¶€ (íŒ€ ìƒê´€ ì—†ì´ íƒ€ê²©)
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	bool IsTyrant;      // Æø±º ¿©ºÎ (ÆÀ »ó°ü ¾øÀÌ Å¸°İ)
+	bool IsTyrant;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// DataInfo
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// ¹°Áú Á¤º¸
+// ë¬¼ì§ˆ ì •ë³´
 USTRUCT( Atomic, BlueprintType )
 struct FMaterialInfo : public FTableRowBase
 {
@@ -206,34 +219,34 @@ struct FMaterialInfo : public FTableRowBase
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	EMaterialState State;                            // ¹°Áú »óÅÂ
+	EMaterialState State;                            // ë¬¼ì§ˆ ìƒíƒœ
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Mass;                                      // Áú·® ( 0 ~ 2 ) (°ø°İ¼Óµµ,ÀÌµ¿¼Óµµ,Á¡ÇÁ·Â ºñÀ²)
+	float Mass;                                      // ì§ˆëŸ‰ ( 0 ~ 2 ) (ê³µê²©ì†ë„,ì´ë™ì†ë„,ì í”„ë ¥ ë¹„ìœ¨)
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float Intensity;                                 // °­µµ ( 0 ~ 2 ) (°ø°İ·Â,¹æ¾î·Â,°­ÀÎÇÔ ºñÀ² )
+	float Intensity;                                 // ê°•ë„ ( 0 ~ 2 ) (ê³µê²©ë ¥,ë°©ì–´ë ¥,ê°•ì¸í•¨ ë¹„ìœ¨ )
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float MatEnergyMax;                              // ÃÖ´ë ¹°Áú ¿¡³ÊÁö
+	float MatEnergyMax;                              // ìµœëŒ€ ë¬¼ì§ˆ ì—ë„ˆì§€
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FName CollisonName;                              // ¹°Áú º¯°æ ½Ã Äİ¸®ÀüÀÌ¸§
+	FName CollisonName;                              // ë¬¼ì§ˆ ë³€ê²½ ì‹œ ì½œë¦¬ì „ì´ë¦„
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	TArray < FString > MaterialAssetPaths;         // ¸ÓÅÍ¸®¾ó ¾Ö¼Â°æ·Î ( ÇØ´ç ÇÏ´Â ¸ÓÅÍ¸®¾óÀº State°¡ µÉ ¼ö ÀÖ´Ù )
+	TArray < FString > MaterialAssetPaths;         // ë¨¸í„°ë¦¬ì–¼ ì• ì…‹ê²½ë¡œ ( í•´ë‹¹ í•˜ëŠ” ë¨¸í„°ë¦¬ì–¼ì€ Stateê°€ ë  ìˆ˜ ìˆë‹¤ )
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FString FootStepParticleName;                // ÀçÁú ¹âÀ» ¶§ ½ºÆùÇÒ ÆÄÆ¼Å¬ ÀÌ¸§
+	FString FootStepParticleName;                // ì¬ì§ˆ ë°Ÿì„ ë•Œ ìŠ¤í°í•  íŒŒí‹°í´ ì´ë¦„
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FString ChangeParticleName;                  // ÇØ´ç ÀçÁú·Î º¯°æµÇ¾úÀ» ¶§ ½ºÆùÇÒ ÆÄÆ¼Å¬ ÀÌ¸§
+	FString ChangeParticleName;                  // í•´ë‹¹ ì¬ì§ˆë¡œ ë³€ê²½ë˜ì—ˆì„ ë•Œ ìŠ¤í°í•  íŒŒí‹°í´ ì´ë¦„
 
-	/// ¸Ê Å°¸¦ ¹İÈ¯ÇÑ´Ù.
+	/// ë§µ í‚¤ë¥¼ ë°˜í™˜í•œë‹¤.
 	EMaterialState GetKey(){ return State; };
 };
 
-// ¹«±â Á¤º¸
+// ë¬´ê¸° ì •ë³´
 USTRUCT( Atomic, BlueprintType )
 struct FWeaponInfo : public FTableRowBase
 {
@@ -241,23 +254,23 @@ struct FWeaponInfo : public FTableRowBase
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int Num;                    // ½Äº°ÀÚ
+	int Num;                    // ì‹ë³„ì
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	EWeaponType Type;         // ¹«±â Á¾·ù
+	EWeaponType Type;         // ë¬´ê¸° ì¢…ë¥˜
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FName ComponentName;        // ½ºÅ×Æ½ ¸Ş½¬ ÄÄÆ÷³ÍÆ® ÀÌ¸§
+	FName ComponentName;        // ìŠ¤í…Œí‹± ë©”ì‰¬ ì»´í¬ë„ŒíŠ¸ ì´ë¦„
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FString ThorwingBPPath;        // ¹«±â ÅõÃ´½Ã ¼ÒÈ¯ÇÒ BP °æ·Î
+	FString ThorwingBPPath;        // ë¬´ê¸° íˆ¬ì²™ì‹œ ì†Œí™˜í•  BP ê²½ë¡œ
 
-	/// ¸Ê Å°¸¦ ¹İÈ¯ÇÑ´Ù.
+	/// ë§µ í‚¤ë¥¼ ë°˜í™˜í•œë‹¤.
 	int GetKey(){ return Num; };
 };
 
 
-// ½ºÅ³ Á¤º¸
+// ìŠ¤í‚¬ ì •ë³´
 USTRUCT( Atomic, BlueprintType )
 struct FSkillInfo : public FTableRowBase
 {
@@ -265,49 +278,49 @@ struct FSkillInfo : public FTableRowBase
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int Num;                                           // ½Äº°ÀÚ
+	int Num;                                           // ì‹ë³„ì
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float CoolTime;                                    // ÄğÅ¸ÀÓ
+	float CoolTime;                                    // ì¿¨íƒ€ì„
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float CostMP;                                      // ¼Ò¸ğ °ª MP
+	float CostMP;                                      // ì†Œëª¨ ê°’ MP
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	ESkillPlaySpeedType PlaySpeedType;                 // ½ºÅ³ Àç»ı¼Óµµ Å¸ÀÔ
+	ESkillPlaySpeedType PlaySpeedType;                 // ìŠ¤í‚¬ ì¬ìƒì†ë„ íƒ€ì…
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	EAnimSubState AnimSubState;                        // ¾Ö´Ï¸ŞÀÌ¼Ç º¸Á¶ »óÅÂ
+	EAnimSubState AnimSubState;                        // ì• ë‹ˆë©”ì´ì…˜ ë³´ì¡° ìƒíƒœ
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	TArray<EAnimState> PlayEnableState;                // ½ºÅ³ »ç¿ë °¡´ÉÇÑ »óÅÂ
+	TArray<EAnimState> PlayEnableState;                // ìŠ¤í‚¬ ì‚¬ìš© ê°€ëŠ¥í•œ ìƒíƒœ
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	TArray<int> PlayEnableSkillNum;                    // ½ºÅ³ »ç¿ë °¡´ÉÇÑ ½ºÅ³¾ÆÀÌµğ
+	TArray<int> PlayEnableSkillNum;                    // ìŠ¤í‚¬ ì‚¬ìš© ê°€ëŠ¥í•œ ìŠ¤í‚¬ì•„ì´ë””
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int DerivedSkillNum;                               // ÆÄ»ı ½ºÅ³ ½Äº°ÀÚ 
+	int DerivedSkillNum;                               // íŒŒìƒ ìŠ¤í‚¬ ì‹ë³„ì 
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	bool LockOnLookAt;                                 // ¶ô¿Â »óÅÂ¿¡¼­ ½ºÅ³ ½ÃÀü ½Ã ¹Ù¶óº¼ °ÍÀÎÁö ¿©ºÎ 
+	bool LockOnLookAt;                                 // ë½ì˜¨ ìƒíƒœì—ì„œ ìŠ¤í‚¬ ì‹œì „ ì‹œ ë°”ë¼ë³¼ ê²ƒì¸ì§€ ì—¬ë¶€ 
 	
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	bool EquipSubWeapon;                               // º¸Á¶ ¹«±â ÀåÂø ¿©ºÎ
+	bool EquipSubWeapon;                               // ë³´ì¡° ë¬´ê¸° ì¥ì°© ì—¬ë¶€
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FString AnimPath;                                  // ¸ùÅ¸ÁÖ °æ·Î
+	FString AnimPath;                                  // ëª½íƒ€ì£¼ ê²½ë¡œ
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float ActivateRangeMin;                            // ½ºÅ³ ¹ßµ¿ ¹üÀ§ ÃÖ¼Ò (¸ó½ºÅÍ Àü¿ë)
+	float ActivateRangeMin;                            // ìŠ¤í‚¬ ë°œë™ ë²”ìœ„ ìµœì†Œ (ëª¬ìŠ¤í„° ì „ìš©)
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float ActivateRangeMax;                            // ½ºÅ³ ¹ßµ¿ ¹üÀ§ ÃÖ´ë (¸ó½ºÅÍ Àü¿ë)
+	float ActivateRangeMax;                            // ìŠ¤í‚¬ ë°œë™ ë²”ìœ„ ìµœëŒ€ (ëª¬ìŠ¤í„° ì „ìš©)
 
-	/// ¸Ê Å°¸¦ ¹İÈ¯ÇÑ´Ù.
+	/// ë§µ í‚¤ë¥¼ ë°˜í™˜í•œë‹¤.
 	int GetKey(){ return Num; };
 };
 
-// ÇÃ·¹ÀÌ¾î ±âº» ½ºÅ³ Á¤º¸
+// í”Œë ˆì´ì–´ ê¸°ë³¸ ìŠ¤í‚¬ ì •ë³´
 USTRUCT( Atomic, BlueprintType )
 struct FPlayerDefaultSkillInfo : public FTableRowBase
 {
@@ -315,16 +328,16 @@ struct FPlayerDefaultSkillInfo : public FTableRowBase
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	EInputKeyType InputKey;                          // ÀÔ·Â Å°
+	EInputKeyType InputKey;                          // ì…ë ¥ í‚¤
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int SkillNum;                                    // ÀÔ·Â Å°¿¡ ÇØ´çÇÏ´Â ½ºÅ³ ³Ñ¹ö
+	int SkillNum;                                    // ì…ë ¥ í‚¤ì— í•´ë‹¹í•˜ëŠ” ìŠ¤í‚¬ ë„˜ë²„
 
-	/// ¸Ê Å°¸¦ ¹İÈ¯ÇÑ´Ù.
+	/// ë§µ í‚¤ë¥¼ ë°˜í™˜í•œë‹¤.
 	EInputKeyType GetKey(){ return InputKey; };
 };
 
-// ÇÃ·¹ÀÌ¾î ¹«±â ½ºÅ³ Á¤º¸
+// í”Œë ˆì´ì–´ ë¬´ê¸° ìŠ¤í‚¬ ì •ë³´
 USTRUCT( Atomic, BlueprintType )
 struct FPlayerWeaponSkillInfo : public FTableRowBase
 {
@@ -332,18 +345,18 @@ struct FPlayerWeaponSkillInfo : public FTableRowBase
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int WeaponNum;                           // ¹«±â ½Äº°ÀÚ
+	int WeaponNum;                           // ë¬´ê¸° ì‹ë³„ì
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int L_SkillNum;                          // ¾à°ø°İ 
+	int L_SkillNum;                          // ì•½ê³µê²© 
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int R_SkillNum;                          // °­°ø°İ 
+	int R_SkillNum;                          // ê°•ê³µê²© 
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int ThrowSkillNum;                       // ¹«±â ÅõÃ´
+	int ThrowSkillNum;                       // ë¬´ê¸° íˆ¬ì²™
 
-	/// ¸Ê Å°¸¦ ¹İÈ¯ÇÑ´Ù.
+	/// ë§µ í‚¤ë¥¼ ë°˜í™˜í•œë‹¤.
 	int GetKey(){ return WeaponNum; };
 };
 
@@ -351,36 +364,36 @@ public:
 //// Const
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace Const
+namespace CONST
 { 
     // Common
-	constexpr float ANIM_LERP_MULITPLIER      = 5.f;       // ¾Ö´Ï¸ŞÀÌ¼Ç Áß ÀÌµ¿ ¼Óµµ º¸°£ °ª
-	constexpr float DEFAULT_MOVE_SPEED        = 600.f;     // ±âº» ÀÌµ¿¼Óµµ
-	constexpr float DEFAULT_DASH_SPEED		  = 1500.f;    // ±âº» ´ë½¬ ÀÌµ¿¼Óµµ
-	constexpr float DEFAULT_JUMP_POWER        = 750.f;     // ±âº» Á¡ÇÁ·Â
-	constexpr float DEFAULT_ROTATION_RATE     = 1000.f;    // ±âº» Ä³¸¯ÅÍ ¹æÇâ ÀüÈ¯ ºñÀ²
-	constexpr float FLY_ROTATION_RATE         = 100.f;     // ³¯±â Ä³¸¯ÅÍ ¹æÇâ ÀüÈ¯ ºñÀ²
-	constexpr float WATER_FALL_ANIM_TIME      = 0.01f;     // ¹°¿¡ ºüÁö´Â ¾Ö´Ï¸ŞÀÌ¼Ç ¼Óµµ
-	constexpr float READY_SKILL_ROTATION_RATE = 100000.f;  // ¹ßµ¿ ´ë±â ½ºÅ³ º¸À¯ Ä³¸¯ÅÍ ¹æÇâ ÀüÈ¯ ºñÀ²
-	constexpr float READY_SKILL_DURATION      = 0.4f;      // ¹ßµ¿ ´ë±âÁßÀÎ ½ºÅ³ ÀúÀå Áö¼Ó½Ã°£
-	constexpr float MONTAGE_INITIAL_TIME      = 0.05f;     // ¸ùÅ¸ÁÖ ¹ßµ¿ ÈÄ ÃÊ±â½Ã°£ ( ¹æÇâÀüÈ¯°¡´É ¹× LookAt ½Ã°£)
-	constexpr float DEAD_ACTOR_DESTROY_TIME   = 3.f;       // »ç¸Á ÈÄ ÇØ´ç ÃÊ ÀÌÈÄ ¾×ÅÍ »èÁ¦
-	constexpr float HOLD_TIME_INCREASE_VALUE  = 0.1f;      // ¿ª°æÁ÷ ½Ã°£ Áõ°¡ °ª
-	constexpr float MP_RECOVERY_VALUE         = 20.f;      // MP È¸º¹ »ó¼ö 
+	constexpr float ANIM_LERP_MULITPLIER      = 5.f;       // ì• ë‹ˆë©”ì´ì…˜ ì¤‘ ì´ë™ ì†ë„ ë³´ê°„ ê°’
+	constexpr float DEFAULT_MOVE_SPEED        = 600.f;     // ê¸°ë³¸ ì´ë™ì†ë„
+	constexpr float DEFAULT_DASH_SPEED		  = 1500.f;    // ê¸°ë³¸ ëŒ€ì‰¬ ì´ë™ì†ë„
+	constexpr float DEFAULT_JUMP_POWER        = 750.f;     // ê¸°ë³¸ ì í”„ë ¥
+	constexpr float DEFAULT_ROTATION_RATE     = 1000.f;    // ê¸°ë³¸ ìºë¦­í„° ë°©í–¥ ì „í™˜ ë¹„ìœ¨
+	constexpr float FLY_ROTATION_RATE         = 100.f;     // ë‚ ê¸° ìºë¦­í„° ë°©í–¥ ì „í™˜ ë¹„ìœ¨
+	constexpr float WATER_FALL_ANIM_TIME      = 0.01f;     // ë¬¼ì— ë¹ ì§€ëŠ” ì• ë‹ˆë©”ì´ì…˜ ì†ë„
+	constexpr float READY_SKILL_ROTATION_RATE = 100000.f;  // ë°œë™ ëŒ€ê¸° ìŠ¤í‚¬ ë³´ìœ  ìºë¦­í„° ë°©í–¥ ì „í™˜ ë¹„ìœ¨
+	constexpr float READY_SKILL_DURATION      = 0.4f;      // ë°œë™ ëŒ€ê¸°ì¤‘ì¸ ìŠ¤í‚¬ ì €ì¥ ì§€ì†ì‹œê°„
+	constexpr float MONTAGE_INITIAL_TIME      = 0.05f;     // ëª½íƒ€ì£¼ ë°œë™ í›„ ì´ˆê¸°ì‹œê°„ ( ë°©í–¥ì „í™˜ê°€ëŠ¥ ë° LookAt ì‹œê°„)
+	constexpr float DEAD_ACTOR_DESTROY_TIME   = 3.f;       // ì‚¬ë§ í›„ í•´ë‹¹ ì´ˆ ì´í›„ ì•¡í„° ì‚­ì œ
+	constexpr float HOLD_TIME_INCREASE_VALUE  = 0.1f;      // ì—­ê²½ì§ ì‹œê°„ ì¦ê°€ ê°’
+	constexpr float MP_RECOVERY_VALUE         = 20.f;      // MP íšŒë³µ ìƒìˆ˜ 
 
-	constexpr float DEFAULT_TARGET_ARM_LENGTH = 280.f;     // ±âº» Ä«¸Ş¶ó ¾Ï ±æÀÌ
-	constexpr float FLY_TARGET_ARM_LENGTH     = 400.f;     // ³¯±â Ä«¸Ş¶ó ¾Ï ±æÀÌ
+	constexpr float DEFAULT_TARGET_ARM_LENGTH = 280.f;     // ê¸°ë³¸ ì¹´ë©”ë¼ ì•” ê¸¸ì´
+	constexpr float FLY_TARGET_ARM_LENGTH     = 400.f;     // ë‚ ê¸° ì¹´ë©”ë¼ ì•” ê¸¸ì´
 
-	constexpr float DEFAULT_GRAVITY_SCALE     = 2.0f;      // ±âº» Áß·Â
-	constexpr float FLY_GRAVITY_SCALE         = 0.3f;      // ³¯±â Áß·Â
+	constexpr float DEFAULT_GRAVITY_SCALE     = 2.0f;      // ê¸°ë³¸ ì¤‘ë ¥
+	constexpr float FLY_GRAVITY_SCALE         = 0.3f;      // ë‚ ê¸° ì¤‘ë ¥
 
-	constexpr float LOCKON_RANGE              = 800.f;      // ¶ô¿Â ¹üÀ§
-	constexpr float LOCKON_CAMERA_ROTAION_LAG_SPEED = 5.f;  // ¶ô¿Â Ä«¸Ş¶ó È¸Àü µô·¹ÀÌ ¼Óµµ
-	constexpr float LOCKON_CAMERA_FIX_PITCH   = 5.f;      // ¶ô¿Â Ä«¸Ş¶ó pitch °íÁ¤ °ª
+	constexpr float LOCKON_RANGE              = 800.f;      // ë½ì˜¨ ë²”ìœ„
+	constexpr float LOCKON_CAMERA_ROTAION_LAG_SPEED = 5.f;  // ë½ì˜¨ ì¹´ë©”ë¼ íšŒì „ ë”œë ˆì´ ì†ë„
+	constexpr float LOCKON_CAMERA_FIX_PITCH   = 5.f;      // ë½ì˜¨ ì¹´ë©”ë¼ pitch ê³ ì • ê°’
 
-	constexpr float MAX_MASS                  = 2.f;       // ÃÖ´ë Áú·®
-	constexpr float MAX_INTENSITY             = 2.f;       // ÃÖ´ë °­µµ
+	constexpr float MAX_MASS                  = 2.f;       // ìµœëŒ€ ì§ˆëŸ‰
+	constexpr float MAX_INTENSITY             = 2.f;       // ìµœëŒ€ ê°•ë„
 
-	constexpr float MIDDLE_RATE               = 1.2f;      // Áß°£ °­µµ/Áú·® ±âÁØ
-	constexpr float HARD_RATE                 = 1.5f;      // °í °­µµ/Áú·® ±âÁØ
+	constexpr float MIDDLE_RATE               = 1.2f;      // ì¤‘ê°„ ê°•ë„/ì§ˆëŸ‰ ê¸°ì¤€
+	constexpr float HARD_RATE                 = 1.5f;      // ê³  ê°•ë„/ì§ˆëŸ‰ ê¸°ì¤€
 };

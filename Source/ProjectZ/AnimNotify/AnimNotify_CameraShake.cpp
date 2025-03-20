@@ -2,7 +2,7 @@
 
 
 #include "AnimNotify_CameraShake.h"
-#include "../Manager/CameraManager.h"
+#include "Manager/GgCameraManager.h"
 
 FString UAnimNotify_CameraShake::GetNotifyName_Implementation() const
 {
@@ -11,5 +11,5 @@ FString UAnimNotify_CameraShake::GetNotifyName_Implementation() const
 
 void UAnimNotify_CameraShake::Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation )
 {
-	GetCameraManager().CameraShake( MeshComp->GetOwner(), Scale, ShakeByWeight, ShakeByIntensity );
+	GetGgCameraManager().CameraShake( MeshComp->GetOwner(), Scale, ShakeByWeight, ShakeByIntensity );
 }

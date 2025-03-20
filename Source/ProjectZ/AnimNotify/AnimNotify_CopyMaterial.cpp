@@ -2,8 +2,8 @@
 
 
 #include "AnimNotify_CopyMaterial.h"
-#include "../Util/UtilMaterial.h"
-#include "../Component/MaterialComp.h"
+#include "Util/UtilMaterial.h"
+#include "Component/GgMaterialComp.h"
 
 FString UAnimNotify_CopyMaterial::GetNotifyName_Implementation() const
 {
@@ -19,7 +19,7 @@ void UAnimNotify_CopyMaterial::Notify( USkeletalMeshComponent* MeshComp, UAnimSe
 	if ( !owner )
 		return;
 
-	UMaterialComp* matProperty = Cast<UMaterialComp>( owner->FindComponentByClass<UMaterialComp>() );
+	UGgMaterialComp* matProperty = owner->FindComponentByClass<UGgMaterialComp>();
 	if( !matProperty ) 
 		return;
 

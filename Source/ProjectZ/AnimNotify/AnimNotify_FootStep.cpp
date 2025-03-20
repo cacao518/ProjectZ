@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "AnimNotify_FootStep.h"
-#include "../ETC/SDB.h"
-#include "../Component/CharacterComp.h"
-#include "../Manager/ObjectManager.h"
-#include "../Manager/DataInfoManager.h"
-#include "../Util/UtilMaterial.h"
+#include "ETC/SDB.h"
+#include "Component/GgCharacterComp.h"
+#include "Manager/GgObjectManager.h"
+#include "Manager/GgDataInfoManager.h"
+#include "Util/UtilMaterial.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -32,9 +32,9 @@ void UAnimNotify_FootStep::Notify( USkeletalMeshComponent* MeshComp, UAnimSequen
 	FVector worldSpawnPos = UKismetMathLibrary::TransformLocation( spawnPosComp->GetComponentTransform(), relativeSpawnPos );
 
 	EMaterialState matState = UtilMaterial::ConvertMatAssetToMatState( UtilMaterial::GetSteppedMatrialInterface( owner ) );
-	const auto& matInfo = GetDataInfoManager().GetMaterialInfos().Find( matState );
+	const auto& matInfo = GetGgDataInfoManager().GetMaterialInfos().Find( matState );
 	if( !matInfo )
 		return;
 
-	GetObjectManager().SpawnParticle( matInfo->FootStepParticleName, owner, worldSpawnPos, owner->GetActorRotation() );
+	GetGgObjectManager().SpawnParticle( matInfo->FootStepParticleName, owner, worldSpawnPos, owner->GetActorRotation() );
 }

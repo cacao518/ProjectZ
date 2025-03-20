@@ -2,7 +2,7 @@
 
 
 #include "AnimNotify_MoveStart.h"
-#include "../Component/CharacterComp.h"
+#include "Component/GgCharacterComp.h"
 
 FString UAnimNotify_MoveStart::GetNotifyName_Implementation() const
 {
@@ -14,7 +14,7 @@ void UAnimNotify_MoveStart::Notify( USkeletalMeshComponent* MeshComp, UAnimSeque
 	if( !MeshComp || !( MeshComp->GetOwner() ) )
 		return;
 
-	UCharacterComp* obj = Cast<UCharacterComp>( MeshComp->GetOwner()->FindComponentByClass<UCharacterComp>() );
+	UGgCharacterComp* obj = MeshComp->GetOwner()->FindComponentByClass<UGgCharacterComp>();
 	if( !obj ) return;
 
 	obj->SetMovePos( MovePower );

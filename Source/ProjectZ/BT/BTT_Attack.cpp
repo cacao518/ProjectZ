@@ -2,9 +2,9 @@
 
 
 #include "BTT_Attack.h"
-#include "../ETC/SDB.h"
-#include "../System/MonsterAIController.h"
-#include "../Component/CharacterComp.h"
+#include "ETC/SDB.h"
+#include "System/GgAIController.h"
+#include "Component/GgCharacterComp.h"
 #include "GameFramework/Character.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -20,19 +20,19 @@ EBTNodeResult::Type UBTT_Attack::ExecuteTask( UBehaviorTreeComponent& OwnerComp,
 	if( !controllingPawn )
 		return EBTNodeResult::Failed;
 
-	ACharacter* target = Cast<ACharacter>( OwnerComp.GetBlackboardComponent()->GetValueAsObject( AMonsterAIController::TargetKey ) );
+	ACharacter* target = Cast<ACharacter>( OwnerComp.GetBlackboardComponent()->GetValueAsObject( AGgAIController::TargetKey ) );
 	if( !target )
 		return EBTNodeResult::Failed;
 
-	auto characterComp = controllingPawn ? Cast<UCharacterComp>( controllingPawn->FindComponentByClass<UCharacterComp>() ) : nullptr;
+	auto characterComp = controllingPawn ? controllingPawn->FindComponentByClass<UGgCharacterComp>() : nullptr;
 	if( !characterComp )
 		return EBTNodeResult::Failed;
 
 	characterComp->LookAt( target );
 
-	bool result = characterComp->SkillPlay( OwnerComp.GetBlackboardComponent()->GetValueAsInt( AMonsterAIController::CurSkillNumKey ) );
+	bool result = characterComp->SkillPlay( OwnerComp.GetBlackboardComponent()->GetValueAsInt( AGgAIController::CurSkillNumKey ) );
 
-	OwnerComp.GetBlackboardComponent()->SetValueAsInt( AMonsterAIController::CurSkillNumKey, 0 );
+	OwnerComp.GetBlackboardComponent()->SetValueAsInt( AGgAIController::CurSkillNumKey, 0 );
 
 	return result ? EBTNodeResult::Succeeded : EBTNodeResult::Failed;
 }
