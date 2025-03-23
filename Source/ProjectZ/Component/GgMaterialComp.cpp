@@ -20,9 +20,6 @@
 #include "Util/UtilMaterial.h"
 
 UGgMaterialComp::UGgMaterialComp()
-	:
-InitMaterial    ( nullptr ),
-OwningCharacter ( nullptr )
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	OwningCharacter = nullptr;	

@@ -16,21 +16,21 @@ class PROJECTZ_API UGgObjectComp : public UActorComponent
 public:
 	// 오브젝트 아이디 값
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay )
-	int                Id;                      
+	int                Id                 = 0;                      
 
 	// 능력치
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	FStatusData        Stat;                    
 
 protected:
-	AActor*            OwningActor;             // 부모 액터 클래스
-	ETeamType          TeamType;                // 팀 타입
-	FCollisionData     AttackCollData;          // 공격 콜리전 정보
-	FStatusData        InitStat;                // 초기기본 능력치
+	AActor*            OwningActor       = nullptr;            // 부모 액터 클래스
+	ETeamType          TeamType          = ETeamType::MAX;     // 팀 타입
+	FCollisionData     AttackCollData;                         // 공격 콜리전 정보
+	FStatusData        InitStat;                               // 초기기본 능력치
 
-	bool               IsSpawnedInEditor;       // 에디터로 스폰되었는지 여부
-	bool               IsDie;                   // 사망 여부
-	bool               IsFallWater;             // 물에 빠졌는지 여부
+	bool               IsSpawnedInEditor = true;               // 에디터로 스폰되었는지 여부
+	bool               IsDie             = false;              // 사망 여부
+	bool               IsFallWater       = false;              // 물에 빠졌는지 여부
 
 public:	
 	// 생성자 함수

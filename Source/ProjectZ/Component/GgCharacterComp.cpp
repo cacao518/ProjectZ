@@ -28,15 +28,6 @@
 
 
 UGgCharacterComp::UGgCharacterComp()
-:
-OwningCharacter ( nullptr ),
-AnimState       ( EAnimState::IDLE_RUN ),
-CurSkillInfo    ( nullptr ),
-IsForceMove     ( false ),
-LandOnce        ( false ),
-FallWaterTime   ( 0 ),
-MontagePlayTime ( 0 ),
-DeathTime       ( 0 )
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }

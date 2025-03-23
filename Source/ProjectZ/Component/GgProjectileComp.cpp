@@ -4,9 +4,6 @@
 #include "GgProjectileComp.h"
 
 UGgProjectileComp::UGgProjectileComp()
-:
-LifeTime    ( 0 ),
-LifeTimeAcc ( 0 )
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }

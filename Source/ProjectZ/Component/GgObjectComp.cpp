@@ -27,13 +27,6 @@
 
 
 UGgObjectComp::UGgObjectComp()
-:
-Id                    ( 0       ),
-OwningActor           ( nullptr ),
-TeamType              ( ETeamType::MAX ),
-IsSpawnedInEditor     ( true    ),
-IsDie                 ( false   ),
-IsFallWater           ( false   )
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }

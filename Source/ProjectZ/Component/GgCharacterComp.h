@@ -29,21 +29,21 @@ public:
 	UAnimMontage*      LandAnim;                
 
 private:
-	ACharacter*        OwningCharacter;         // 부모 캐릭터 클래스
-	EAnimState         AnimState;       	    // 애니메이션 상태
-	FVector            MovePos;                 // 이동할 위치
-	CooltimeMap        CoolingSkills;           // 쿨타임 돌고 있는 스킬 정보		
-	const FSkillInfo*  CurSkillInfo;            // 현재 스킬 정보     
+	ACharacter*        OwningCharacter = nullptr;               // 부모 캐릭터 클래스
+	EAnimState         AnimState       = EAnimState::IDLE_RUN;  // 애니메이션 상태
+	FVector            MovePos;                                 // 이동할 위치
+	CooltimeMap        CoolingSkills;                           // 쿨타임 돌고 있는 스킬 정보		
+	const FSkillInfo*  CurSkillInfo    = nullptr;               // 현재 스킬 정보     
 
-	bool               IsEnableDerivedKey;      // 추가 키 입력 가능한지 여부
-	bool               IsForceMove;             // 강제 이동 여부(스킬 이동, 넉백)
-	bool               IsDash;                  // 대쉬 중 여부
-	bool               LandOnce;                // 착지 체크 변수
+	bool               IsEnableDerivedKey = false;      // 추가 키 입력 가능한지 여부
+	bool               IsForceMove        = false;      // 강제 이동 여부(스킬 이동, 넉백)
+	bool               IsDash             = false;      // 대쉬 중 여부
+	bool               LandOnce           = false;      // 착지 체크 변수
 
-	float              HoldTime;                // 역경직 시간 누적
-	float              FallWaterTime;           // 물에 빠져있는 시간 누적
-	float              MontagePlayTime;         // 몽타주 재생시간 누적
-	float              DeathTime;               // 사망 시간 누적
+	float              HoldTime        = 0;         // 역경직 시간 누적
+	float              FallWaterTime   = 0;         // 물에 빠져있는 시간 누적
+	float              MontagePlayTime = 0;         // 몽타주 재생시간 누적
+	float              DeathTime       = 0;         // 사망 시간 누적
 
 public:
 	// 생성자 함수

@@ -19,13 +19,13 @@ public:
 
 	// 지속 시간
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	float LifeTime;                             
+	float LifeTime = 0;                             
 
 	// 투사체 방향
 	FVector Direction;                          
 
 private:
-	float LifeTimeAcc;
+	float LifeTimeAcc = 0;
 
 public:
 	// 생성자 함수

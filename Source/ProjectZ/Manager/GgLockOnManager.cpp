@@ -18,9 +18,8 @@
 
 
 FGgLockOnManager::FGgLockOnManager()
-:	 
-LockOnTarget ( nullptr )
 {
+	LockOnTarget = nullptr;
 
 }
 
