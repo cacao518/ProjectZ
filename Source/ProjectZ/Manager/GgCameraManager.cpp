@@ -9,7 +9,7 @@
 #include "System/GgGameModeBase.h"
 #include "Manager/GgLockOnManager.h"
 #include "Manager/GgDataInfoManager.h"
-//#include "ETC/CameraShakeEffect.h"
+#include "ETC/GgCameraShake.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Actor.h"
@@ -62,8 +62,8 @@ void FGgCameraManager::CameraShake( AActor* InCaster, float InScale, bool InShak
 		if( !objectComp )
 			return;
 
-		/*if( !moveComponent->IsFalling() && objectComp->IsHeavyWeight() )
-			controller->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );*/
+		if( !moveComponent->IsFalling() && objectComp->IsHeavyWeight() )
+			controller->ClientStartCameraShake( UGgCameraShake::StaticClass(), InScale );
 	}
 	else if( InShakeByIntensity )
 	{
@@ -71,12 +71,12 @@ void FGgCameraManager::CameraShake( AActor* InCaster, float InScale, bool InShak
 		if( !matProperty )
 			return;
 
-		//if( matProperty->IsHardIntensity() )
-		//	controller->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );
+		if( matProperty->IsHardIntensity() )
+			controller->ClientStartCameraShake( UGgCameraShake::StaticClass(), InScale );
 	}
 	else
 	{
-		//controller->ClientStartCameraShake( UCameraShakeEffect::StaticClass(), InScale );
+		controller->ClientStartCameraShake( UGgCameraShake::StaticClass(), InScale );
 	}
 }
 
