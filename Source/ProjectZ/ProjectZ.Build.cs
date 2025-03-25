@@ -7,9 +7,10 @@ public class ProjectZ : ModuleRules
 {
 	public ProjectZ(ReadOnlyTargetRules Target) : base(Target)
 	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
+        //PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+        //PrivatePCHHeaderFile = "ProjectZ.h";
+
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
 
         PrivateDependencyModuleNames.AddRange(new string[] { "Landscape", "Niagara", "Water", "UMG", "GameplayTasks", "AIModule", "NavigationSystem", "GameplayCameras" });
         

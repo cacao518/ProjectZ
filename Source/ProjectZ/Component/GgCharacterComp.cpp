@@ -194,7 +194,7 @@ void UGgCharacterComp::OnAttackSuccess()
 	//WeaponComp->SubWeaponDurability();
 
 	// 역경직 시간 추가
-	HoldTime += CONST::HOLD_TIME_INCREASE_VALUE;
+	HoldTime += AttackCollData.HitStopTime;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -404,7 +404,7 @@ void UGgCharacterComp::_ProcessHit( AActor* InOtherActor )
 		}
 
 		// 역경직 시간 추가
-		HoldTime += CONST::HOLD_TIME_INCREASE_VALUE;
+		HoldTime += othetObjectComp->GetAttackCollInfo().HitStopTime;
 	}
 
 	_ProcessCameraShake( InOtherActor );
@@ -581,6 +581,13 @@ void UGgCharacterComp::_FallingWater( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgCharacterComp::_ProcessLand()
 {
+	if( !OwningCharacter )
+		return;
+
+	auto animInstance = OwningCharacter->GetMesh()->GetAnimInstance();
+	if( !animInstance )
+		return;
+
 	auto curMontage = OwningCharacter ? OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage() : nullptr;
 
 	auto moveComponent = OwningCharacter->GetMovementComponent();

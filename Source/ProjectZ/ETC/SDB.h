@@ -68,6 +68,16 @@ enum class EWeaponType : uint8
 	MAX,
 };
 
+// 콜리전 모양 종류
+UENUM( BlueprintType )
+enum class ECollShapeType : uint8
+{
+	BOX          UMETA( DisplayName = "Box" ),
+	PAN          UMETA( DisplayName = "Pan" ),
+
+	MAX,
+};
+
 // 입력 키 종류
 UENUM( BlueprintType )
 enum class EInputKeyType : uint8
@@ -120,6 +130,9 @@ struct FCollisionData
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	ECollShapeType Shape;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FVector Size;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
@@ -131,19 +144,23 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float KnockBackPower;
 
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float HitStopTime;
+
 	FCollisionData()
 	{
 		Size = FVector( 0, 0, 0 );
 		Pos = FVector( 0, 0, 0 );
-		Power = 0;
 	};
 
-	FCollisionData( FVector InSize, FVector InPos, float InPower, float InKnockBackPower )
+	FCollisionData( ECollShapeType InShape, FVector InSize, FVector InPos, float InPower, float InKnockBackPower, float InHitStopTime )
 	{
+		Shape = InShape;
 		Size = InSize;
 		Pos = InPos;
 		Power = InPower;
 		KnockBackPower = InKnockBackPower;
+		HitStopTime = InHitStopTime;
 	};
 };
 

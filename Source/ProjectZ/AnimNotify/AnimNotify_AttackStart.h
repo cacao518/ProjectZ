@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "../ETC/SDB.h"
+#include "ETC/SDB.h"
 #include "Animation/AnimNotifies/AnimNotify.h"
 #include "AnimNotify_AttackStart.generated.h"
 
@@ -17,6 +17,9 @@ class PROJECTZ_API UAnimNotify_AttackStart : public UAnimNotify
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
+	ECollShapeType Shape;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
 	FVector Size;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
@@ -27,6 +30,9 @@ public:
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
 	float KnockBackPower;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
+	float HitStopTime;
 
 public:
 	virtual FString GetNotifyName_Implementation() const override;
