@@ -17,10 +17,8 @@ void UAnimNotify_AttackStart::Notify( USkeletalMeshComponent* MeshComp, UAnimSeq
 
 	if( GetWorld() && GetWorld()->WorldType == EWorldType::EditorPreview )
 	{
-		if( Shape == ECollShapeType::BOX )
-		{
-			DrawDebugBox( GetWorld(), Pos, Size, FColor::Red, false, 1.0f, 0, 2.0f );
-		}
+		CurWorld = GetWorld();
+		_DebugShape( CurWorld );
 	}
 
 	UGgObjectComp* obj = MeshComp->GetOwner()->FindComponentByClass<UGgObjectComp>();
@@ -28,4 +26,24 @@ void UAnimNotify_AttackStart::Notify( USkeletalMeshComponent* MeshComp, UAnimSeq
 
 	obj->SetAttackCollData( FCollisionData( Shape, Size, Pos, Power, KnockBackPower, HitStopTime ) );
 	obj->SetIsEnabledAttackColl( true );
+}
+
+#if WITH_EDITOR
+void UAnimNotify_AttackStart::PostEditChangeProperty( FPropertyChangedEvent& PropertyChangedEvent )
+{
+	Super::PostEditChangeProperty( PropertyChangedEvent );
+
+	_DebugShape( CurWorld );
+}
+#endif
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 히트 박스 모양을 그린다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UAnimNotify_AttackStart::_DebugShape( UWorld* InWorld )
+{
+	if( Shape == ECollShapeType::BOX )
+	{
+		DrawDebugBox( InWorld, Pos, Size, FColor::Red, false, 1.0f, 0, 2.0f );
+	}
 }

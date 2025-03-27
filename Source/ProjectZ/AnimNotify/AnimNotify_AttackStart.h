@@ -7,9 +7,10 @@
 #include "Animation/AnimNotifies/AnimNotify.h"
 #include "AnimNotify_AttackStart.generated.h"
 
-/**
- * 
- */
+
+class UWorld;
+
+
 UCLASS()
 class PROJECTZ_API UAnimNotify_AttackStart : public UAnimNotify
 {
@@ -34,10 +35,20 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
 	float HitStopTime;
 
+private:
+	UWorld* CurWorld = nullptr;
+
 public:
 	virtual FString GetNotifyName_Implementation() const override;
 
-private:
+protected:
 	void Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation ) override;
-	
+
+#if WITH_EDITOR
+	void PostEditChangeProperty( FPropertyChangedEvent& PropertyChangedEvent );
+#endif
+
+private:
+	// 히트 박스 모양을 그린다.
+	void _DebugShape( UWorld* InWorld );
 };
