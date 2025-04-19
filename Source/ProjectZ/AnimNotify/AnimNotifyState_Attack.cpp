@@ -174,5 +174,45 @@ void UAnimNotifyState_Attack::_DebugShape()
 			DrawDebugLine( world, Point1_Bottom, Point1_Top, FColor::Cyan, false, 2.0f );
 		}
 	}
+	else if( Coll.Shape == ECollShapeType::CYLINDER )
+	{
+		// 회전 및 위치 반영
+		FQuat rotationQuat = Owner->GetActorQuat() * Coll.Rotation.Quaternion(); // Coll = FCylinderCollData
+		FVector cylinderPos = pos + rotationQuat.RotateVector( Coll.Pos * scale );
+		float scaledRadius = Coll.Radius * FMath::Max( scale.X, scale.Y ); // XY 기준
+		float scaledHeight = Coll.Height * scale.Z;
+
+		// 시각화용 Segment 수 (32~64가 적당)
+		int32 segmentCount = 32;
+		float angleStep = 2.f * PI / segmentCount;
+
+		// 윗면 오프셋
+		FVector upOffset = rotationQuat.RotateVector( FVector( 0, 0, scaledHeight ) );
+
+		// 각도별 점 찍기 + 선 그리기
+		for( int32 i = 0; i < segmentCount; ++i )
+		{
+			float angle1 = i * angleStep;
+			float angle2 = ( i + 1 ) * angleStep;
+
+			FVector dir1 = FVector( FMath::Cos( angle1 ), FMath::Sin( angle1 ), 0 );
+			FVector dir2 = FVector( FMath::Cos( angle2 ), FMath::Sin( angle2 ), 0 );
+
+			FVector p1Bottom = cylinderPos + rotationQuat.RotateVector( dir1 * scaledRadius );
+			FVector p2Bottom = cylinderPos + rotationQuat.RotateVector( dir2 * scaledRadius );
+			FVector p1Top = p1Bottom + upOffset;
+			FVector p2Top = p2Bottom + upOffset;
+
+			// 아래 원 테두리
+			DrawDebugLine( world, p1Bottom, p2Bottom, FColor::Green, false, 1.0f, 0, 1.5f );
+			// 위 원 테두리
+			DrawDebugLine( world, p1Top, p2Top, FColor::Green, false, 1.0f, 0, 1.5f );
+			// 측면 세로선
+			DrawDebugLine( world, p1Bottom, p1Top, FColor::Yellow, false, 1.0f, 0, 1.5f );
+		}
+
+		// 중심 연결선
+		DrawDebugLine( world, cylinderPos, cylinderPos + upOffset, FColor::Cyan, false, 1.0f, 0, 1.5f );
+	}
 }
 #endif

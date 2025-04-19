@@ -175,5 +175,101 @@ namespace UtilCollision
 			}
 #endif
 		}
+		else if( InCollData.Shape == ECollShapeType::CYLINDER )
+		{
+			InPMC->ClearAllMeshSections();
+			InPMC->ClearCollisionConvexMeshes();
+
+			TArray<FVector> Vertices;
+			TArray<int32> Triangles;
+
+			int numSegments = 10;
+			float angleStepRad = 2 * PI / numSegments;
+			FQuat RotQuat = InCollData.Rotation.Quaternion();
+
+			// 중심점
+			FVector bottomCenter = RotQuat.RotateVector( FVector( 0, 0, 0 ) + InCollData.Pos );
+			FVector topCenter = RotQuat.RotateVector( FVector( 0, 0, InCollData.Height ) + InCollData.Pos );
+
+			Vertices.Add( bottomCenter ); // 0
+			Vertices.Add( topCenter );    // 1
+
+			int32 baseIndex = Vertices.Num();
+
+			// 원 둘레 점 생성
+			for( int32 i = 0; i <= numSegments; ++i )
+			{
+				float angle = i * angleStepRad;
+				float x = InCollData.Radius * FMath::Cos( angle );
+				float y = InCollData.Radius * FMath::Sin( angle );
+				FVector bottom = RotQuat.RotateVector( FVector( x, y, 0 ) + InCollData.Pos );
+				FVector top = RotQuat.RotateVector( FVector( x, y, InCollData.Height ) + InCollData.Pos );
+
+				Vertices.Add( bottom );  // i*2 + 2
+				Vertices.Add( top );     // i*2 + 3
+			}
+
+			// 충돌용 Convex 설정
+			InPMC->bUseComplexAsSimpleCollision = false;
+			InPMC->AddCollisionConvexMesh( Vertices );
+
+#if WITH_EDITOR
+			if( InDebugShape )
+			{
+				// 바닥 삼각형
+				for( int32 i = 0; i < numSegments; ++i )
+				{
+					int32 bi = baseIndex + i * 2;
+					int32 bi_next = baseIndex + ( ( i + 1 ) % numSegments ) * 2;
+
+					Triangles.Add( 0 );
+					Triangles.Add( bi_next );
+					Triangles.Add( bi );
+				}
+
+				// 윗면 삼각형
+				for( int32 i = 0; i < numSegments; ++i )
+				{
+					int32 ti = baseIndex + i * 2 + 1;
+					int32 ti_next = baseIndex + ( ( i + 1 ) % numSegments ) * 2 + 1;
+
+					Triangles.Add( 1 );
+					Triangles.Add( ti );
+					Triangles.Add( ti_next );
+				}
+
+				// 옆면 (사각형 2개 → 삼각형 2개)
+				for( int32 i = 0; i < numSegments; ++i )
+				{
+					int32 b0 = baseIndex + i * 2;
+					int32 t0 = b0 + 1;
+					int32 b1 = baseIndex + ( ( i + 1 ) % numSegments ) * 2;
+					int32 t1 = b1 + 1;
+
+					Triangles.Add( b0 );
+					Triangles.Add( t0 );
+					Triangles.Add( t1 );
+
+					Triangles.Add( b0 );
+					Triangles.Add( t1 );
+					Triangles.Add( b1 );
+				}
+
+				// 부가 정보
+				TArray<FVector> Normals;
+				TArray<FVector2D> UV0;
+				TArray<FLinearColor> VertexColors;
+				TArray<FProcMeshTangent> Tangents;
+
+				Normals.SetNumZeroed( Vertices.Num() );
+				UV0.SetNumZeroed( Vertices.Num() );
+				VertexColors.Init( FLinearColor::White, Vertices.Num() );
+				Tangents.SetNumZeroed( Vertices.Num() );
+
+				// 메쉬 생성
+				InPMC->CreateMeshSection_LinearColor( 0, Vertices, Triangles, Normals, UV0, VertexColors, Tangents, false );
+			}
+#endif
+		}
 	}
 }

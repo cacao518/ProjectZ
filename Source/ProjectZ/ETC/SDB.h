@@ -74,6 +74,7 @@ enum class ECollShapeType : uint8
 {
 	BOX          UMETA( DisplayName = "Box" ),
 	FAN          UMETA( DisplayName = "Fan" ),
+	CYLINDER     UMETA( DisplayName = "Cylinder" ),
 
 	MAX,
 };
@@ -152,13 +153,14 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Box", meta = ( EditCondition = "Shape == ECollShapeType::BOX" ) )
 	FVector Extent;
 
-	/* Fan */
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Fan", meta = ( EditCondition = "Shape == ECollShapeType::FAN" ) )
+	/* Fan & Cylinder */
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Fan & Cylinder", meta = ( EditCondition = "Shape == ECollShapeType::FAN || Shape == ECollShapeType::CYLINDER" ) )
 	float Radius;
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Fan", meta = ( EditCondition = "Shape == ECollShapeType::FAN" ) )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Fan & Cylinder", meta = ( EditCondition = "Shape == ECollShapeType::FAN || Shape == ECollShapeType::CYLINDER" ) )
 	float Height;
 
+	/* Fan */
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Fan", meta = ( ClampMin = "0", ClampMax = "180" ), meta = ( EditCondition = "Shape == ECollShapeType::FAN" ) )
 	float Angle;
 

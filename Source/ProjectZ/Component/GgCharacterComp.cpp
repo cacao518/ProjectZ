@@ -410,9 +410,9 @@ void UGgCharacterComp::_ProcessHit( AActor* InOtherActor )
 
 	_UpdateHpBar();
 
-	FString str = OwningActor->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
-	if ( GEngine )
-		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
+	//FString str = OwningActor->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
+	//if ( GEngine )
+	//	GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
