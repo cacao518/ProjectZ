@@ -16,26 +16,12 @@ class PROJECTZ_API UAnimNotifyState_Attack : public UAnimNotifyState
 	GENERATED_BODY()
 
 public:
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
-	ECollShapeType Shape;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
-	FVector Size;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
-	FVector Pos;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
-	float Power;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
-	float KnockBackPower;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
-	float HitStopTime;
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify" )
+	FCollisionData Coll;
 
 private:
 	UWorld* CurWorld = nullptr;
+	TWeakObjectPtr<AActor> Owner = nullptr;
 
 protected:
 	virtual void NotifyBegin( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference ) override;
@@ -47,5 +33,5 @@ protected:
 
 private:
 	// 히트 박스 모양을 그린다.
-	void _DebugShape( UWorld* InWorld );
+	void _DebugShape();
 };

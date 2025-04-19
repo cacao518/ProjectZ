@@ -4,6 +4,8 @@
 #include "GgProjectile.h"
 #include "Component/GgProjectileComp.h"
 #include "Components/BoxComponent.h"
+#include "ProceduralMeshComponent.h"
+
 
 // Sets default values
 AGgProjectile::AGgProjectile()
@@ -22,7 +24,7 @@ AGgProjectile::AGgProjectile()
 	HitColl->SetCollisionProfileName( TEXT( "HitColl" ) );
 
 	// AttackBox Component
-	AttackColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "AttackColl" ) );
+	AttackColl = CreateDefaultSubobject<UProceduralMeshComponent>( TEXT( "AttackColl" ) );
 	AttackColl->SetupAttachment( RootComponent );
 	AttackColl->SetCollisionProfileName( TEXT( "AttackColl" ) );
 }

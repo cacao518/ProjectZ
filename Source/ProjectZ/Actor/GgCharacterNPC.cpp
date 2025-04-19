@@ -9,6 +9,8 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/SceneComponent.h"
 #include "Components/WidgetComponent.h"
+#include "ProceduralMeshComponent.h"
+
 
 // Sets default values
 AGgCharacterNPC::AGgCharacterNPC()
@@ -56,7 +58,7 @@ AGgCharacterNPC::AGgCharacterNPC()
 	HitColl->SetCollisionProfileName( TEXT( "HitColl" ) );
 
 	// AttackBox Component
-	AttackColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "AttackColl" ) );
+	AttackColl = CreateDefaultSubobject<UProceduralMeshComponent>( TEXT( "AttackColl" ) );
 	AttackColl->SetupAttachment( GetMesh() );
 	AttackColl->SetCollisionProfileName( TEXT( "AttackColl" ) );
 }

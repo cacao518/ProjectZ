@@ -15,13 +15,13 @@ class PROJECTZ_API UAnimNotify_CameraShake : public UAnimNotify
 	GENERATED_BODY()
 
 public:
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify")
 	float Scale = 1.f;
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify" )
 	bool ShakeByWeight = false;
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify" )
 	bool ShakeByIntensity = false;
 
 public:

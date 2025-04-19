@@ -16,16 +16,16 @@ class PROJECTZ_API UAnimNotify_SpawnActor : public UAnimNotify
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify")
 	UClass* Actor;                 
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify" )
 	FVector Pos;
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify" )
 	FRotator Rotate;
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify" )
 	bool SetAsParentTeamType = true;
 
 protected:

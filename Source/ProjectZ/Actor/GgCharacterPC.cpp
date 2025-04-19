@@ -10,6 +10,7 @@
 #include "Components/InputComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/SceneComponent.h"
+#include "ProceduralMeshComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
@@ -60,7 +61,7 @@ AGgCharacterPC::AGgCharacterPC()
 	HitColl->SetCollisionProfileName( TEXT( "HitColl" ) );
 
 	// AttackBox Component
-	AttackColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "AttackColl" ) );
+	AttackColl = CreateDefaultSubobject<UProceduralMeshComponent>( TEXT( "AttackColl" ) );
 	AttackColl->SetupAttachment( GetMesh() );
 	AttackColl->SetCollisionProfileName( TEXT( "AttackColl" ) );
 }

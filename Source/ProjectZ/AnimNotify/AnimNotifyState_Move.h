@@ -15,7 +15,7 @@ class PROJECTZ_API UAnimNotifyState_Move : public UAnimNotifyState
 	GENERATED_BODY()
 
 public:
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify" )
 	float MovePower;
 
 protected:

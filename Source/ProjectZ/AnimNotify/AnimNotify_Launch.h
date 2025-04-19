@@ -15,7 +15,7 @@ class PROJECTZ_API UAnimNotify_Launch : public UAnimNotify
 	GENERATED_BODY()
 
 public:
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify" )
 	FVector Vec;
 
 public:

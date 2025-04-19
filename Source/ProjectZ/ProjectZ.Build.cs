@@ -12,7 +12,7 @@ public class ProjectZ : ModuleRules
 
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
 
-        PrivateDependencyModuleNames.AddRange(new string[] { "Landscape", "Niagara", "Water", "UMG", "GameplayTasks", "AIModule", "NavigationSystem", "GameplayCameras" });
+        PrivateDependencyModuleNames.AddRange(new string[] { "Landscape", "Niagara", "Water", "UMG", "GameplayTasks", "AIModule", "NavigationSystem", "GameplayCameras", "ProceduralMeshComponent" });
         
         PublicIncludePaths.AddRange( new string[] { "ProjectZ/" } );
 

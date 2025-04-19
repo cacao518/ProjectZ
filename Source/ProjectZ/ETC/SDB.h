@@ -73,7 +73,7 @@ UENUM( BlueprintType )
 enum class ECollShapeType : uint8
 {
 	BOX          UMETA( DisplayName = "Box" ),
-	PAN          UMETA( DisplayName = "Pan" ),
+	FAN          UMETA( DisplayName = "Fan" ),
 
 	MAX,
 };
@@ -129,39 +129,56 @@ struct FCollisionData
 	GENERATED_BODY()
 
 public:
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	/* Common */
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
 	ECollShapeType Shape;
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FVector Size;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
 	FVector Pos;
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
+	FRotator Rotation;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
 	float Power;
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
 	float KnockBackPower;
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
 	float HitStopTime;
 
+	/* Box */
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Box", meta = ( EditCondition = "Shape == ECollShapeType::BOX" ) )
+	FVector Extent;
+
+	/* Fan */
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Fan", meta = ( EditCondition = "Shape == ECollShapeType::FAN" ) )
+	float Radius;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Fan", meta = ( EditCondition = "Shape == ECollShapeType::FAN" ) )
+	float Height;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Fan", meta = ( ClampMin = "0", ClampMax = "360" ), meta = ( EditCondition = "Shape == ECollShapeType::FAN" ) )
+	float Angle;
+
+public:
+	TSet<int64> HitObjList;
+
+public:
 	FCollisionData()
 	{
-		Size = FVector( 0, 0, 0 );
-		Pos = FVector( 0, 0, 0 );
-	};
-
-	FCollisionData( ECollShapeType InShape, FVector InSize, FVector InPos, float InPower, float InKnockBackPower, float InHitStopTime )
-	{
-		Shape = InShape;
-		Size = InSize;
-		Pos = InPos;
-		Power = InPower;
-		KnockBackPower = InKnockBackPower;
-		HitStopTime = InHitStopTime;
-	};
+		Shape = ECollShapeType::MAX;
+		Pos = FVector();
+		Rotation = FRotator();
+		Power = 0;
+		KnockBackPower = 0;
+		HitStopTime = 0;
+		Extent = FVector();
+		Radius = 0;
+		Height = 0;
+		Angle = 0;
+	}
 };
 
 // 스텟 정보

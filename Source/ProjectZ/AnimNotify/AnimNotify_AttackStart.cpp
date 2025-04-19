@@ -24,7 +24,7 @@ void UAnimNotify_AttackStart::Notify( USkeletalMeshComponent* MeshComp, UAnimSeq
 	UGgObjectComp* obj = MeshComp->GetOwner()->FindComponentByClass<UGgObjectComp>();
 	if( !obj ) return;
 
-	obj->SetAttackCollData( FCollisionData( Shape, Size, Pos, Power, KnockBackPower, HitStopTime ) );
+	//obj->SetAttackCollData( FCollisionData( Shape, Size, Pos, Power, KnockBackPower, HitStopTime ) );
 	obj->SetIsEnabledAttackColl( true );
 }
 

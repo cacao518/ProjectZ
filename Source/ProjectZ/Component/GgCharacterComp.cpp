@@ -364,8 +364,8 @@ void UGgCharacterComp::_ProcessHit( AActor* InOtherActor )
 	if( !othetObjectComp )
 		return;
 
-	auto othetMatComp = InOtherActor ? InOtherActor->FindComponentByClass<UGgMaterialComp>() : nullptr;
-	auto myMatComp    = OwningActor  ? OwningActor->FindComponentByClass<UGgMaterialComp>() : nullptr;
+	if( othetObjectComp->FindHitObject( Id ) )
+		return;
 
 	if ( othetObjectComp->GetTeamType() == ETeamType::MAX || TeamType == ETeamType::MAX )
 		return;
@@ -383,10 +383,12 @@ void UGgCharacterComp::_ProcessHit( AActor* InOtherActor )
 	float decrease = Stat.Hp - totalDamage;
 	Stat.Hp = decrease > 0 ? decrease : 0;
 
+	// 경직
+	auto othetMatComp = InOtherActor ? InOtherActor->FindComponentByClass<UGgMaterialComp>() : nullptr;
+	auto myMatComp = OwningActor ? OwningActor->FindComponentByClass<UGgMaterialComp>() : nullptr;
+
 	float myIntensity    = myMatComp    ? myMatComp->GetIntensity()    : 1.f;
 	float otherIntensity = othetMatComp ? othetMatComp->GetIntensity() : 1.f;
-
-	// 경직
 	if( otherIntensity >= myIntensity )
 	{
 		float addTimeToDamage = totalDamage / Stat.Hpm;
@@ -414,6 +416,8 @@ void UGgCharacterComp::_ProcessHit( AActor* InOtherActor )
 	//FString str = OwningActor->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
 	//if ( GEngine )
 	//	GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
+
+	othetObjectComp->AddHitObject( Id );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

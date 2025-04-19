@@ -16,7 +16,7 @@ class PROJECTZ_API UGgObjectComp : public UActorComponent
 public:
 	// 오브젝트 아이디 값
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay )
-	int                Id                 = 0;                      
+	int64              Id = 0;                      
 
 	// 능력치
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
@@ -28,6 +28,7 @@ protected:
 	FCollisionData     AttackCollData;                         // 공격 콜리전 정보
 	FStatusData        InitStat;                               // 초기기본 능력치
 
+	bool               bEnableAttackColl = false;              // 공격 컬리전 활성화 여부
 	bool               IsSpawnedInEditor = true;               // 에디터로 스폰되었는지 여부
 	bool               IsDie             = false;              // 사망 여부
 	bool               IsFallWater       = false;              // 물에 빠졌는지 여부
@@ -47,6 +48,15 @@ public:
 
 	// 대상을 바라본다.
 	void LookAt( ACharacter* InTarget );
+
+	// 타격한 대상을 추가한다.
+	void AddHitObject( int64 InObjId ) { AttackCollData.HitObjList.Add( InObjId ); };
+
+	// 타격한 대상 리스트를 초기화한다.
+	void ResetHitObjects() { AttackCollData.HitObjList.Empty(); };
+
+	// 타격한 대상에 등록되어있는지 확인한다.
+	bool FindHitObject( int64 InObjId ) { return AttackCollData.HitObjList.Contains( InObjId ); }
 
 	// 공격 성공 처리를 한다.
 	virtual void OnAttackSuccess() {};
@@ -127,6 +137,9 @@ public:
 
 	// 고 중량 인지 여부를 반환한다.
 	bool IsHeavyWeight();
+
+	// 공격 콜리전이 활성화 되어있는지 여부를 반환한다.
+	bool IsEnableAttackColl() { return bEnableAttackColl; };
 
 	///////////////////////////////////////////////////////////////////////
 	// Delegate Function

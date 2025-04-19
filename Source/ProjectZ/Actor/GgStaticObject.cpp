@@ -4,6 +4,8 @@
 #include "GgStaticObject.h"
 #include "Component/GgObjectComp.h"
 #include "Components/BoxComponent.h"
+#include "ProceduralMeshComponent.h"
+
 
 // Sets default values
 AGgStaticObject::AGgStaticObject()
@@ -22,7 +24,7 @@ AGgStaticObject::AGgStaticObject()
 	HitColl->SetCollisionProfileName( TEXT( "HitColl" ) );
 
 	// AttackBox Component
-	AttackColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "AttackColl" ) );
+	AttackColl = CreateDefaultSubobject<UProceduralMeshComponent>( TEXT( "AttackColl" ) );
 	AttackColl->SetupAttachment( RootComponent );
 	AttackColl->SetCollisionProfileName( TEXT( "AttackColl" ) );
 }

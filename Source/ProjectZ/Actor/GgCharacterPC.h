@@ -31,7 +31,7 @@ public:
 	class UBoxComponent* HitColl;
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = ( AllowPrivateAccess = "true" ) )
-	class UBoxComponent* AttackColl;
+	class UProceduralMeshComponent* AttackColl;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;

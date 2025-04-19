@@ -21,7 +21,7 @@ public:
 	class UBoxComponent* HitColl;
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = ( AllowPrivateAccess = "true" ) )
-	class UBoxComponent* AttackColl;
+	class UProceduralMeshComponent* AttackColl;
 
 public:
 	// Sets default values for this character's properties

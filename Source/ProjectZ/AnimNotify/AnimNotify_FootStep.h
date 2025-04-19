@@ -16,7 +16,7 @@ class PROJECTZ_API UAnimNotify_FootStep : public UAnimNotify
 	GENERATED_BODY()
 
 public:
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify", meta = ( ExposeOnSpawn = true ) )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify" )
 	FVector FootLocation;
 
 public:

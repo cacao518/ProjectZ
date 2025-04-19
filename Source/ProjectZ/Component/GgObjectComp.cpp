@@ -15,11 +15,13 @@
 #include "System/GgAIController.h"
 #include "System/GgGameInstance.h"
 #include "System/GgAnimInstance.h"
+#include "Util/UtilCollision.h"
 #include "Util/UtilMaterial.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "ProceduralMeshComponent.h"
 #include "WaterBodyComponent.h"
 #include "LandscapeComponent.h"
 #include "LandscapeProxy.h"
@@ -81,12 +83,10 @@ void UGgObjectComp::SetAttackCollData( const FCollisionData& InAttackCollData )
 {
 	AttackCollData = InAttackCollData;
 
-	auto attackColl = OwningActor ? Cast<UBoxComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "AttackColl" ) ) ) : nullptr;
-	if( attackColl )
-	{ 
-		attackColl->SetBoxExtent( AttackCollData.Size );
-		attackColl->SetRelativeLocation( AttackCollData.Pos );
-	}
+	auto attackColl = OwningActor ? Cast<UProceduralMeshComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "AttackColl" ) ) ) : nullptr;
+	if( !attackColl ) return;
+
+	UtilCollision::SetProceduralMeshCollision( attackColl, InAttackCollData );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,12 +110,14 @@ void UGgObjectComp::SetJumpPower( float InJumpPower )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgObjectComp::SetIsEnabledAttackColl( bool InIsEnabled )
 {
-	auto attackColl = OwningActor ? Cast<UBoxComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "AttackColl" ) ) ) : nullptr;
-	if( attackColl )
-	{ 
-		attackColl->SetCollisionEnabled( InIsEnabled ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision );
-		attackColl->SetVisibility( InIsEnabled );
-	}
+	auto attackColl = OwningActor ? Cast<UProceduralMeshComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "AttackColl" ) ) ) : nullptr;
+	if( !attackColl ) return;
+
+	ResetHitObjects();
+
+	bEnableAttackColl = InIsEnabled;
+
+	attackColl->SetCollisionEnabled( InIsEnabled ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,10 +126,9 @@ void UGgObjectComp::SetIsEnabledAttackColl( bool InIsEnabled )
 void UGgObjectComp::SetIsEnabledHitColl( bool InIsEnabled )
 {
 	auto hitColl = OwningActor ? Cast<UBoxComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "HitColl" ) ) ) : nullptr;
-	if( hitColl )
-	{
-		hitColl->SetCollisionEnabled( InIsEnabled ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision );
-	}
+	if( !hitColl ) return;
+
+	hitColl->SetCollisionEnabled( InIsEnabled ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,8 +176,8 @@ void UGgObjectComp::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponen
 	if( Cast<AActor>( OtherActor ) == OwningActor ) 
 		return;
 
-	auto boxComponent = Cast<UBoxComponent>( OtherComp );
-	if( boxComponent && boxComponent->GetName().Equals( TEXT( "AttackColl" ) ) )
+	auto component = Cast<UProceduralMeshComponent>( OtherComp );
+	if( component && component->GetName().Equals( TEXT( "AttackColl" ) ) )
 	{
 		_ProcessHit( OtherActor );
 		return;
@@ -236,20 +237,23 @@ void UGgObjectComp::_ProcessDie()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgObjectComp::_ProcessHit( AActor* InOtherActor )
 {
-	auto othetGgObjectComp = InOtherActor ? InOtherActor->FindComponentByClass<UGgObjectComp>() : nullptr;
-	if( !othetGgObjectComp )
+	auto othetObjectComp = InOtherActor ? InOtherActor->FindComponentByClass<UGgObjectComp>() : nullptr;
+	if( !othetObjectComp )
 		return;
 
-	if ( othetGgObjectComp->GetTeamType() == ETeamType::MAX || TeamType == ETeamType::MAX )
+	if( othetObjectComp->FindHitObject( Id ) )
 		return;
 
-	if ( othetGgObjectComp->GetTeamType() == TeamType && !othetGgObjectComp->Stat.IsTyrant )
+	if ( othetObjectComp->GetTeamType() == ETeamType::MAX || TeamType == ETeamType::MAX )
 		return;
 
-	othetGgObjectComp->OnAttackSuccess();
+	if ( othetObjectComp->GetTeamType() == TeamType && !othetObjectComp->Stat.IsTyrant )
+		return;
+
+	othetObjectComp->OnAttackSuccess();
 
 	// 체력 감소
-	float totalDamage = othetGgObjectComp->GetAttackCollInfo().Power * othetGgObjectComp->GetStat().AttackPower;
+	float totalDamage = othetObjectComp->GetAttackCollInfo().Power * othetObjectComp->GetStat().AttackPower;
 	totalDamage -= Stat.DefensePower;
 	totalDamage = totalDamage > 0 ? totalDamage : 1;
 
@@ -257,6 +261,8 @@ void UGgObjectComp::_ProcessHit( AActor* InOtherActor )
 	Stat.Hp = decrease > 0 ? decrease : 0;
 
 	_ProcessCameraShake( InOtherActor );
+
+	othetObjectComp->AddHitObject( Id );
 
 	/*FString str = OwningActor->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
 	if ( GEngine )

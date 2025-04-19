@@ -33,7 +33,7 @@ public:
 	class UBoxComponent* HitColl;
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = ( AllowPrivateAccess = "true" ) )
-	class UBoxComponent* AttackColl;
+	class UProceduralMeshComponent* AttackColl;
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
 	TArray<int> SkillInfos;             
