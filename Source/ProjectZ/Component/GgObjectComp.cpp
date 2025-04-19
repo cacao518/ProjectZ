@@ -113,8 +113,6 @@ void UGgObjectComp::SetIsEnabledAttackColl( bool InIsEnabled )
 	auto attackColl = OwningActor ? Cast<UProceduralMeshComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "AttackColl" ) ) ) : nullptr;
 	if( !attackColl ) return;
 
-	ResetHitObjects();
-
 	bEnableAttackColl = InIsEnabled;
 
 	attackColl->SetCollisionEnabled( InIsEnabled ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision );
@@ -241,9 +239,6 @@ void UGgObjectComp::_ProcessHit( AActor* InOtherActor )
 	if( !othetObjectComp )
 		return;
 
-	if( othetObjectComp->FindHitObject( Id ) )
-		return;
-
 	if ( othetObjectComp->GetTeamType() == ETeamType::MAX || TeamType == ETeamType::MAX )
 		return;
 
@@ -261,8 +256,6 @@ void UGgObjectComp::_ProcessHit( AActor* InOtherActor )
 	Stat.Hp = decrease > 0 ? decrease : 0;
 
 	_ProcessCameraShake( InOtherActor );
-
-	othetObjectComp->AddHitObject( Id );
 
 	/*FString str = OwningActor->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
 	if ( GEngine )

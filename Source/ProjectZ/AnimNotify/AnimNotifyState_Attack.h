@@ -29,9 +29,9 @@ protected:
 
 #if WITH_EDITOR
 	void PostEditChangeProperty( FPropertyChangedEvent& PropertyChangedEvent );
-#endif
 
 private:
 	// 히트 박스 모양을 그린다.
 	void _DebugShape();
+#endif
 };

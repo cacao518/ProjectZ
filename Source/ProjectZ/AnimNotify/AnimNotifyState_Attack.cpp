@@ -23,9 +23,11 @@ void UAnimNotifyState_Attack::NotifyBegin( USkeletalMeshComponent* MeshComp, UAn
 	CurWorld = MeshComp->GetWorld();
 	Owner = MeshComp->GetOwner();
 
+#if WITH_EDITOR
 	if( CurWorld && CurWorld->WorldType == EWorldType::EditorPreview )
 		_DebugShape();
-	
+#endif
+
 	UGgCharacterComp* charComp = MeshComp->GetOwner()->FindComponentByClass<UGgCharacterComp>();
 	if( !charComp ) return;
 
@@ -76,6 +78,7 @@ void UAnimNotifyState_Attack::PostEditChangeProperty( FPropertyChangedEvent& Pro
 }
 #endif
 
+#if WITH_EDITOR
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 히트 박스 모양을 그린다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -172,3 +175,4 @@ void UAnimNotifyState_Attack::_DebugShape()
 		}
 	}
 }
+#endif

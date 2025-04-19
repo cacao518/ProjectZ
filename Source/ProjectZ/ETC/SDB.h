@@ -159,11 +159,8 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Fan", meta = ( EditCondition = "Shape == ECollShapeType::FAN" ) )
 	float Height;
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Fan", meta = ( ClampMin = "0", ClampMax = "360" ), meta = ( EditCondition = "Shape == ECollShapeType::FAN" ) )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Fan", meta = ( ClampMin = "0", ClampMax = "180" ), meta = ( EditCondition = "Shape == ECollShapeType::FAN" ) )
 	float Angle;
-
-public:
-	TSet<int64> HitObjList;
 
 public:
 	FCollisionData()

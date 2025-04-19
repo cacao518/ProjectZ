@@ -49,6 +49,7 @@ namespace UtilCollision
 			InPMC->bUseComplexAsSimpleCollision = false;
 			InPMC->AddCollisionConvexMesh( ConvexVerts );
 
+#if WITH_EDITOR
 			if( InDebugShape )
 			{
 				TArray<FVector> Vertices = ConvexVerts;
@@ -80,6 +81,7 @@ namespace UtilCollision
 
 				InPMC->CreateMeshSection_LinearColor( 0, Vertices, Triangles, Normals, UV0, VertexColors, Tangents, false );
 			}
+#endif
 		}
 		else if( InCollData.Shape == ECollShapeType::FAN )
 		{
@@ -108,15 +110,7 @@ namespace UtilCollision
 				Vertices.Add( RotQuat.RotateVector( point + InCollData.Pos ) );
 			}
 
-			// 3. 바닥 삼각형 인덱스
-			for( int32 i = 1; i <= numSegments; ++i )
-			{
-				Triangles.Add( 0 );
-				Triangles.Add( i );
-				Triangles.Add( i + 1 );
-			}
-
-			// 4. 윗면 점 추가 (Height 위로 올림)
+			// 3. 윗면 점 추가 (Height 위로 올림)
 			int32 baseVertexCount = Vertices.Num();
 			for( int32 i = 0; i < baseVertexCount; ++i )
 			{
@@ -124,48 +118,62 @@ namespace UtilCollision
 				Vertices.Add( topVertex );
 			}
 
-			// 5. 옆면 삼각형 (부채꼴 벽면)
-			for( int32 i = 1; i <= numSegments; ++i )
+			InPMC->bUseComplexAsSimpleCollision = false;
+			InPMC->AddCollisionConvexMesh( Vertices );
+
+#if WITH_EDITOR
+			if( InDebugShape )
 			{
-				int32 bl = i;
-				int32 br = i + 1;
-				int32 tl = bl + baseVertexCount;
-				int32 tr = br + baseVertexCount;
+				// 1. 바닥 삼각형 인덱스
+				for( int32 i = 1; i <= numSegments; ++i )
+				{
+					Triangles.Add( 0 );
+					Triangles.Add( i );
+					Triangles.Add( i + 1 );
+				}
 
-				// 쿼드 → 삼각형 2개
-				Triangles.Add( bl );
-				Triangles.Add( tl );
-				Triangles.Add( tr );
+				// 2. 옆면 삼각형 (부채꼴 벽면)
+				for( int32 i = 1; i <= numSegments; ++i )
+				{
+					int32 bl = i;
+					int32 br = i + 1;
+					int32 tl = bl + baseVertexCount;
+					int32 tr = br + baseVertexCount;
 
-				Triangles.Add( bl );
-				Triangles.Add( tr );
-				Triangles.Add( br );
+					// 쿼드 → 삼각형 2개
+					Triangles.Add( bl );
+					Triangles.Add( tl );
+					Triangles.Add( tr );
+
+					Triangles.Add( bl );
+					Triangles.Add( tr );
+					Triangles.Add( br );
+				}
+
+				// 3. 위쪽 부채꼴 삼각형도 추가 (옵션)
+				// 상단 중심 인덱스는 baseVertexCount (== 위쪽 부채꼴 중심)
+				for( int32 i = 1; i <= numSegments; ++i )
+				{
+					Triangles.Add( baseVertexCount ); // 윗면 중심
+					Triangles.Add( baseVertexCount + i + 1 );
+					Triangles.Add( baseVertexCount + i );
+				}
+
+				// 4. 부가 정보
+				TArray<FVector> Normals;
+				TArray<FVector2D> UV0;
+				TArray<FLinearColor> VertexColors;
+				TArray<FProcMeshTangent> Tangents;
+
+				Normals.SetNumZeroed( Vertices.Num() );
+				UV0.SetNumZeroed( Vertices.Num() );
+				VertexColors.Init( FLinearColor::White, Vertices.Num() );
+				Tangents.SetNumZeroed( Vertices.Num() );
+
+				// 5. 메쉬 생성
+				InPMC->CreateMeshSection_LinearColor( 0, Vertices, Triangles, Normals, UV0, VertexColors, Tangents, false );
 			}
-
-			// 6. 위쪽 부채꼴 삼각형도 추가 (옵션)
-			// 상단 중심 인덱스는 baseVertexCount (== 위쪽 부채꼴 중심)
-			for( int32 i = 1; i <= numSegments; ++i )
-			{
-				Triangles.Add( baseVertexCount ); // 윗면 중심
-				Triangles.Add( baseVertexCount + i + 1 );
-				Triangles.Add( baseVertexCount + i );
-			}
-
-			// 7. 부가 정보
-			TArray<FVector> Normals;
-			TArray<FVector2D> UV0;
-			TArray<FLinearColor> VertexColors;
-			TArray<FProcMeshTangent> Tangents;
-
-			Normals.SetNumZeroed( Vertices.Num() );
-			UV0.SetNumZeroed( Vertices.Num() );
-			VertexColors.Init( FLinearColor::White, Vertices.Num() );
-			Tangents.SetNumZeroed( Vertices.Num() );
-
-			// 8. 메쉬 생성
-			InPMC->bUseComplexAsSimpleCollision = true;
-			InPMC->CreateMeshSection_LinearColor( 0, Vertices, Triangles, Normals, UV0, VertexColors, Tangents, true );
-			InPMC->SetVisibility( InDebugShape );
+#endif
 		}
 	}
 }

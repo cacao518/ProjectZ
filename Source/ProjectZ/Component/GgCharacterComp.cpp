@@ -364,9 +364,6 @@ void UGgCharacterComp::_ProcessHit( AActor* InOtherActor )
 	if( !othetObjectComp )
 		return;
 
-	if( othetObjectComp->FindHitObject( Id ) )
-		return;
-
 	if ( othetObjectComp->GetTeamType() == ETeamType::MAX || TeamType == ETeamType::MAX )
 		return;
 
@@ -413,11 +410,9 @@ void UGgCharacterComp::_ProcessHit( AActor* InOtherActor )
 
 	_UpdateHpBar();
 
-	//FString str = OwningActor->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
-	//if ( GEngine )
-	//	GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
-
-	othetObjectComp->AddHitObject( Id );
+	FString str = OwningActor->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
+	if ( GEngine )
+		GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

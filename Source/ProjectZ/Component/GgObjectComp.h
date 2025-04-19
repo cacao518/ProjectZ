@@ -49,15 +49,6 @@ public:
 	// 대상을 바라본다.
 	void LookAt( ACharacter* InTarget );
 
-	// 타격한 대상을 추가한다.
-	void AddHitObject( int64 InObjId ) { AttackCollData.HitObjList.Add( InObjId ); };
-
-	// 타격한 대상 리스트를 초기화한다.
-	void ResetHitObjects() { AttackCollData.HitObjList.Empty(); };
-
-	// 타격한 대상에 등록되어있는지 확인한다.
-	bool FindHitObject( int64 InObjId ) { return AttackCollData.HitObjList.Contains( InObjId ); }
-
 	// 공격 성공 처리를 한다.
 	virtual void OnAttackSuccess() {};
 
