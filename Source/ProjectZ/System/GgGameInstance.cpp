@@ -45,13 +45,13 @@ void UGgGameInstance::Init()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgGameInstance::Shutdown()
 {
-	Super::Shutdown();
-
 	FGgObjectManager::DestroyInstance();
 	FGgDataInfoManager::DestroyInstance();
 	FGgCameraManager::DestroyInstance();
 	FGgLockOnManager::DestroyInstance();
 	FGgUIManager::DestroyInstance();
+
+	Super::Shutdown();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
