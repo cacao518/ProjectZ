@@ -90,7 +90,6 @@ namespace UtilCollision
 
 			int numSegments = 10;
 			TArray<FVector> Vertices;
-			TArray<int32> Triangles;
 
 			float halfAngleRad = FMath::DegreesToRadians( InCollData.Angle * 0.5f );
 			float angleStepDeg = InCollData.Angle / numSegments;
@@ -124,6 +123,8 @@ namespace UtilCollision
 #if WITH_EDITOR
 			if( InDebugShape )
 			{
+				TArray<int32> Triangles;
+
 				// 1. 바닥 삼각형 인덱스
 				for( int32 i = 1; i <= numSegments; ++i )
 				{
@@ -181,7 +182,6 @@ namespace UtilCollision
 			InPMC->ClearCollisionConvexMeshes();
 
 			TArray<FVector> Vertices;
-			TArray<int32> Triangles;
 
 			int numSegments = 10;
 			float angleStepRad = 2 * PI / numSegments;
@@ -216,6 +216,8 @@ namespace UtilCollision
 #if WITH_EDITOR
 			if( InDebugShape )
 			{
+				TArray<int32> Triangles;
+
 				// 바닥 삼각형
 				for( int32 i = 0; i < numSegments; ++i )
 				{

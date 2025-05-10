@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
 #include "NiagaraSystem.h"
-#include "SDB.generated.h"
+#include "GgConst.generated.h"
 
 
 using namespace std;

@@ -10,7 +10,7 @@
 #include "Manager/GgDataInfoManager.h"
 #include "System/GgAnimInstance.h"
 #include "System/GgGameInstance.h"
-#include "ETC/SDB.h"
+#include "ETC/GgConst.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 

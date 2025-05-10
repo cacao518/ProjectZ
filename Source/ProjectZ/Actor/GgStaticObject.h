@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ETC/SDB.h"
+#include "ETC/GgConst.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GgStaticObject.generated.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ETC/SDB.h"
+#include "ETC/GgConst.h"
 #include "ProceduralMeshComponent.h"
 
 

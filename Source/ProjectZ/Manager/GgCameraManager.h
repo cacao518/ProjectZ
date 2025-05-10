@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ETC/SDB.h"
+#include "ETC/GgConst.h"
 #include "GgSingletonBase.h"
 #include "CoreMinimal.h"
 #include <unordered_map>

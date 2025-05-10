@@ -8,7 +8,6 @@
 #include "System/GgAnimInstance.h"
 #include "System/GgGameInstance.h"
 #include "System/GgGameModeBase.h"
-#include "ETC/SDB.h"
 #include "Blueprint/UserWidget.h"
 #include "Misc/OutputDeviceNull.h"
 #include "Components/WidgetComponent.h"

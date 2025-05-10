@@ -4,7 +4,6 @@
 #include "GgMaterialComp.h"
 #include "GgWeaponComp.h"
 #include "GgFloatingBarComp.h"
-#include "ETC/SDB.h"
 #include "Actor/GgCharacterPC.h"
 #include "Actor/GgCharacterNPC.h"
 #include "Manager/GgObjectManager.h"

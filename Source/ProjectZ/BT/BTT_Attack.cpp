@@ -2,7 +2,7 @@
 
 
 #include "BTT_Attack.h"
-#include "ETC/SDB.h"
+#include "ETC/GgConst.h"
 #include "System/GgAIController.h"
 #include "Component/GgCharacterComp.h"
 #include "GameFramework/Character.h"

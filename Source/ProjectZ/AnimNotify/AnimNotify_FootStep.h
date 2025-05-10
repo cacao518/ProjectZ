@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "../ETC/SDB.h"
+#include "ETC/GgConst.h"
 #include "Animation/AnimNotifies/AnimNotify.h"
 #include "AnimNotify_FootStep.generated.h"
 

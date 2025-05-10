@@ -3,7 +3,7 @@
 #pragma once
 
 #include "ETC/GgActorSpawner.h"
-#include "ETC/SDB.h"
+//#include "ETC/SDB.h"
 #include "GgSingletonBase.h"
 #include "CoreMinimal.h"
 #include <unordered_map>

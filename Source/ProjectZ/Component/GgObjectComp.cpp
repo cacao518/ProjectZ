@@ -3,7 +3,6 @@
 #include "GgObjectComp.h"
 #include "GgMaterialComp.h"
 #include "GgWeaponComp.h"
-#include "ETC/SDB.h"
 #include "Actor/GgCharacterPC.h"
 #include "Actor/GgCharacterNPC.h"
 #include "Actor/GgStaticObject.h"

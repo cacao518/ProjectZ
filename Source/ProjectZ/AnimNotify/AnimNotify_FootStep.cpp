@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "AnimNotify_FootStep.h"
-#include "ETC/SDB.h"
+#include "ETC/GgConst.h"
 #include "Component/GgCharacterComp.h"
 #include "Manager/GgObjectManager.h"
 #include "Manager/GgDataInfoManager.h"

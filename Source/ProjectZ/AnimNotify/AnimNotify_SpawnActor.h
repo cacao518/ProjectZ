@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotify.h"
-#include "../ETC/SDB.h"
+#include "ETC/GgConst.h"
 #include "AnimNotify_SpawnActor.generated.h"
 
 /**

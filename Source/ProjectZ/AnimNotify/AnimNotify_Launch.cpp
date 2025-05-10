@@ -2,7 +2,7 @@
 
 
 #include "AnimNotify_Launch.h"
-#include "ETC/SDB.h"
+#include "ETC/GgConst.h"
 #include "Component/GgCharacterComp.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"

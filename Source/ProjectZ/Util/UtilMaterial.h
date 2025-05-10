@@ -1,16 +1,16 @@
 #pragma once
 
-#include "../ETC/SDB.h"
+#include "ETC/GgConst.h"
 
 
 namespace UtilMaterial
 {
-	// Actor ¹ß ¹Ø¿¡ ÀÖ´Â MaterialInterfaceÀ» ¾Ë¾Æ³½´Ù.
+	// Actor ë°œ ë°‘ì— ìˆëŠ” MaterialInterfaceì„ ì•Œì•„ë‚¸ë‹¤.
 	UMaterialInterface* GetSteppedMatrialInterface( AActor* InActor );
 
-	// Actor°¡ °¡Áö°í ÀÖ´Â MaterialInterface¸¦ ¾Ë¾Æ³½´Ù.
+	// Actorê°€ ê°€ì§€ê³  ìˆëŠ” MaterialInterfaceë¥¼ ì•Œì•„ë‚¸ë‹¤.
 	UMaterialInterface* GetMatrialInterface( AActor* InActor );
 
-	// MaterialInterface¸¦ EMaterialState·Î ¹Ù²ãÁØ´Ù.
+	// MaterialInterfaceë¥¼ EMaterialStateë¡œ ë°”ê¿”ì¤€ë‹¤.
 	EMaterialState ConvertMatAssetToMatState( UMaterialInterface* InMaterial );
 }

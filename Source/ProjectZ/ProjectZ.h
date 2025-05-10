@@ -3,4 +3,4 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ETC/SDB.h"
+#include "ETC/GgConst.h"

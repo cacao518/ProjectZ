@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "../ETC/SDB.h"
+#include "../ETC/GgConst.h"
 #include "Animation/AnimInstance.h"
 #include "GgAnimInstance.generated.h"
 
@@ -17,21 +17,21 @@ class PROJECTZ_API UGgAnimInstance : public UAnimInstance
 	
 public:
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	float        Speed;                 // ÀÌµ¿¼Óµµ   
+	float        Speed;                 // ì´ë™ì†ë„   
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	bool         IsJump;                // Á¡ÇÁ Áß ¿©ºÎ
+	bool         IsJump;                // ì í”„ ì¤‘ ì—¬ë¶€
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	bool         IsFly;                 // ³¯±â Áß ¿©ºÎ
+	bool         IsFly;                 // ë‚ ê¸° ì¤‘ ì—¬ë¶€
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	bool         IsDie;                 // »ç¸Á ¿©ºÎ
+	bool         IsDie;                 // ì‚¬ë§ ì—¬ë¶€
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	EAnimState   AnimState;             // ¾Ö´Ï¸ŞÀÌ¼Ç »óÅÂ
+	EAnimState   AnimState;             // ì• ë‹ˆë©”ì´ì…˜ ìƒíƒœ
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	EAnimSubState   AnimSubState;       // ¾Ö´Ï¸ŞÀÌ¼Ç º¸Á¶ »óÅÂ
+	EAnimSubState   AnimSubState;       // ì• ë‹ˆë©”ì´ì…˜ ë³´ì¡° ìƒíƒœ
 
 };
