@@ -62,7 +62,7 @@ AActor* FGgObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation
 		auto objectComp = newActor ? newActor->FindComponentByClass<UGgObjectComp>() : nullptr;
 		if( objectComp )
 		{
-			objectComp->SetId( ObjectId );
+			objectComp->SetObjId( ObjectId );
 			objectComp->SetTeamType( InTeamType );
 			objectComp->SetIsSpawnedInEditor( false );
 		}
@@ -123,12 +123,12 @@ void FGgObjectManager::DestroyActor( AActor* InActor )
 	if( !objectComp )
 		return;
 
-	if( Objects.Find( objectComp->GetId() ) )
+	if( Objects.Find( objectComp->GetObjId() ) )
 	{
 		InActor->Destroy();
-		Objects.Remove( objectComp->GetId() );
+		Objects.Remove( objectComp->GetObjId() );
 
-		const auto& spawner = SpawnerMap.FindRef( objectComp->GetId() );
+		const auto& spawner = SpawnerMap.FindRef( objectComp->GetObjId() );
 		if( spawner.IsValid() )
 		{
 			spawner.Get()->SubSpawnCountInWorld();
@@ -162,10 +162,10 @@ void FGgObjectManager::RegisterActorInEditor( AActor* InActor )
 	if( !objectComp )
 		return;
 
-	if( Objects.Find( objectComp->GetId() ) )
+	if( Objects.Find( objectComp->GetObjId() ) )
 		return;
 
-	objectComp->SetId( ObjectId );
+	objectComp->SetObjId( ObjectId );
 	objectComp->SetTeamType( ETeamType::MAX );
 
 	Objects.Add( ObjectId, InActor );

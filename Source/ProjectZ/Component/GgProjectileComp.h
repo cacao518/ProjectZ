@@ -12,19 +12,15 @@ class PROJECTZ_API UGgProjectileComp final : public UGgObjectComp
 {
 	GENERATED_BODY()
 
-public:
+private:
 	// 공격 콜리전 정보
-	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	FCollisionData     AttackCollData;         
 
-	// 지속 시간
-	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	float LifeTime = 0;                             
-
 	// 투사체 방향
-	FVector Direction;                          
+	FVector Direction;
 
-private:
+	// 지속 시간
+	float LifeTime = 0;                             
 	float LifeTimeAcc = 0;
 
 public:

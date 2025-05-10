@@ -5,6 +5,7 @@
 #include "System/GgAIController.h"
 #include "Actor/GgCharacterNPC.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Manager/GgDataInfoManager.h"
 #include "NavigationSystem.h"
 
 UBTT_FindPatrolPos::UBTT_FindPatrolPos()
@@ -26,7 +27,11 @@ EBTNodeResult::Type UBTT_FindPatrolPos::ExecuteTask( UBehaviorTreeComponent& Own
 	if( !controllingCharacterNPC )
 		return EBTNodeResult::Failed;
 
-	PatrolRadius = controllingCharacterNPC->PatrolRange;
+	const auto& npcInfo = GetGgDataInfoManager().GetNPCInfos().Find( controllingCharacterNPC->InfoId );
+	if( !npcInfo )
+		return EBTNodeResult::Failed;
+
+	PatrolRadius = npcInfo->PatrolRange;
 	FVector origin = controllingCharacterNPC->GetActorLocation();
 	FNavLocation nextPatrol;
 	if( navSystem->GetRandomPointInNavigableRadius( origin, PatrolRadius, nextPatrol ) )

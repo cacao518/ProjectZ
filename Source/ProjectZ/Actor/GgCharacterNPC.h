@@ -17,6 +17,10 @@ class PROJECTZ_API AGgCharacterNPC final : public ACharacter
 	GENERATED_BODY()
 
 public:
+	// NPC 인포 식별자
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
+	int InfoId;
+
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
 	class UGgCharacterComp* CharacterComp;
 
@@ -34,15 +38,6 @@ public:
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = ( AllowPrivateAccess = "true" ) )
 	class UProceduralMeshComponent* AttackColl;
-
-	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
-	TArray<int> SkillInfos;             
-
-	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
-	float PatrolRange;
-
-	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay, meta = ( AllowPrivateAccess = "true" ) )
-	float DetectRange;
 
 public:
 	// Sets default values for this character's properties

@@ -2,6 +2,8 @@
 
 
 #include "GgProjectileComp.h"
+#include "Actor/GgProjectile.h"
+#include "Manager/GgDataInfoManager.h"
 
 UGgProjectileComp::UGgProjectileComp()
 {
@@ -47,6 +49,17 @@ void UGgProjectileComp::OnAttackSuccess()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgProjectileComp::_Init()
 {
+	AGgProjectile* proj = Cast< AGgProjectile >( GetOwner() );
+	if( !proj )
+		return;
+
+	const auto& projInfo = GetGgDataInfoManager().GetProjectileInfos().Find( proj->InfoId );
+	if( !projInfo )
+		return;
+
+	AttackCollData = projInfo->AttackCollData;
+	LifeTime = projInfo->LifeTime;
+
 	const FRotator rotation = OwningActor->GetActorRotation();
 	Direction = FRotationMatrix( rotation ).GetUnitAxis( EAxis::X );
 

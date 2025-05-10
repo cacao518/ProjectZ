@@ -336,7 +336,7 @@ public:
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	bool LockOnLookAt;                                 // 락온 상태에서 스킬 시전 시 바라볼 것인지 여부 
-	
+
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	bool EquipSubWeapon;                               // 보조 무기 장착 여부
 
@@ -348,6 +348,23 @@ public:
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float ActivateRangeMax;                            // 스킬 발동 범위 최대 (몬스터 전용)
+
+	/// 맵 키를 반환한다.
+	int GetKey(){ return Num; };
+};
+
+// 플레이어 기본 스텟 정보
+USTRUCT( Atomic, BlueprintType )
+struct FPlayerDefaultStatInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int Num;                            // 식별자
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	FStatusData Stat;                   // 스텟
 
 	/// 맵 키를 반환한다.
 	int GetKey(){ return Num; };
@@ -391,6 +408,81 @@ public:
 
 	/// 맵 키를 반환한다.
 	int GetKey(){ return WeaponNum; };
+};
+
+// NPC 정보
+USTRUCT( Atomic, BlueprintType )
+struct FNPCInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int Num;                            // 식별자
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	FStatusData Stat;                   // 스텟
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	TArray<int> SkillInfos;             // 스킬
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float PatrolRange;                  // 정찰 이동 범위
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float DetectRange;                  // 탐지 범위
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	FString BPPath;                    // BP 경로
+
+	/// 맵 키를 반환한다.
+	int GetKey(){ return Num; };
+};
+
+// 정적 오브젝트 정보
+USTRUCT( Atomic, BlueprintType )
+struct FStaticObjectInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int Num;                            // 식별자
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	FStatusData Stat;                   // 스텟
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	FString BPPath;                    // BP 경로
+
+	/// 맵 키를 반환한다.
+	int GetKey(){ return Num; };
+};
+
+// 투사체 정보
+USTRUCT( Atomic, BlueprintType )
+struct FProjectileInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int Num;                            // 식별자
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	FStatusData Stat;                   // 스텟
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	FCollisionData     AttackCollData; // 공격 콜리전 정보
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float LifeTime = 0;                // 지속 시간
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	FString BPPath;                    // BP 경로
+
+	/// 맵 키를 반환한다.
+	int GetKey(){ return Num; };
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -16,11 +16,10 @@ class PROJECTZ_API UGgObjectComp : public UActorComponent
 public:
 	// 오브젝트 아이디 값
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay )
-	int64              Id = 0;                      
+	int64              ObjId = 0;                                    
 
-	// 능력치
-	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	FStatusData        Stat;                    
+public:
+	FStatusData        Stat;                                   // 현재 능력치
 
 protected:
 	AActor*            OwningActor       = nullptr;            // 부모 액터 클래스
@@ -57,7 +56,7 @@ public:
 	///////////////////////////////////////////////////////////////////////
 
 	// 오브젝트 아이디를 셋팅한다.
-	void SetId( int InId ){ Id = InId; };
+	void SetObjId( int InObjId ){ ObjId = InObjId; };
 
 	// 팀 타입을 설정한다.
 	void SetTeamType( ETeamType InTeamType ){ TeamType = InTeamType; };
@@ -112,7 +111,7 @@ public:
 	const FCollisionData& GetAttackCollInfo() { return AttackCollData; };
 
 	// 오브젝트 아이디를 반환한다.
-	int GetId(){ return Id; };
+	int GetObjId(){ return ObjId; };
 
 	// 현재 능력치를 반환한다.
 	const FStatusData& GetStat() { return Stat; };

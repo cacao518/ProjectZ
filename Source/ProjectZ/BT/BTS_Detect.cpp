@@ -9,6 +9,7 @@
 #include "Component/GgCharacterComp.h"
 #include "Component/GgMaterialComp.h"
 #include "Util/UtilMaterial.h"
+#include "Manager/GgDataInfoManager.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
 #include <algorithm>
@@ -35,7 +36,11 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 	if( !world )
 		return;
 
-	DetectRadius = controllingChar->DetectRange;
+	const auto& npcInfo = GetGgDataInfoManager().GetNPCInfos().Find( controllingChar->InfoId );
+	if( !npcInfo )
+		return;
+
+	DetectRadius = npcInfo->DetectRange;
 
 	FVector center = controllingChar->GetActorLocation();
 

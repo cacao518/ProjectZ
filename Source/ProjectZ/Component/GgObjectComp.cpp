@@ -266,9 +266,38 @@ void UGgObjectComp::_ProcessHit( AActor* InOtherActor )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgObjectComp::_Init()
 {
-	InitStat = Stat;
-
 	OwningActor = Cast<AActor>( GetOwner() );
+
+	if( AGgCharacterPC* pc = Cast<AGgCharacterPC>( OwningActor ) )
+	{
+		if( const auto& pcInfo = GetGgDataInfoManager().GetPlayerDefaultStatInfos().Find( 0 ) )
+		{
+			Stat = pcInfo->Stat;
+		}
+	}
+	else if( AGgCharacterNPC* npc = Cast<AGgCharacterNPC>( OwningActor ) )
+	{
+		if( const auto& npcInfo = GetGgDataInfoManager().GetNPCInfos().Find( npc->InfoId ) )
+		{
+			Stat = npcInfo->Stat;
+		}
+	}
+	else if( AGgProjectile* proj = Cast<AGgProjectile>( OwningActor ) )
+	{
+		if( const auto& projInfo = GetGgDataInfoManager().GetProjectileInfos().Find( proj->InfoId ) )
+		{
+			Stat = projInfo->Stat;
+		}
+	}
+	else if( AGgStaticObject* so = Cast<AGgStaticObject>( OwningActor ) )
+	{
+		if( const auto& soInfo = GetGgDataInfoManager().GetProjectileInfos().Find( so->InfoId ) )
+		{
+			Stat = soInfo->Stat;
+		}
+	}
+
+	InitStat = Stat;
 
 	auto hitColl = OwningActor ? Cast<UBoxComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "HitColl" ) ) ) : nullptr;
 	if( hitColl )
