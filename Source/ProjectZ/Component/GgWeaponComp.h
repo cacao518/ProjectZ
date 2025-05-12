@@ -19,7 +19,7 @@ class PROJECTZ_API UGgWeaponComp final : public UActorComponent
 public:
 	// 무기 식별자 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	int32                           WeaponNum;       	        
+	int32                           WeaponInfoId;       	        
 
 private:
 	ACharacter*                     OwningCharacter;             // 부모 캐릭터 클래스
@@ -53,7 +53,7 @@ public:
 	///////////////////////////////////////////////////////////////////////
 	
 	// 무기를 변경한다.
-	void EquipWeapon( int32 InWeaponNum, bool InChangeAnim = true );
+	void EquipWeapon( int32 InWeaponInfoId, bool InChangeAnim = true );
 
 	// 무기를 해제한다.
 	void UnEquipWeapon();
@@ -72,7 +72,7 @@ public:
 	EWeaponType GetWeaponType() { return WeaponType; };
 
 	// 현재 무기 식별자를 반환한다.
-	int GetCurWeaponNum() { return WeaponNum; };
+	int GetCurWeaponInfoId() { return WeaponInfoId; };
 
 	// 현재 무기 스태틱매쉬를 반환한다.
 	UStaticMeshComponent* GetCurWeaponMesh() { return WeaponMesh; };

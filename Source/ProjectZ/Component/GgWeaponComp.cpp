@@ -34,7 +34,7 @@ void UGgWeaponComp::BeginPlay()
 	OwningCharacter = Cast<ACharacter>( GetOwner() );
 
 	_InitWeaponMesh();
-	EquipWeapon( WeaponNum, false );
+	EquipWeapon( WeaponInfoId, false );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,18 +59,18 @@ void UGgWeaponComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 무기를 변경한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGgWeaponComp::EquipWeapon( int32 InWeaponNum, bool InChangeAnim )
+void UGgWeaponComp::EquipWeapon( int32 InWeaponInfoId, bool InChangeAnim )
 {
 	if( WeaponMeshes.IsEmpty() )
 		return;
 
-	const auto& curWeaponInfo = GetGgDataInfoManager().GetWeaponInfos().Find( InWeaponNum );
+	const auto& curWeaponInfo = GetGgDataInfoManager().GetWeaponInfos().Find( InWeaponInfoId );
 	if( !curWeaponInfo )
 		return;
 
-	WeaponNum = InWeaponNum;
+	WeaponInfoId = InWeaponInfoId;
 	WeaponType = curWeaponInfo->Type;
-	WeaponMesh = WeaponMeshes.FindRef( InWeaponNum );
+	WeaponMesh = WeaponMeshes.FindRef( InWeaponInfoId );
 
 	if( !WeaponMesh )
 		return;
@@ -97,11 +97,11 @@ void UGgWeaponComp::EquipWeapon( int32 InWeaponNum, bool InChangeAnim )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgWeaponComp::UnEquipWeapon()
 {
-	const auto& curWeaponInfo = GetGgDataInfoManager().GetWeaponInfos().Find( WeaponNum );
+	const auto& curWeaponInfo = GetGgDataInfoManager().GetWeaponInfos().Find( WeaponInfoId );
 	if( !curWeaponInfo )
 		return;
 
-	WeaponNum = 0;
+	WeaponInfoId = 0;
 	WeaponMesh = nullptr;
 	WeaponType = EWeaponType::MAX;
 

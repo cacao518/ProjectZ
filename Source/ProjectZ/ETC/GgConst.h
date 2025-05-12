@@ -287,7 +287,7 @@ struct FWeaponInfo : public FTableRowBase
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int Num;                    // 식별자
+	int InfoId;                    // 식별자
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	EWeaponType Type;         // 무기 종류
@@ -299,7 +299,7 @@ public:
 	FString ThorwingBPPath;        // 무기 투척시 소환할 BP 경로
 
 	/// 맵 키를 반환한다.
-	int GetKey(){ return Num; };
+	int GetKey(){ return InfoId; };
 };
 
 
@@ -311,7 +311,7 @@ struct FSkillInfo : public FTableRowBase
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int Num;                                           // 식별자
+	int InfoId;                                           // 식별자
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float CoolTime;                                    // 쿨타임
@@ -329,10 +329,10 @@ public:
 	TArray<EAnimState> PlayEnableState;                // 스킬 사용 가능한 상태
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	TArray<int> PlayEnableSkillNum;                    // 스킬 사용 가능한 스킬아이디
+	TArray<int> PlayEnableSkillId;                    // 스킬 사용 가능한 스킬아이디
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int DerivedSkillNum;                               // 파생 스킬 식별자 
+	int DerivedSkillId;                               // 파생 스킬 식별자
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	bool LockOnLookAt;                                 // 락온 상태에서 스킬 시전 시 바라볼 것인지 여부 
@@ -350,7 +350,7 @@ public:
 	float ActivateRangeMax;                            // 스킬 발동 범위 최대 (몬스터 전용)
 
 	/// 맵 키를 반환한다.
-	int GetKey(){ return Num; };
+	int GetKey(){ return InfoId; };
 };
 
 // 플레이어 기본 스텟 정보
@@ -361,13 +361,13 @@ struct FPlayerDefaultStatInfo : public FTableRowBase
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int Num;                            // 식별자
+	int InfoId;                            // 식별자
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FStatusData Stat;                   // 스텟
 
 	/// 맵 키를 반환한다.
-	int GetKey(){ return Num; };
+	int GetKey(){ return InfoId; };
 };
 
 // 플레이어 기본 스킬 정보
@@ -381,7 +381,7 @@ public:
 	EInputKeyType InputKey;                          // 입력 키
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int SkillNum;                                    // 입력 키에 해당하는 스킬 넘버
+	int SkillId;                                    // 입력 키에 해당하는 스킬 넘버
 
 	/// 맵 키를 반환한다.
 	EInputKeyType GetKey(){ return InputKey; };
@@ -395,19 +395,19 @@ struct FPlayerWeaponSkillInfo : public FTableRowBase
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int WeaponNum;                           // 무기 식별자
+	int WeaponInfoId;                         // 무기 식별자
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int L_SkillNum;                          // 약공격 
+	int L_SkillId;                          // 약공격 
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int R_SkillNum;                          // 강공격 
+	int R_SkillId;                          // 강공격 
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int ThrowSkillNum;                       // 무기 투척
+	int ThrowSkillId;                       // 무기 투척
 
 	/// 맵 키를 반환한다.
-	int GetKey(){ return WeaponNum; };
+	int GetKey(){ return WeaponInfoId; };
 };
 
 // NPC 정보
@@ -418,7 +418,7 @@ struct FNPCInfo : public FTableRowBase
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int Num;                            // 식별자
+	int InfoId;                            // 식별자
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FStatusData Stat;                   // 스텟
@@ -436,7 +436,7 @@ public:
 	FString BPPath;                    // BP 경로
 
 	/// 맵 키를 반환한다.
-	int GetKey(){ return Num; };
+	int GetKey(){ return InfoId; };
 };
 
 // 정적 오브젝트 정보
@@ -447,7 +447,7 @@ struct FStaticObjectInfo : public FTableRowBase
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int Num;                            // 식별자
+	int InfoId;                            // 식별자
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FStatusData Stat;                   // 스텟
@@ -456,7 +456,7 @@ public:
 	FString BPPath;                    // BP 경로
 
 	/// 맵 키를 반환한다.
-	int GetKey(){ return Num; };
+	int GetKey(){ return InfoId; };
 };
 
 // 투사체 정보
@@ -467,7 +467,7 @@ struct FProjectileInfo : public FTableRowBase
 
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int Num;                            // 식별자
+	int InfoId;                            // 식별자
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FStatusData Stat;                   // 스텟
@@ -482,7 +482,7 @@ public:
 	FString BPPath;                    // BP 경로
 
 	/// 맵 키를 반환한다.
-	int GetKey(){ return Num; };
+	int GetKey(){ return InfoId; };
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -128,14 +128,14 @@ bool UGgCharacterComp::SkillPlay( int InSkillNum )
 	// 파생스킬을 발동 시킬 것인지 확인
 	if( CurSkillInfo )
 	{
-		if( skillInfo->DerivedSkillNum != 0 && IsEnableDerivedKey )
+		if( skillInfo->DerivedSkillId != 0 && IsEnableDerivedKey )
 		{
-			if( CurSkillInfo->Num == skillInfo->Num )
+			if( CurSkillInfo->InfoId == skillInfo->InfoId )
 			{
 				IsEnableDerivedKey = false;
 			}
 
-			return SkillPlay( skillInfo->DerivedSkillNum );
+			return SkillPlay( skillInfo->DerivedSkillId );
 		}
 	}
 
@@ -144,14 +144,14 @@ bool UGgCharacterComp::SkillPlay( int InSkillNum )
 		return false;
 
 	// 쿨타임 확인
-	if ( IsCoolingSkill( skillInfo->Num ) )
+	if ( IsCoolingSkill( skillInfo->InfoId ) )
 		return false;
 
 	// 현재 스킬 사용 가능한 AnimState / SkillNum 인지 확인
 	bool isEmptyEnableState = skillInfo->PlayEnableState.IsEmpty();
-	bool isEmptyEnableSkillNum = skillInfo->PlayEnableSkillNum.IsEmpty();
+	bool isEmptyEnableSkillNum = skillInfo->PlayEnableSkillId.IsEmpty();
 	bool isFindEnableState = skillInfo->PlayEnableState.Find( AnimState ) != INDEX_NONE;
-	bool isFindEnableSkillNum = skillInfo->PlayEnableSkillNum.Find( CurSkillInfo ? CurSkillInfo->Num : 0 ) != INDEX_NONE;
+	bool isFindEnableSkillNum = skillInfo->PlayEnableSkillId.Find( CurSkillInfo ? CurSkillInfo->InfoId : 0 ) != INDEX_NONE;
 
 	// 사용가능한 AnimState / SkillNum 이 둘 다 설정 되어 있을 경우 둘 중 하나만 만족하면 된다.
 	if ( !isEmptyEnableState && !isEmptyEnableSkillNum )
@@ -513,10 +513,10 @@ void UGgCharacterComp::_RegisterCoolTime( const FSkillInfo& InSkillInfo )
 	if( InSkillInfo.CoolTime <= 0 )
 		return;
 
-	if( float* coolTime = CoolingSkills.Find( InSkillInfo.Num ) )
+	if( float* coolTime = CoolingSkills.Find( InSkillInfo.InfoId ) )
 		*coolTime = InSkillInfo.CoolTime;
 	else
-		CoolingSkills.Add( InSkillInfo.Num, InSkillInfo.CoolTime );
+		CoolingSkills.Add( InSkillInfo.InfoId, InSkillInfo.CoolTime );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

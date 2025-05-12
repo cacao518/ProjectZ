@@ -27,7 +27,7 @@ void UAnimNotify_SpawnThrowingItem::SetProperty( AActor* InOwner )
 	if ( !weaponComp )
 		return;
 
-	const auto& weaponInfo = GetGgDataInfoManager().GetWeaponInfos().Find( weaponComp->GetCurWeaponNum() );
+	const auto& weaponInfo = GetGgDataInfoManager().GetWeaponInfos().Find( weaponComp->GetCurWeaponInfoId() );
 	if ( !weaponInfo )
 		return;
 

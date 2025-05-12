@@ -202,11 +202,11 @@ void AGgPlayerController::ProcessLeftMouse()
 	if( !WeaponComp )
 		return;
 
-	const auto& skillInfo = GetGgDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetCurWeaponNum() );
+	const auto& skillInfo = GetGgDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetCurWeaponInfoId() );
 	if ( !skillInfo )
 		return;
 
-	_SkillPlay( skillInfo->L_SkillNum ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::LEFT_MOUSE );
+	_SkillPlay( skillInfo->L_SkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::LEFT_MOUSE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -217,11 +217,11 @@ void AGgPlayerController::ProcessRightMouse()
 	if( !WeaponComp )
 		return;
 
-	const auto& skillInfo = GetGgDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetCurWeaponNum() );
+	const auto& skillInfo = GetGgDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetCurWeaponInfoId() );
 	if ( !skillInfo )
 		return;
 
-	_SkillPlay( skillInfo->R_SkillNum ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::RIGHT_MOUSE );
+	_SkillPlay( skillInfo->R_SkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::RIGHT_MOUSE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -314,7 +314,7 @@ void AGgPlayerController::ProcessSpace()
 	if ( !skillInfo )
 		return;
 
-	_SkillPlay( skillInfo->SkillNum ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::SPACE );
+	_SkillPlay( skillInfo->SkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::SPACE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -328,11 +328,11 @@ void AGgPlayerController::ProcessTab()
 	if ( WeaponComp->GetWeaponType() == EWeaponType::DEFAULT )
 		return;
 
-	const auto& skillInfo = GetGgDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetCurWeaponNum() );
+	const auto& skillInfo = GetGgDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetCurWeaponInfoId() );
 	if ( !skillInfo )
 		return;
 
-	_SkillPlay( skillInfo->ThrowSkillNum ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::Tab );
+	_SkillPlay( skillInfo->ThrowSkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::Tab );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -344,7 +344,7 @@ void AGgPlayerController::ProcessF()
 	if ( !skillInfo )
 		return;
 
-	_SkillPlay( skillInfo->SkillNum );
+	_SkillPlay( skillInfo->SkillId );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -358,7 +358,7 @@ void AGgPlayerController::ProcessR()
 
 	//if ( MatComp && MatComp->GetMatState() != EMaterialState::JELLY )
 	//{
-	//	if ( _SkillPlay( skillInfo->SkillNum ) )
+	//	if ( _SkillPlay( skillInfo->SkillId ) )
 	//	{
 	//		MatComp->SetMatState( nullptr, true );
 	//	}
@@ -380,7 +380,7 @@ void AGgPlayerController::Process1()
 	if ( !skillInfo )
 		return;
 
-	_SkillPlay( skillInfo->SkillNum );
+	_SkillPlay( skillInfo->SkillId );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -398,7 +398,7 @@ void AGgPlayerController::Process2()
 	if( !skillInfo )
 		return;
 
-	_SkillPlay( skillInfo->SkillNum );
+	_SkillPlay( skillInfo->SkillId );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -416,18 +416,18 @@ void AGgPlayerController::Process3()
 	if( !skillInfo )
 		return;
 
-	_SkillPlay( skillInfo->SkillNum );
+	_SkillPlay( skillInfo->SkillId );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 스킬을 재생한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-bool AGgPlayerController::_SkillPlay( int InSkillNum )
+bool AGgPlayerController::_SkillPlay( int InSkillId )
 {
 	if( !CharacterComp )
 		return false;
 
-	return CharacterComp->SkillPlay( InSkillNum );
+	return CharacterComp->SkillPlay( InSkillId );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
