@@ -3,7 +3,7 @@
 #pragma once
 
 #include "ETC/GgActorSpawner.h"
-//#include "ETC/SDB.h"
+#include "ETC/GgConst.h"
 #include "GgSingletonBase.h"
 #include "CoreMinimal.h"
 #include <unordered_map>
@@ -14,12 +14,9 @@ class AGgActorSpawner;
 class UNiagaraSystem;
 
 
-using ActorPtr        = TWeakObjectPtr< AActor >;
-using ActorSpawnerPtr = TWeakObjectPtr< AGgActorSpawner >;
-
-using ActorMap         = TMap< int, ActorPtr >;
-using SpawnerMap       = TMap< int, ActorSpawnerPtr >;
-using ActorSpawnerList = TArray< ActorSpawnerPtr >;
+using ActorMap         = TMap< int, FActorPtr >;
+using SpawnerMap       = TMap< int, FActorSpawnerPtr >;
+using ActorSpawnerList = TArray< FActorSpawnerPtr >;
 
 
 class FGgObjectManager final : public FGgSingletonBase< FGgObjectManager >
@@ -48,32 +45,32 @@ public:
 	///////////////////////////////////////////////////////////////
 	
 	// 액터 생성
-	AActor* SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InTeamType = ETeamType::MAX, AGgActorSpawner* InSpawner = nullptr );
+	AActor* SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InTeamType = ETeamType::MAX, FActorSpawnerPtr InSpawner = nullptr );
 
 	// 정적 오브젝트 생성
 	AActor* SpawnStaticObject( const FString& InName, const FVector& InLocation, const FRotator& InRotator );
 
 	// 파티클 생성
-	void SpawnParticle( const FString& InEffectName, const AActor* InUseActor, const FVector& InLocation, const FRotator& InRotator );
+	void SpawnParticle( const FString& InEffectName, const FActorPtr InUseActor, const FVector& InLocation, const FRotator& InRotator );
 
 	// 파티클 생성
-	void SpawnParticle( UNiagaraSystem* InEffect, const AActor* InUseActor, const FVector& InLocation, const FRotator& InRotator );
+	void SpawnParticle( UNiagaraSystem* InEffect, const FActorPtr InUseActor, const FVector& InLocation, const FRotator& InRotator );
 
 	// 액터 제거
-	void DestroyActor( AActor* InActor );
+	void DestroyActor( FActorPtr InActor );
 
 	// 리스트를 정리한다.
 	void Clear();
 
 	// 에디터에서 소환된 액터를 등록한다.
-	void RegisterActorInEditor( AActor* InActor );
+	void RegisterActorInEditor( FActorPtr InActor );
 
 	///////////////////////////////////////////////////////////////
 	/// 스포너
 	///////////////////////////////////////////////////////////////
 	
 	//// 스포너 등록 함수
-	void RegisterSpawner( AGgActorSpawner* InSpawner);
+	void RegisterSpawner( FActorSpawnerPtr InSpawner );
 
 	//// 스포너에서 스폰한다.
 	void SpawnActorInSpawner( float InDeltaTime );

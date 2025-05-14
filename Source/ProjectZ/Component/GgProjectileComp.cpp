@@ -72,6 +72,8 @@ void UGgProjectileComp::_Init()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgProjectileComp::_ProcessMove()
 {
+	if( !OwningActor.IsValid() ) return;
+
 	float moveSpeed = GetWorld()->GetDeltaSeconds() * Stat.MoveSpeed * CONST::ANIM_LERP_MULITPLIER;
 	OwningActor->SetActorLocation( OwningActor->GetActorLocation() + ( Direction * moveSpeed ), true );
 }

@@ -274,7 +274,7 @@ void AGgPlayerController::ProcessBothMouseUp()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGgPlayerController::ProcessWheelClick()
 {
-	if( GetGgLockOnManager().GetLockOnTarget() )
+	if( GetGgLockOnManager().GetLockOnTarget().IsValid() )
 	{
 		GetGgLockOnManager().LockOnRelease();
 		return;
@@ -288,7 +288,7 @@ void AGgPlayerController::ProcessWheelClick()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGgPlayerController::ProcessWheelUp()
 {
-	if ( GetGgLockOnManager().GetLockOnTarget() )
+	if ( GetGgLockOnManager().GetLockOnTarget().IsValid() )
 	{
 		GetGgLockOnManager().LockOnStart( ELockOnMode::Prev );
 	}
@@ -299,7 +299,7 @@ void AGgPlayerController::ProcessWheelUp()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGgPlayerController::ProcessWheelDown()
 {
-	if ( GetGgLockOnManager().GetLockOnTarget() )
+	if ( GetGgLockOnManager().GetLockOnTarget().IsValid() )
 	{
 		GetGgLockOnManager().LockOnStart( ELockOnMode::Next );
 	}

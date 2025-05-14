@@ -12,8 +12,10 @@ namespace UtilMaterial
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//// @briefActor 발 밑에 있는 MaterialInterface을 알아낸다.
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	UMaterialInterface* GetSteppedMatrialInterface( AActor* InActor )
+	UMaterialInterface* GetSteppedMatrialInterface( FActorPtr InActor )
 	{
+		if( !InActor.IsValid() ) return nullptr;
+
 		FVector LineTraceStart = InActor->GetActorLocation();
 		FVector LineTraceEnd = FVector( InActor->GetActorLocation().X, InActor->GetActorLocation().Y, InActor->GetActorLocation().Z - 150.f );
 
@@ -29,7 +31,7 @@ namespace UtilMaterial
 		);*/
 
 		// 쿼리 변수 설정
-		FCollisionQueryParams TraceParameters( FName( TEXT( "" ) ), false, InActor ); //Tag, Bool Trace Complex, Ignore 액터 (자신 제외)
+		FCollisionQueryParams TraceParameters( FName( TEXT( "" ) ), false, InActor.Get() ); //Tag, Bool Trace Complex, Ignore 액터 (자신 제외)
 		FHitResult hitResult;
 		GetGgGameInstance().GetWorld()->LineTraceSingleByObjectType(
 			OUT hitResult,
@@ -55,8 +57,10 @@ namespace UtilMaterial
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//// @brief Actor가 가지고 있는 MaterialInterface를 알아낸다.
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	UMaterialInterface* GetMatrialInterface( AActor* InActor )
+	UMaterialInterface* GetMatrialInterface( FActorPtr InActor )
 	{
+		if( !InActor.IsValid() ) return nullptr;
+
 		UMaterialInterface* matInterface = nullptr;
 
 		// 몬스터나 플레이어

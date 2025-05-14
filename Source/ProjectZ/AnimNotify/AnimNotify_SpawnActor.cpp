@@ -26,9 +26,9 @@ void UAnimNotify_SpawnActor::SetProperty( AActor* InOwner )
 	FVector relativeSpawnPos = spawnPosComp->GetRelativeLocation() + Pos;
 	FVector worldSpawnPos = UKismetMathLibrary::TransformLocation( spawnPosComp->GetComponentTransform(), relativeSpawnPos );
 
-	ResultActor  = Actor;
-	ResultPos    = worldSpawnPos;
-	ResultRotate = InOwner->GetActorRotation() + Rotate;
+	ResultActorClass = ActorClass.IsValid() ? ActorClass.Get() : ActorClass.LoadSynchronous();
+	ResultPos        = worldSpawnPos;
+	ResultRotate     = InOwner->GetActorRotation() + Rotate;
 }
 
 void UAnimNotify_SpawnActor::Notify( USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation )
@@ -50,7 +50,7 @@ void UAnimNotify_SpawnActor::Notify( USkeletalMeshComponent* MeshComp, UAnimSequ
 	SetProperty( owner );
 
 	if( SetAsParentTeamType )
-		GetGgObjectManager().SpawnActor( ResultActor, ResultPos, ResultRotate, objComp->GetTeamType() );
+		GetGgObjectManager().SpawnActor( ResultActorClass.Get(), ResultPos, ResultRotate, objComp->GetTeamType());
 	else
-		GetGgObjectManager().SpawnActor( ResultActor, ResultPos, ResultRotate );
+		GetGgObjectManager().SpawnActor( ResultActorClass.Get(), ResultPos, ResultRotate);
 }

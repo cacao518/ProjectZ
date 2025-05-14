@@ -31,9 +31,9 @@ void UAnimNotify_SpawnThrowingItem::SetProperty( AActor* InOwner )
 	if ( !weaponInfo )
 		return;
 
-	FString path = weaponInfo->ThorwingBPPath;
+	FString path = weaponInfo->ThorwingBPPath.ToString();
 	UClass* thorwingBP = ConstructorHelpersInternal::FindOrLoadClass( path, AGgProjectile::StaticClass() );
-	ResultActor = thorwingBP;
+	ResultActorClass = thorwingBP;
 
 	/* Set Pos */
 	UGgObjectComp* objComp = InOwner->FindComponentByClass<UGgObjectComp>();
@@ -50,7 +50,7 @@ void UAnimNotify_SpawnThrowingItem::SetProperty( AActor* InOwner )
 	ResultPos = worldSpawnPos;
 
 	/* Set Rotate */
-	ACharacter* lockOnTarget = GetGgLockOnManager().GetLockOnTarget();
+	ACharacter* lockOnTarget = GetGgLockOnManager().GetLockOnTarget().Get();
 	if ( lockOnTarget )
 		ResultRotate = UKismetMathLibrary::FindLookAtRotation( InOwner->GetActorLocation(), lockOnTarget->GetActorLocation() );
 	else

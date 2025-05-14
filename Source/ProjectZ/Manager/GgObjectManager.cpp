@@ -35,7 +35,7 @@ void FGgObjectManager::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 액터 생성
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-AActor* FGgObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InTeamType, AGgActorSpawner* InSpawner )
+AActor* FGgObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InTeamType, FActorSpawnerPtr InSpawner )
 {
 	const auto& actor = Objects.FindRef( ObjectId );
 	if( actor.IsValid() )
@@ -67,8 +67,8 @@ AActor* FGgObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation
 			objectComp->SetIsSpawnedInEditor( false );
 		}
 
-		if( InSpawner )
-			SpawnerMap.Add( ObjectId, ActorSpawnerPtr( InSpawner ) );
+		if( InSpawner.IsValid() )
+			SpawnerMap.Add( ObjectId, FActorSpawnerPtr( InSpawner ) );
 
 		Objects.Add( ObjectId, newActor );
 
@@ -96,7 +96,7 @@ AActor* FGgObjectManager::SpawnStaticObject( const FString& InName, const FVecto
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 파티클 생성
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void FGgObjectManager::SpawnParticle( const FString& InEffectName, const AActor* InUseActor, const FVector& InLocation, const FRotator& InRotator )
+void FGgObjectManager::SpawnParticle( const FString& InEffectName, const FActorPtr InUseActor, const FVector& InLocation, const FRotator& InRotator )
 {
 	FString path = FString( TEXT( "/Game/Particle/" ) ) + InEffectName;
 	UNiagaraSystem* effect = LoadObject<UNiagaraSystem>( NULL, *path, NULL, LOAD_None, NULL);
@@ -109,7 +109,7 @@ void FGgObjectManager::SpawnParticle( const FString& InEffectName, const AActor*
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 파티클 생성
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void FGgObjectManager::SpawnParticle( UNiagaraSystem* InEffect, const AActor* InUseActor, const FVector& InLocation, const FRotator& InRotator )
+void FGgObjectManager::SpawnParticle( UNiagaraSystem* InEffect, const FActorPtr InUseActor, const FVector& InLocation, const FRotator& InRotator )
 {
 	UNiagaraFunctionLibrary::SpawnSystemAttached( InEffect, InUseActor->GetRootComponent(), NAME_None, InLocation, InRotator, EAttachLocation::KeepWorldPosition, true, true, ENCPoolMethod::None );
 }
@@ -117,9 +117,9 @@ void FGgObjectManager::SpawnParticle( UNiagaraSystem* InEffect, const AActor* In
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 액터 제거 함수
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void FGgObjectManager::DestroyActor( AActor* InActor )
+void FGgObjectManager::DestroyActor( FActorPtr InActor )
 {
-	auto objectComp = InActor ? InActor->FindComponentByClass<UGgObjectComp>() : nullptr;
+	auto objectComp = InActor.IsValid() ? InActor->FindComponentByClass<UGgObjectComp>() : nullptr;
 	if( !objectComp )
 		return;
 
@@ -137,7 +137,7 @@ void FGgObjectManager::DestroyActor( AActor* InActor )
 	}
 	else
 	{
-		if( InActor )
+		if( InActor.IsValid() )
 			InActor->Destroy();
 	}
 }
@@ -156,9 +156,9 @@ void FGgObjectManager::Clear()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 에디터에서 소환된 액터를 등록한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void FGgObjectManager::RegisterActorInEditor( AActor* InActor )
+void FGgObjectManager::RegisterActorInEditor( FActorPtr InActor )
 {
-	auto objectComp = InActor ? InActor->FindComponentByClass<UGgObjectComp>() : nullptr;
+	auto objectComp = InActor.IsValid() ? InActor->FindComponentByClass<UGgObjectComp>() : nullptr;
 	if( !objectComp )
 		return;
 
@@ -176,9 +176,9 @@ void FGgObjectManager::RegisterActorInEditor( AActor* InActor )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 스포너 등록 함수
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void FGgObjectManager::RegisterSpawner( AGgActorSpawner* InSpawner )
+void FGgObjectManager::RegisterSpawner( FActorSpawnerPtr InSpawner )
 {
-	if( !InSpawner )
+	if( !InSpawner.IsValid() )
 		return;
 
 	SpawnerList.Add( InSpawner );

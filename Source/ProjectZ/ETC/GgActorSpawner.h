@@ -15,7 +15,7 @@ class PROJECTZ_API AGgActorSpawner : public AActor
 public:
 	///< 스폰할 액터
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	UClass* ActorClass;              
+	TSoftClassPtr<AActor> ActorClass;              
 
 	///< 스폰 간격 ( 해당 초 간격으로 반복 생성 )
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
@@ -48,7 +48,7 @@ public:
 	bool CanSpawn();
 
 	// 소환할 액터를 반환한다.
-	UClass* GetActorClass(){ return ActorClass; };
+	UClass* GetActorClass(){ return ActorClass.IsValid() ? ActorClass.Get() : ActorClass.LoadSynchronous(); };
 
 	void AddSpawnIntervalCount( float InDeltaTime ){ SpawnIntervalCount += InDeltaTime; };
 	void ResetSpawnIntervalCount(){ SpawnIntervalCount = 0; };

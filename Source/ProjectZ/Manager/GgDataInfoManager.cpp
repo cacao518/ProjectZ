@@ -28,13 +28,13 @@ FGgDataInfoManager::~FGgDataInfoManager()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void FGgDataInfoManager::DataCreate()
 {
-	_LoadDataTable< FPlayerDefaultSkillInfo, PlayerDefaultSkillInfoMap >( PlayerDefaultSkillInfos, TEXT( "/Game/Data/DT_PlayerDefaultSkillInfo" ) );
-	_LoadDataTable< FPlayerWeaponSkillInfo,  PlayerWeaponSkillInfoMap > ( PlayerWeaponSkillInfos,  TEXT( "/Game/Data/DT_PlayerWeaponSkillInfo" ) );
-	_LoadDataTable< FPlayerDefaultStatInfo,  PlayerDefaultStatInfoMap > ( PlayerDefaultStatInfos,  TEXT( "/Game/Data/DT_PlayerDefaultStatInfo" ) );
-	_LoadDataTable< FMaterialInfo,           MaterialInfoMap >          ( MaterialInfos,           TEXT( "/Game/Data/DT_MaterialInfo" ) );
-	_LoadDataTable< FWeaponInfo,             WeaponInfoMap >            ( WeaponInfos,             TEXT( "/Game/Data/DT_WeaponInfo" ) );
-	_LoadDataTable< FSkillInfo,              SkillInfoMap >             ( SkillInfos,              TEXT( "/Game/Data/DT_SkillInfo" ) );
-	_LoadDataTable< FNPCInfo,                NPCInfoMap >               ( NPCInfos,                TEXT( "/Game/Data/DT_NPCInfo" ) );
-	_LoadDataTable< FProjectileInfo,         ProjectileInfoMap >        ( ProjectileInfos,         TEXT( "/Game/Data/DT_ProjectileInfo" ) );
-	_LoadDataTable< FStaticObjectInfo,       StaticObjectInfoMap >      ( StaticObjectInfos,       TEXT( "/Game/Data/DT_StaticObjectInfo" ) );
+	_LoadDataTable< FPlayerDefaultSkillInfo, PlayerDefaultSkillInfoMap >( PlayerDefaultSkillInfos, TEXT( "/Game/Data/DT_PlayerDefaultSkill" ) );
+	_LoadDataTable< FPlayerWeaponSkillInfo,  PlayerWeaponSkillInfoMap > ( PlayerWeaponSkillInfos,  TEXT( "/Game/Data/DT_PlayerWeaponSkill" ) );
+	_LoadDataTable< FPlayerDefaultStatInfo,  PlayerDefaultStatInfoMap > ( PlayerDefaultStatInfos,  TEXT( "/Game/Data/DT_PlayerDefaultStat" ) );
+	_LoadDataTable< FMaterialInfo,           MaterialInfoMap >          ( MaterialInfos,           TEXT( "/Game/Data/DT_Material" ) );
+	_LoadDataTable< FWeaponInfo,             WeaponInfoMap >            ( WeaponInfos,             TEXT( "/Game/Data/DT_Weapon" ) );
+	_LoadDataTable< FSkillInfo,              SkillInfoMap >             ( SkillInfos,              TEXT( "/Game/Data/DT_Skill" ) );
+	_LoadDataTable< FNPCInfo,                NPCInfoMap >               ( NPCInfos,                TEXT( "/Game/Data/DT_NPC" ) );
+	_LoadDataTable< FProjectileInfo,         ProjectileInfoMap >        ( ProjectileInfos,         TEXT( "/Game/Data/DT_Projectile" ) );
+	_LoadDataTable< FStaticObjectInfo,       StaticObjectInfoMap >      ( StaticObjectInfos,       TEXT( "/Game/Data/DT_StaticObject" ) );
 }

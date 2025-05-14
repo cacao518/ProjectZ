@@ -170,7 +170,7 @@ void FGgLockOnManager::LockOnRelease()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void FGgLockOnManager::_ProcessLockOn()
 {
-	if( !LockOnTarget )
+	if( !LockOnTarget.IsValid() )
 		return;
 
 	AGgCharacterPC* myPlayer = GetGgGameInstance().GetMyPlayer();
@@ -185,7 +185,7 @@ void FGgLockOnManager::_ProcessLockOn()
 	if( !otherGgObjectComp )
 		return;
 
-	bool targetDie = !GetValid( LockOnTarget ) || otherGgObjectComp->GetIsDie();
+	bool targetDie = !LockOnTarget.IsValid() || otherGgObjectComp->GetIsDie();
 	bool targetAway = LockOnTarget->GetDistanceTo( myPlayer ) > CONST::LOCKON_RANGE;
 	bool ownerDie = !GetValid( myPlayer ) || ownerGgObjectComp->GetIsDie();
 	

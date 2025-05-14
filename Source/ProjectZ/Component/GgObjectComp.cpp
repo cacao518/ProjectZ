@@ -65,9 +65,9 @@ void UGgObjectComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 대상을 바라본다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGgObjectComp::LookAt( ACharacter* InTarget )
+void UGgObjectComp::LookAt( FCharacterPtr InTarget )
 {
-	if( !OwningActor || !InTarget )
+	if( !OwningActor.IsValid() || !InTarget.IsValid() )
 		return;
 
 	FRotator rotator = UKismetMathLibrary::FindLookAtRotation( OwningActor->GetActorLocation(), InTarget->GetActorLocation() );
@@ -82,7 +82,7 @@ void UGgObjectComp::SetAttackCollData( const FCollisionData& InAttackCollData )
 {
 	AttackCollData = InAttackCollData;
 
-	auto attackColl = OwningActor ? Cast<UProceduralMeshComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "AttackColl" ) ) ) : nullptr;
+	auto attackColl = OwningActor.IsValid() ? Cast<UProceduralMeshComponent>(OwningActor->GetDefaultSubobjectByName(TEXT("AttackColl"))) : nullptr;
 	if( !attackColl ) return;
 
 	UtilCollision::SetProceduralMeshCollision( attackColl, InAttackCollData );
@@ -109,7 +109,7 @@ void UGgObjectComp::SetJumpPower( float InJumpPower )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgObjectComp::SetIsEnabledAttackColl( bool InIsEnabled )
 {
-	auto attackColl = OwningActor ? Cast<UProceduralMeshComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "AttackColl" ) ) ) : nullptr;
+	auto attackColl = OwningActor.IsValid() ? Cast<UProceduralMeshComponent>(OwningActor->GetDefaultSubobjectByName(TEXT("AttackColl"))) : nullptr;
 	if( !attackColl ) return;
 
 	bEnableAttackColl = InIsEnabled;
@@ -122,7 +122,7 @@ void UGgObjectComp::SetIsEnabledAttackColl( bool InIsEnabled )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgObjectComp::SetIsEnabledHitColl( bool InIsEnabled )
 {
-	auto hitColl = OwningActor ? Cast<UBoxComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "HitColl" ) ) ) : nullptr;
+	auto hitColl = OwningActor.IsValid() ? Cast<UBoxComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "HitColl" ) ) ) : nullptr;
 	if( !hitColl ) return;
 
 	hitColl->SetCollisionEnabled( InIsEnabled ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision );
@@ -133,7 +133,7 @@ void UGgObjectComp::SetIsEnabledHitColl( bool InIsEnabled )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 EObjectType UGgObjectComp::GetObjectType()
 {
-	if( !OwningActor )
+	if( !OwningActor.IsValid() )
 		return EObjectType::MAX;
 
 	if( auto characterPC = Cast< AGgCharacterPC >( OwningActor ) )
@@ -166,7 +166,7 @@ void UGgObjectComp::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponen
 									   AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
 									   bool bFromSweep, const FHitResult& SweepResult )
 {
-	if( !OwningActor || IsDie || IsFallWater ) 
+	if( !OwningActor.IsValid() || IsDie || IsFallWater )
 		return;
 
 	// 자기 자신 충돌은 무시한다.
@@ -186,8 +186,10 @@ void UGgObjectComp::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponen
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 카메라 쉐이크 처리를 한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGgObjectComp::_ProcessCameraShake( AActor* InOtherActor )
+void UGgObjectComp::_ProcessCameraShake( FActorPtr InOtherActor )
 {
+	if( !InOtherActor.IsValid() ) return;
+
 	// 내 플레이어가 맞거나, 때린 경우에만 카메라 쉐이크
 	AGgCharacterPC* myPlayer = GetGgGameInstance().GetMyPlayer();
 	if ( !myPlayer )
@@ -218,7 +220,7 @@ void UGgObjectComp::_ProcessCameraShake( AActor* InOtherActor )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgObjectComp::_ProcessDie()
 {
-	if( !OwningActor )
+	if( !OwningActor.IsValid() )
 		return;
 
 	if( IsFallWater || Stat.Hp <= 0 )
@@ -232,9 +234,9 @@ void UGgObjectComp::_ProcessDie()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 피격 처리를 한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGgObjectComp::_ProcessHit( AActor* InOtherActor )
+void UGgObjectComp::_ProcessHit( FActorPtr InOtherActor )
 {
-	auto othetObjectComp = InOtherActor ? InOtherActor->FindComponentByClass<UGgObjectComp>() : nullptr;
+	auto othetObjectComp = InOtherActor.IsValid() ? InOtherActor->FindComponentByClass<UGgObjectComp>() : nullptr;
 	if( !othetObjectComp )
 		return;
 
@@ -299,7 +301,7 @@ void UGgObjectComp::_Init()
 
 	InitStat = Stat;
 
-	auto hitColl = OwningActor ? Cast<UBoxComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "HitColl" ) ) ) : nullptr;
+	auto hitColl = OwningActor.IsValid() ? Cast<UBoxComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "HitColl" ) ) ) : nullptr;
 	if( hitColl )
 		hitColl->OnComponentBeginOverlap.AddDynamic( this, &UGgObjectComp::HitCollBeginOverlap );
 
@@ -318,7 +320,7 @@ void UGgObjectComp::_Init()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 물 히트 처리를 한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGgObjectComp::_ProcessWaterHit( AActor* InOtherActor )
+void UGgObjectComp::_ProcessWaterHit( FActorPtr InOtherActor )
 {
 	// 깊은 물에만 빠진다.
 	EMaterialState matState = UtilMaterial::ConvertMatAssetToMatState( UtilMaterial::GetMatrialInterface( InOtherActor ) );
@@ -330,7 +332,7 @@ void UGgObjectComp::_ProcessWaterHit( AActor* InOtherActor )
 		return;
 
 	/// 물은 물에 빠지지 않는다.
-	auto charMatProperty = OwningActor ? OwningActor->FindComponentByClass<UGgMaterialComp>() : nullptr;
+	auto charMatProperty = OwningActor.IsValid() ? OwningActor->FindComponentByClass<UGgMaterialComp>() : nullptr;
 	if( charMatProperty )
 	{
 		if( charMatProperty->GetMatState() == EMaterialState::WATER ||

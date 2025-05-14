@@ -17,7 +17,7 @@ class PROJECTZ_API UAnimNotify_SpawnActor : public UAnimNotify
 	
 public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify")
-	UClass* Actor;                 
+	TSoftClassPtr< AActor > ActorClass;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify" )
 	FVector Pos;
@@ -29,7 +29,7 @@ public:
 	bool SetAsParentTeamType = true;
 
 protected:
-	UClass*  ResultActor;
+	TWeakObjectPtr<UClass> ResultActorClass;
 	FVector  ResultPos;
 	FRotator ResultRotate;
 

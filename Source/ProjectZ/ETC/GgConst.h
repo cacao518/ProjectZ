@@ -9,6 +9,10 @@
 using namespace std;
 
 
+class AGgActorSpawner;
+class AGgProjectile;
+
+
 // 오브젝트 종류
 UENUM( BlueprintType )
 enum class EObjectType : uint8
@@ -296,7 +300,7 @@ public:
 	FName ComponentName;        // 스테틱 메쉬 컴포넌트 이름
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FString ThorwingBPPath;        // 무기 투척시 소환할 BP 경로
+	FSoftObjectPath ThorwingBPPath;      // 무기 투척시 소환할 BP 경로
 
 	/// 맵 키를 반환한다.
 	int GetKey(){ return InfoId; };
@@ -341,7 +345,7 @@ public:
 	bool EquipSubWeapon;                               // 보조 무기 장착 여부
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FString AnimPath;                                  // 몽타주 경로
+	FSoftObjectPath AnimPath;                           // 몽타주 경로
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float ActivateRangeMin;                            // 스킬 발동 범위 최소 (몬스터 전용)
@@ -433,7 +437,7 @@ public:
 	float DetectRange;                  // 탐지 범위
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FString BPPath;                    // BP 경로
+	FSoftObjectPath BPPath;            // BP 경로
 
 	/// 맵 키를 반환한다.
 	int GetKey(){ return InfoId; };
@@ -453,7 +457,7 @@ public:
 	FStatusData Stat;                   // 스텟
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FString BPPath;                    // BP 경로
+	FSoftObjectPath BPPath;            // BP 경로
 
 	/// 맵 키를 반환한다.
 	int GetKey(){ return InfoId; };
@@ -479,7 +483,7 @@ public:
 	float LifeTime = 0;                // 지속 시간
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FString BPPath;                    // BP 경로
+	FSoftObjectPath BPPath;            // BP 경로
 
 	/// 맵 키를 반환한다.
 	int GetKey(){ return InfoId; };
@@ -522,3 +526,11 @@ namespace CONST
 	constexpr float MIDDLE_RATE               = 1.2f;      // 중간 강도/질량 기준
 	constexpr float HARD_RATE                 = 1.5f;      // 고 강도/질량 기준
 };
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// Type def
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+using FActorPtr        = TWeakObjectPtr<AActor>;
+using FCharacterPtr    = TWeakObjectPtr<ACharacter>;
+using FActorSpawnerPtr = TWeakObjectPtr<AGgActorSpawner>;

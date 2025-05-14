@@ -22,14 +22,14 @@ class PROJECTZ_API UGgCharacterComp final : public UGgObjectComp
 public:
 	// 피격 애니메이션
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	UAnimMontage*      HitAnim;                 
+	TSoftObjectPtr<UAnimMontage>    HitAnim;
 
 	// 착지 애니메이션
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	UAnimMontage*      LandAnim;                
+	TSoftObjectPtr<UAnimMontage>    LandAnim;
 
 private:
-	ACharacter*        OwningCharacter = nullptr;               // 부모 캐릭터 클래스
+	FCharacterPtr      OwningCharacter = nullptr;               // 부모 캐릭터 클래스
 	EAnimState         AnimState       = EAnimState::IDLE_RUN;  // 애니메이션 상태
 	FVector            MovePos;                                 // 이동할 위치
 	CooltimeMap        CoolingSkills;                           // 쿨타임 돌고 있는 스킬 정보		
@@ -128,7 +128,7 @@ protected:
 	virtual void _ProcessDie() override;
 
 	// 피격 처리를 한다.
-	virtual void _ProcessHit( AActor* InOtherActor ) override;
+	virtual void _ProcessHit( FActorPtr InOtherActor ) override;
 
 private:
 	// 초기화 한다.

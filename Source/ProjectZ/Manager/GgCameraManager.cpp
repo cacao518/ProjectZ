@@ -36,12 +36,12 @@ void FGgCameraManager::Tick( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 카메라 쉐이크를 실행한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void FGgCameraManager::CameraShake( AActor* InCaster, float InScale, bool InShakeByWeight, bool InShakeByIntensity )
+void FGgCameraManager::CameraShake( FActorPtr InCaster, float InScale, bool InShakeByWeight, bool InShakeByIntensity )
 {
 	if( !GetGgGameInstance().IsValidLowLevel() )
 		return;
 
-	if ( !InCaster )
+	if ( !InCaster.IsValid() )
 		return;
 	
 	APlayerController* controller = GetGgGameInstance().GetPlayerController();
@@ -67,7 +67,7 @@ void FGgCameraManager::CameraShake( AActor* InCaster, float InScale, bool InShak
 	}
 	else if( InShakeByIntensity )
 	{
-		auto matProperty = InCaster ? InCaster->FindComponentByClass<UGgMaterialComp>() : nullptr;
+		auto matProperty = InCaster.IsValid() ? InCaster->FindComponentByClass<UGgMaterialComp>() : nullptr;
 		if( !matProperty )
 			return;
 
@@ -102,7 +102,7 @@ void FGgCameraManager::_ProcessCameraArm( float InDeltaTime )
 	else
 		cameraBoom->TargetArmLength = FMath::Lerp( cameraBoom->TargetArmLength, CONST::DEFAULT_TARGET_ARM_LENGTH, InDeltaTime * 5.f );
 
-	if( GetGgLockOnManager().GetLockOnTarget() )
+	if( GetGgLockOnManager().GetLockOnTarget().IsValid() )
 		cameraBoom->CameraRotationLagSpeed = CONST::LOCKON_CAMERA_ROTAION_LAG_SPEED;
 	else
 		cameraBoom->CameraRotationLagSpeed = 0.f;

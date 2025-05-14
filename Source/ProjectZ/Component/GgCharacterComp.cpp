@@ -101,7 +101,7 @@ void UGgCharacterComp::MontagePlay( const FString& InMontagePath, float InScale 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgCharacterComp::MontagePlay( UAnimMontage* InMontage, float InScale )
 {
-	if( !OwningCharacter )
+	if( !OwningCharacter.IsValid() )
 		return;
 
 	if ( !OwningCharacter->GetMesh() )
@@ -168,9 +168,9 @@ bool UGgCharacterComp::SkillPlay( int InSkillNum )
 	}
 
 	if ( skillInfo->PlaySpeedType == ESkillPlaySpeedType::DEFAULT )
-		MontagePlay( skillInfo->AnimPath );
+		MontagePlay( skillInfo->AnimPath.ToString() );
 	else
-		MontagePlay( skillInfo->AnimPath, skillInfo->PlaySpeedType == ESkillPlaySpeedType::ATTACK_SPEED ? Stat.AttackSpeed : Stat.MoveSpeed );
+		MontagePlay( skillInfo->AnimPath.ToString(), skillInfo->PlaySpeedType == ESkillPlaySpeedType::ATTACK_SPEED ? Stat.AttackSpeed : Stat.MoveSpeed );
 
 	_RegisterCoolTime( *skillInfo );
 
@@ -186,7 +186,7 @@ bool UGgCharacterComp::SkillPlay( int InSkillNum )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgCharacterComp::OnAttackSuccess()
 {
-	auto WeaponComp = OwningActor ? OwningActor->FindComponentByClass<UGgWeaponComp>() : nullptr;
+	auto WeaponComp = OwningActor.IsValid() ? OwningActor->FindComponentByClass<UGgWeaponComp>() : nullptr;
 	if( !WeaponComp )
 		return;
 
@@ -203,7 +203,7 @@ void UGgCharacterComp::SetMoveSpeed( float InMoveSpeed )
 {
 	Stat.MoveSpeed = InMoveSpeed;
 
-	auto characterMovement = OwningCharacter ? OwningCharacter->GetCharacterMovement() : nullptr;
+	auto characterMovement = OwningCharacter.IsValid() ? OwningCharacter->GetCharacterMovement() : nullptr;
 	if( characterMovement )
 		characterMovement->MaxWalkSpeed = Stat.MoveSpeed * CONST::DEFAULT_MOVE_SPEED;
 }
@@ -215,7 +215,7 @@ void UGgCharacterComp::SetJumpPower( float InJumpPower )
 {
 	Stat.JumpPower = InJumpPower;
 
-	auto characterMovement = OwningCharacter ? OwningCharacter->GetCharacterMovement() : nullptr;
+	auto characterMovement = OwningCharacter.IsValid() ? OwningCharacter->GetCharacterMovement() : nullptr;
 	if( characterMovement )
 		characterMovement->JumpZVelocity = Stat.JumpPower * CONST::DEFAULT_JUMP_POWER;
 }
@@ -225,7 +225,7 @@ void UGgCharacterComp::SetJumpPower( float InJumpPower )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgCharacterComp::SetMovePos( float InMovePower, bool InIsKnockBack )
 {
-	if( !OwningCharacter )
+	if( !OwningCharacter.IsValid() )
 		return;
 
 	const FRotator rotation = OwningCharacter->GetActorRotation();
@@ -243,7 +243,7 @@ void UGgCharacterComp::SetMovePos( float InMovePower, bool InIsKnockBack )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 FString UGgCharacterComp::GetCurMontageName()
 {
-	auto curMontage = OwningCharacter ? OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage() : nullptr;
+	auto curMontage = OwningCharacter.IsValid() ? OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage() : nullptr;
 	FString curMontageName = curMontage ? curMontage->GetName() : "";
 
 	return curMontageName;
@@ -293,7 +293,7 @@ bool UGgCharacterComp::IsHold()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgCharacterComp::_ProcessDie()
 {
-	if( !OwningCharacter )
+	if( !OwningCharacter.IsValid() )
 		return;
 
 	if( !IsDie && AnimState == EAnimState::DIE )
@@ -357,9 +357,9 @@ void UGgCharacterComp::_ProcessDie()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 피격 처리를 한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGgCharacterComp::_ProcessHit( AActor* InOtherActor )
+void UGgCharacterComp::_ProcessHit( FActorPtr InOtherActor )
 {
-	auto othetObjectComp = InOtherActor ? InOtherActor->FindComponentByClass<UGgObjectComp>() : nullptr;
+	auto othetObjectComp = InOtherActor.IsValid() ? InOtherActor->FindComponentByClass<UGgObjectComp>() : nullptr;
 	if( !othetObjectComp )
 		return;
 
@@ -380,8 +380,8 @@ void UGgCharacterComp::_ProcessHit( AActor* InOtherActor )
 	Stat.Hp = decrease > 0 ? decrease : 0;
 
 	// 경직
-	auto othetMatComp = InOtherActor ? InOtherActor->FindComponentByClass<UGgMaterialComp>() : nullptr;
-	auto myMatComp = OwningActor ? OwningActor->FindComponentByClass<UGgMaterialComp>() : nullptr;
+	auto othetMatComp = InOtherActor.IsValid() ? InOtherActor->FindComponentByClass<UGgMaterialComp>() : nullptr;
+	auto myMatComp = OwningActor.IsValid() ? OwningActor->FindComponentByClass<UGgMaterialComp>() : nullptr;
 
 	float myIntensity    = myMatComp    ? myMatComp->GetIntensity()    : 1.f;
 	float otherIntensity = othetMatComp ? othetMatComp->GetIntensity() : 1.f;
@@ -390,7 +390,8 @@ void UGgCharacterComp::_ProcessHit( AActor* InOtherActor )
 		float addTimeToDamage = totalDamage / Stat.Hpm;
 		float subTimeToMyStrength = Stat.Strength * 0.01f;
 		float hitPlayRate = FMath::Clamp( 1.f - addTimeToDamage + subTimeToMyStrength, 0.3f, 1.f );
-		MontagePlay( HitAnim, hitPlayRate );
+		UAnimMontage* hitAnim = HitAnim.IsValid() ? HitAnim.Get() : HitAnim.LoadSynchronous();
+		MontagePlay( hitAnim, hitPlayRate );
 		LookAt( Cast<ACharacter>( InOtherActor ) );
 
 		// 넉백
@@ -435,7 +436,7 @@ void UGgCharacterComp::_AnimStateChange()
 		return;
 	}
 
-	if( !OwningCharacter )
+	if( !OwningCharacter.IsValid() )
 		return;
 
 	UGgAnimInstance* animInstance = Cast<UGgAnimInstance>( OwningCharacter->GetMesh()->GetAnimInstance() );
@@ -482,7 +483,7 @@ void UGgCharacterComp::_ProcessMove()
 	if ( IsHold() )
 		return;
 
-	auto characterMovement = OwningCharacter ? OwningCharacter->GetCharacterMovement() : nullptr;
+	auto characterMovement = OwningCharacter.IsValid() ? OwningCharacter->GetCharacterMovement() : nullptr;
 
 	if( !characterMovement )
 		return;
@@ -559,8 +560,10 @@ void UGgCharacterComp::_FallingWater( float InDeltaTime )
 	auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
 	bool isNotHitAnim = curMontage && HitAnim && curMontage->GetName() != HitAnim->GetName();
 	if( !curMontage || isNotHitAnim )
-		MontagePlay( HitAnim, CONST::WATER_FALL_ANIM_TIME );
-
+	{
+		UAnimMontage* hitAnim = HitAnim.IsValid() ? HitAnim.Get() : HitAnim.LoadSynchronous();
+		MontagePlay( hitAnim, CONST::WATER_FALL_ANIM_TIME );
+	}
 	if( FallWaterTime <= 3.f )
 	{
 		FallWaterTime += InDeltaTime;
@@ -579,14 +582,14 @@ void UGgCharacterComp::_FallingWater( float InDeltaTime )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgCharacterComp::_ProcessLand()
 {
-	if( !OwningCharacter )
+	if( !OwningCharacter.IsValid() )
 		return;
 
 	auto animInstance = OwningCharacter->GetMesh()->GetAnimInstance();
 	if( !animInstance )
 		return;
 
-	auto curMontage = OwningCharacter ? OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage() : nullptr;
+	auto curMontage = OwningCharacter.IsValid() ? OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage() : nullptr;
 
 	auto moveComponent = OwningCharacter->GetMovementComponent();
 	if( moveComponent )
@@ -598,8 +601,11 @@ void UGgCharacterComp::_ProcessLand()
 		else if( LandOnce )
 		{
 			if( !curMontage )
-				MontagePlay( LandAnim );
-			
+			{
+				UAnimMontage* randAnim = LandAnim.IsValid() ? LandAnim.Get() : LandAnim.LoadSynchronous();
+				MontagePlay( randAnim );
+			}
+
 			GetGgCameraManager().CameraShake( OwningCharacter, 1.f, true );
 			LandOnce = false;
 		}
@@ -614,7 +620,7 @@ void UGgCharacterComp::_ProcessHold( float InDeltaTime )
 	if ( !IsHold() )
 		return;
 
-	if ( !OwningCharacter )
+	if ( !OwningCharacter.IsValid() )
 		return;
 
 	auto animInstance = OwningCharacter->GetMesh()->GetAnimInstance();

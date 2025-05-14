@@ -22,7 +22,7 @@ public:
 	FStatusData        Stat;                                   // 현재 능력치
 
 protected:
-	AActor*            OwningActor       = nullptr;            // 부모 액터 클래스
+	FActorPtr          OwningActor       = nullptr;            // 부모 액터 클래스
 	ETeamType          TeamType          = ETeamType::MAX;     // 팀 타입
 	FCollisionData     AttackCollData;                         // 공격 콜리전 정보
 	FStatusData        InitStat;                               // 초기기본 능력치
@@ -46,7 +46,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	// 대상을 바라본다.
-	void LookAt( ACharacter* InTarget );
+	void LookAt( FCharacterPtr InTarget );
 
 	// 공격 성공 처리를 한다.
 	virtual void OnAttackSuccess() {};
@@ -141,18 +141,18 @@ public:
 
 protected:
 	// 카메라 쉐이크 처리를 한다.
-	void _ProcessCameraShake( AActor* InOtherActor );
+	void _ProcessCameraShake( FActorPtr InOtherActor );
 
 	// 사망 관련 로직을 수행한다.
 	virtual void _ProcessDie();
 
 	// 피격 처리를 한다.
-	virtual void _ProcessHit( AActor* InOtherActor );
+	virtual void _ProcessHit( FActorPtr InOtherActor );
 
 private:
 	// 초기화 한다.
 	void _Init();
 
 	// 물 히트 처리를 한다.
-	void _ProcessWaterHit( AActor* InOtherActor );
+	void _ProcessWaterHit( FActorPtr InOtherActor );
 };

@@ -20,7 +20,7 @@ public:
 	virtual void Tick( float InDeltaTime ) override;
 
 	// 카메라 쉐이크를 실행한다.
-	void CameraShake( AActor* InCaster, float InScale = 1.f, bool InShakeByWeight = false, bool InShakeByIntensity = false );
+	void CameraShake( FActorPtr InCaster, float InScale = 1.f, bool InShakeByWeight = false, bool InShakeByIntensity = false );
 
 private:
 	// 카메라 암 로직을 수행한다.

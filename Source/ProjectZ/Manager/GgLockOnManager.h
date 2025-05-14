@@ -20,7 +20,7 @@ class FGgLockOnManager final : public FGgSingletonBase< FGgLockOnManager >
 {
 
 private:
-	ACharacter* LockOnTarget;         // 락온 된 대상 
+	FCharacterPtr LockOnTarget;         // 락온 된 대상 
 
 public:
 	FGgLockOnManager();
@@ -36,7 +36,7 @@ public:
 	void LockOnRelease();
 
 	// 락온 된 대상을 반환한다.
-	ACharacter* GetLockOnTarget() { return LockOnTarget; };
+	FCharacterPtr GetLockOnTarget() { return LockOnTarget; };
 
 private:
 	// 락온 기능 수행
