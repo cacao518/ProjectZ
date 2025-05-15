@@ -81,19 +81,6 @@ AActor* FGgObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 정적 오브젝트 생성
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-AActor* FGgObjectManager::SpawnStaticObject( const FString& InName, const FVector& InLocation, const FRotator& InRotator )
-{
-	FString path = FString( TEXT( "/Game/Blueprints/StaticObject/" ) ) + InName;
-	UClass* staticObject = ConstructorHelpersInternal::FindOrLoadClass( path, AGgStaticObject::StaticClass() );
-	if( !staticObject )
-		return nullptr;
-
-	return SpawnActor( staticObject, InLocation, InRotator, ETeamType::MAX );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 파티클 생성
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void FGgObjectManager::SpawnParticle( const FString& InEffectName, const FActorPtr InUseActor, const FVector& InLocation, const FRotator& InRotator )

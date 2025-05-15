@@ -11,6 +11,8 @@ using namespace std;
 
 class AGgActorSpawner;
 class AGgProjectile;
+class AGgCharacterNPC;
+class AGgStaticObject;
 
 
 // 오브젝트 종류
@@ -300,7 +302,7 @@ public:
 	FName ComponentName;        // 스테틱 메쉬 컴포넌트 이름
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FSoftObjectPath ThorwingBPPath;      // 무기 투척시 소환할 BP 경로
+	TSoftClassPtr<AGgProjectile> ThorwingBPClass;      // 무기 투척시 소환할 BP Class
 
 	/// 맵 키를 반환한다.
 	int GetKey(){ return InfoId; };
@@ -345,7 +347,7 @@ public:
 	bool EquipSubWeapon;                               // 보조 무기 장착 여부
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FSoftObjectPath AnimPath;                           // 몽타주 경로
+	TSoftObjectPtr<UAnimMontage> AnimMontage;          // 몽타주
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float ActivateRangeMin;                            // 스킬 발동 범위 최소 (몬스터 전용)
@@ -437,7 +439,7 @@ public:
 	float DetectRange;                  // 탐지 범위
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FSoftObjectPath BPPath;            // BP 경로
+	TSoftClassPtr<AGgCharacterNPC> BPClass;    // BP Class
 
 	/// 맵 키를 반환한다.
 	int GetKey(){ return InfoId; };
@@ -457,7 +459,7 @@ public:
 	FStatusData Stat;                   // 스텟
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FSoftObjectPath BPPath;            // BP 경로
+	TSoftClassPtr<AGgStaticObject> BPClass;    // BP Class
 
 	/// 맵 키를 반환한다.
 	int GetKey(){ return InfoId; };
@@ -483,7 +485,7 @@ public:
 	float LifeTime = 0;                // 지속 시간
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FSoftObjectPath BPPath;            // BP 경로
+	TSoftClassPtr<AGgProjectile> BPClass;    // BP Class
 
 	/// 맵 키를 반환한다.
 	int GetKey(){ return InfoId; };

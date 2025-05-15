@@ -26,7 +26,7 @@ void UAnimNotify_SpawnActor::SetProperty( AActor* InOwner )
 	FVector relativeSpawnPos = spawnPosComp->GetRelativeLocation() + Pos;
 	FVector worldSpawnPos = UKismetMathLibrary::TransformLocation( spawnPosComp->GetComponentTransform(), relativeSpawnPos );
 
-	ResultActorClass = ActorClass.IsValid() ? ActorClass.Get() : ActorClass.LoadSynchronous();
+	ResultActorClass = ActorClass.LoadSynchronous();
 	ResultPos        = worldSpawnPos;
 	ResultRotate     = InOwner->GetActorRotation() + Rotate;
 }

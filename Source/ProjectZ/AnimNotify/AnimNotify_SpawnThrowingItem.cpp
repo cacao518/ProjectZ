@@ -31,8 +31,7 @@ void UAnimNotify_SpawnThrowingItem::SetProperty( AActor* InOwner )
 	if ( !weaponInfo )
 		return;
 
-	FString path = weaponInfo->ThorwingBPPath.ToString();
-	UClass* thorwingBP = ConstructorHelpersInternal::FindOrLoadClass( path, AGgProjectile::StaticClass() );
+	UClass* thorwingBP = weaponInfo->ThorwingBPClass.LoadSynchronous();
 	ResultActorClass = thorwingBP;
 
 	/* Set Pos */

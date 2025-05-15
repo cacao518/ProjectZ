@@ -87,9 +87,9 @@ void UGgCharacterComp::ResetInfo( bool InForceReset )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 몽타주를 플레이한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGgCharacterComp::MontagePlay( const FString& InMontagePath, float InScale )
+void UGgCharacterComp::MontagePlay( TSoftObjectPtr<UAnimMontage> InMontagePtr, float InScale )
 {
-	UAnimMontage* anim = LoadObject<UAnimMontage>( NULL, *InMontagePath, NULL, LOAD_None, NULL );
+	UAnimMontage* anim = InMontagePtr.LoadSynchronous();
 	if ( !anim )
 		return;
 
@@ -168,9 +168,9 @@ bool UGgCharacterComp::SkillPlay( int InSkillNum )
 	}
 
 	if ( skillInfo->PlaySpeedType == ESkillPlaySpeedType::DEFAULT )
-		MontagePlay( skillInfo->AnimPath.ToString() );
+		MontagePlay( skillInfo->AnimMontage );
 	else
-		MontagePlay( skillInfo->AnimPath.ToString(), skillInfo->PlaySpeedType == ESkillPlaySpeedType::ATTACK_SPEED ? Stat.AttackSpeed : Stat.MoveSpeed );
+		MontagePlay( skillInfo->AnimMontage, skillInfo->PlaySpeedType == ESkillPlaySpeedType::ATTACK_SPEED ? Stat.AttackSpeed : Stat.MoveSpeed );
 
 	_RegisterCoolTime( *skillInfo );
 

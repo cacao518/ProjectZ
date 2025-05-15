@@ -75,3 +75,6 @@ DerivedDataCache/*
 
 # Content
 Content/*
+
+# Config
+Config/DefaultGame.ini

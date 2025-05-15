@@ -47,9 +47,6 @@ public:
 	// 액터 생성
 	AActor* SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InTeamType = ETeamType::MAX, FActorSpawnerPtr InSpawner = nullptr );
 
-	// 정적 오브젝트 생성
-	AActor* SpawnStaticObject( const FString& InName, const FVector& InLocation, const FRotator& InRotator );
-
 	// 파티클 생성
 	void SpawnParticle( const FString& InEffectName, const FActorPtr InUseActor, const FVector& InLocation, const FRotator& InRotator );
 
