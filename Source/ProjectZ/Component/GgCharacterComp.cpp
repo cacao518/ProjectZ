@@ -121,7 +121,7 @@ void UGgCharacterComp::MontagePlay( UAnimMontage* InMontage, float InScale )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool UGgCharacterComp::SkillPlay( int InSkillNum )
 {
-	const auto& skillInfo = GetGgDataInfoManager().GetSkillInfos().Find( InSkillNum );
+	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FSkillInfo>( InSkillNum );
 	if ( !skillInfo )
 		return false;
 

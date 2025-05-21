@@ -97,7 +97,7 @@ void UGgMaterialComp::SetMatState( UMaterialInterface* InMatInterface, bool InIs
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 float UGgMaterialComp::GetIntensity()
 {
-	const auto& matInfo = GetGgDataInfoManager().GetMaterialInfos().Find( MatState );
+	const auto& matInfo = GetGgDataInfoManager().GetInfo<FMaterialInfo>( MatState );
 	if( matInfo )
 	{
 		return matInfo->Intensity;
@@ -111,7 +111,7 @@ float UGgMaterialComp::GetIntensity()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool UGgMaterialComp::IsMiddleIntensity()
 {
-	const auto& matInfo = GetGgDataInfoManager().GetMaterialInfos().Find( MatState );
+	const auto& matInfo = GetGgDataInfoManager().GetInfo<FMaterialInfo>( MatState );
 	if( matInfo )
 	{
 		if( matInfo->Intensity >= CONST::MIDDLE_RATE )
@@ -126,7 +126,7 @@ bool UGgMaterialComp::IsMiddleIntensity()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool UGgMaterialComp::IsHardIntensity()
 {
-	const auto& matInfo = GetGgDataInfoManager().GetMaterialInfos().Find( MatState );
+	const auto& matInfo = GetGgDataInfoManager().GetInfo<FMaterialInfo>( MatState );
 	if( matInfo )
 	{
 		if( matInfo->Intensity >= CONST::HARD_RATE )
@@ -161,7 +161,7 @@ void UGgMaterialComp::_InitStatus()
 	if( !characterMovement )
 		return;
 
-	const auto& matInfo = GetGgDataInfoManager().GetMaterialInfos().Find( MatState );
+	const auto& matInfo = GetGgDataInfoManager().GetInfo<FMaterialInfo>( MatState );
 	if( matInfo )
 	{
 		objectComp->SetMoveSpeed   ( ( CONST::MAX_MASS - matInfo->Mass ) * objectComp->GetInitStat().MoveSpeed );
@@ -180,7 +180,7 @@ void UGgMaterialComp::_InitStatus()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgMaterialComp::_PlayChangeEffect()
 {
-	const auto& matInfo = GetGgDataInfoManager().GetMaterialInfos().Find( MatState );
+	const auto& matInfo = GetGgDataInfoManager().GetInfo<FMaterialInfo>( MatState );
 	if( !matInfo )
 		return;
 

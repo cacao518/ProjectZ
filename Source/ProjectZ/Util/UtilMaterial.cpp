@@ -83,7 +83,7 @@ namespace UtilMaterial
 			auto waterBody = Cast<UWaterBodyComponent>( InActor->GetComponentByClass( UWaterBodyComponent::StaticClass() ) );
 			if ( waterBody )
 			{
-				const auto& waterMatInfo = GetGgDataInfoManager().GetMaterialInfos().Find( EMaterialState::WATER );
+				const auto& waterMatInfo = GetGgDataInfoManager().GetInfo<FMaterialInfo>( EMaterialState::WATER );
 				if ( waterMatInfo )
 				{
 					FString path = waterMatInfo->MaterialAssetPaths[ 0 ];
@@ -121,7 +121,7 @@ namespace UtilMaterial
 		if ( !InMaterial )
 			return EMaterialState::DEFAULT;
 
-		for ( const auto& [state, matInfo] : GetGgDataInfoManager().GetMaterialInfos() )
+		for ( const auto& [state, matInfo] : GetGgDataInfoManager().GetInfos<FMaterialInfo>() )
 		{
 			if ( matInfo.MaterialAssetPaths.Find( InMaterial->GetPathName() ) != INDEX_NONE )
 				return state;

@@ -32,13 +32,13 @@ void UBTS_CheckRange::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 	if( !characterComp )
 		return;
 
-	const auto& npcInfo = GetGgDataInfoManager().GetNPCInfos().Find( controllingNPC->InfoId );
+	const auto& npcInfo = GetGgDataInfoManager().GetInfo<FNPCInfo>( controllingNPC->InfoId );
 	if( !npcInfo )
 		return;
 
 	for( const auto& skillNum : npcInfo->SkillInfos )
 	{
-		const auto& skillInfo = GetGgDataInfoManager().GetSkillInfos().Find( skillNum );
+		const auto& skillInfo = GetGgDataInfoManager().GetInfo<FSkillInfo>( skillNum );
 		if ( !skillInfo )
 			continue;
 

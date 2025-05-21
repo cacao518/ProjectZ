@@ -53,7 +53,7 @@ void UGgProjectileComp::_Init()
 	if( !proj )
 		return;
 
-	const auto& projInfo = GetGgDataInfoManager().GetProjectileInfos().Find( proj->InfoId );
+	const auto& projInfo = GetGgDataInfoManager().GetInfo<FProjectileInfo>( proj->InfoId );
 	if( !projInfo )
 		return;
 

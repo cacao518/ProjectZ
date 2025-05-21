@@ -27,7 +27,7 @@ EBTNodeResult::Type UBTT_FindPatrolPos::ExecuteTask( UBehaviorTreeComponent& Own
 	if( !controllingCharacterNPC )
 		return EBTNodeResult::Failed;
 
-	const auto& npcInfo = GetGgDataInfoManager().GetNPCInfos().Find( controllingCharacterNPC->InfoId );
+	const auto& npcInfo = GetGgDataInfoManager().GetInfo<FNPCInfo>( controllingCharacterNPC->InfoId );
 	if( !npcInfo )
 		return EBTNodeResult::Failed;
 

@@ -282,7 +282,8 @@ public:
 	FString ChangeParticleName;                  // 해당 재질로 변경되었을 때 스폰할 파티클 이름
 
 	/// 맵 키를 반환한다.
-	EMaterialState GetKey(){ return State; };
+	using KeyType = EMaterialState;
+	KeyType GetKey(){ return State; };
 };
 
 // 무기 정보
@@ -305,7 +306,8 @@ public:
 	TSoftClassPtr<AGgProjectile> ThorwingBPClass;      // 무기 투척시 소환할 BP Class
 
 	/// 맵 키를 반환한다.
-	int GetKey(){ return InfoId; };
+	using KeyType = int;
+	KeyType GetKey(){ return InfoId; };
 };
 
 
@@ -356,7 +358,8 @@ public:
 	float ActivateRangeMax;                            // 스킬 발동 범위 최대 (몬스터 전용)
 
 	/// 맵 키를 반환한다.
-	int GetKey(){ return InfoId; };
+	using KeyType = int;
+	KeyType GetKey(){ return InfoId; };
 };
 
 // 플레이어 기본 스텟 정보
@@ -373,7 +376,8 @@ public:
 	FStatusData Stat;                   // 스텟
 
 	/// 맵 키를 반환한다.
-	int GetKey(){ return InfoId; };
+	using KeyType = int;
+	KeyType GetKey(){ return InfoId; };
 };
 
 // 플레이어 기본 스킬 정보
@@ -390,7 +394,8 @@ public:
 	int SkillId;                                    // 입력 키에 해당하는 스킬 넘버
 
 	/// 맵 키를 반환한다.
-	EInputKeyType GetKey(){ return InputKey; };
+	using KeyType = EInputKeyType;
+	KeyType GetKey(){ return InputKey; };
 };
 
 // 플레이어 무기 스킬 정보
@@ -413,7 +418,8 @@ public:
 	int ThrowSkillId;                       // 무기 투척
 
 	/// 맵 키를 반환한다.
-	int GetKey(){ return WeaponInfoId; };
+	using KeyType = int;
+	KeyType GetKey(){ return WeaponInfoId; };
 };
 
 // NPC 정보
@@ -442,7 +448,8 @@ public:
 	TSoftClassPtr<AGgCharacterNPC> BPClass;    // BP Class
 
 	/// 맵 키를 반환한다.
-	int GetKey(){ return InfoId; };
+	using KeyType = int;
+	KeyType GetKey(){ return InfoId; };
 };
 
 // 정적 오브젝트 정보
@@ -462,7 +469,8 @@ public:
 	TSoftClassPtr<AGgStaticObject> BPClass;    // BP Class
 
 	/// 맵 키를 반환한다.
-	int GetKey(){ return InfoId; };
+	using KeyType = int;
+	KeyType GetKey(){ return InfoId; };
 };
 
 // 투사체 정보
@@ -488,7 +496,8 @@ public:
 	TSoftClassPtr<AGgProjectile> BPClass;    // BP Class
 
 	/// 맵 키를 반환한다.
-	int GetKey(){ return InfoId; };
+	using KeyType = int;
+	KeyType GetKey(){ return InfoId; };
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

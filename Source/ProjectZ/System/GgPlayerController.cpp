@@ -202,7 +202,7 @@ void AGgPlayerController::ProcessLeftMouse()
 	if( !WeaponComp )
 		return;
 
-	const auto& skillInfo = GetGgDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetCurWeaponInfoId() );
+	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerWeaponSkillInfo>( WeaponComp->GetCurWeaponInfoId() );
 	if ( !skillInfo )
 		return;
 
@@ -217,7 +217,7 @@ void AGgPlayerController::ProcessRightMouse()
 	if( !WeaponComp )
 		return;
 
-	const auto& skillInfo = GetGgDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetCurWeaponInfoId() );
+	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerWeaponSkillInfo>( WeaponComp->GetCurWeaponInfoId() );
 	if ( !skillInfo )
 		return;
 
@@ -310,7 +310,7 @@ void AGgPlayerController::ProcessWheelDown()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGgPlayerController::ProcessSpace()
 {
-	const auto& skillInfo = GetGgDataInfoManager().GetPlayerDefaultSkillInfos().Find( EInputKeyType::SPACE );
+	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerDefaultSkillInfo>( EInputKeyType::SPACE );
 	if ( !skillInfo )
 		return;
 
@@ -328,7 +328,7 @@ void AGgPlayerController::ProcessTab()
 	if ( WeaponComp->GetWeaponType() == EWeaponType::DEFAULT )
 		return;
 
-	const auto& skillInfo = GetGgDataInfoManager().GetPlayerWeaponSkillInfos().Find( WeaponComp->GetCurWeaponInfoId() );
+	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerWeaponSkillInfo>( WeaponComp->GetCurWeaponInfoId() );
 	if ( !skillInfo )
 		return;
 
@@ -340,7 +340,7 @@ void AGgPlayerController::ProcessTab()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGgPlayerController::ProcessF()
 {
-	const auto& skillInfo = GetGgDataInfoManager().GetPlayerDefaultSkillInfos().Find( EInputKeyType::F );
+	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerDefaultSkillInfo>( EInputKeyType::F );
 	if ( !skillInfo )
 		return;
 
@@ -352,7 +352,7 @@ void AGgPlayerController::ProcessF()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGgPlayerController::ProcessR()
 {
-	const auto& skillInfo = GetGgDataInfoManager().GetPlayerDefaultSkillInfos().Find( EInputKeyType::R );
+	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerDefaultSkillInfo>( EInputKeyType::R );
 	if ( !skillInfo )
 		return;
 
@@ -376,7 +376,7 @@ void AGgPlayerController::Process1()
 	//if( !( WeaponComp->CanWeaponComp( EWeaponState::SWORD ) ) )
 	//	return;
 
-	const auto& skillInfo = GetGgDataInfoManager().GetPlayerDefaultSkillInfos().Find( EInputKeyType::Num1 );
+	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerDefaultSkillInfo>( EInputKeyType::Num1 );
 	if ( !skillInfo )
 		return;
 
@@ -394,7 +394,7 @@ void AGgPlayerController::Process2()
 	//if( !( WeaponComp->CanWeaponComp( EWeaponState::AXE ) ) )
 	//	return;
 
-	const auto& skillInfo = GetGgDataInfoManager().GetPlayerDefaultSkillInfos().Find( EInputKeyType::Num2 );
+	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerDefaultSkillInfo>( EInputKeyType::Num2 );
 	if( !skillInfo )
 		return;
 
@@ -412,7 +412,7 @@ void AGgPlayerController::Process3()
 	//if( !( WeaponComp->CanWeaponComp( EWeaponState::SPEAR ) ) )
 	//	return;
 
-	const auto& skillInfo = GetGgDataInfoManager().GetPlayerDefaultSkillInfos().Find( EInputKeyType::Num3 );
+	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerDefaultSkillInfo>( EInputKeyType::Num3 );
 	if( !skillInfo )
 		return;
 

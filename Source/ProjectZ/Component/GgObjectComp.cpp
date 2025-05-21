@@ -272,28 +272,28 @@ void UGgObjectComp::_Init()
 
 	if( AGgCharacterPC* pc = Cast<AGgCharacterPC>( OwningActor ) )
 	{
-		if( const auto& pcInfo = GetGgDataInfoManager().GetPlayerDefaultStatInfos().Find( 0 ) )
+		if( const auto& pcInfo = GetGgDataInfoManager().GetInfo<FPlayerDefaultStatInfo>( 0 ) )
 		{
 			Stat = pcInfo->Stat;
 		}
 	}
 	else if( AGgCharacterNPC* npc = Cast<AGgCharacterNPC>( OwningActor ) )
 	{
-		if( const auto& npcInfo = GetGgDataInfoManager().GetNPCInfos().Find( npc->InfoId ) )
+		if( const auto& npcInfo = GetGgDataInfoManager().GetInfo<FNPCInfo>( npc->InfoId ) )
 		{
 			Stat = npcInfo->Stat;
 		}
 	}
 	else if( AGgProjectile* proj = Cast<AGgProjectile>( OwningActor ) )
 	{
-		if( const auto& projInfo = GetGgDataInfoManager().GetProjectileInfos().Find( proj->InfoId ) )
+		if( const auto& projInfo = GetGgDataInfoManager().GetInfo<FProjectileInfo>( proj->InfoId ) )
 		{
 			Stat = projInfo->Stat;
 		}
 	}
 	else if( AGgStaticObject* so = Cast<AGgStaticObject>( OwningActor ) )
 	{
-		if( const auto& soInfo = GetGgDataInfoManager().GetProjectileInfos().Find( so->InfoId ) )
+		if( const auto& soInfo = GetGgDataInfoManager().GetInfo<FStaticObjectInfo>( so->InfoId ) )
 		{
 			Stat = soInfo->Stat;
 		}

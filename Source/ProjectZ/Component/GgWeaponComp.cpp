@@ -64,7 +64,7 @@ void UGgWeaponComp::EquipWeapon( int32 InWeaponInfoId, bool InChangeAnim )
 	if( WeaponMeshes.IsEmpty() )
 		return;
 
-	const auto& curWeaponInfo = GetGgDataInfoManager().GetWeaponInfos().Find( InWeaponInfoId );
+	const auto& curWeaponInfo = GetGgDataInfoManager().GetInfo<FWeaponInfo>( InWeaponInfoId );
 	if( !curWeaponInfo )
 		return;
 
@@ -97,7 +97,7 @@ void UGgWeaponComp::EquipWeapon( int32 InWeaponInfoId, bool InChangeAnim )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgWeaponComp::UnEquipWeapon()
 {
-	const auto& curWeaponInfo = GetGgDataInfoManager().GetWeaponInfos().Find( WeaponInfoId );
+	const auto& curWeaponInfo = GetGgDataInfoManager().GetInfo<FWeaponInfo>( WeaponInfoId );
 	if( !curWeaponInfo )
 		return;
 
@@ -136,7 +136,7 @@ void UGgWeaponComp::UnEquipSubWeapon()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgWeaponComp::_InitWeaponMesh()
 {
-	for( const auto& [num, weaponInfo] : GetGgDataInfoManager().GetWeaponInfos() )
+	for( const auto& [num, weaponInfo] : GetGgDataInfoManager().GetInfos<FWeaponInfo>() )
 	{
 		auto staticMesh = Cast<UStaticMeshComponent>( OwningCharacter->GetDefaultSubobjectByName( weaponInfo.ComponentName ) );
 		if( staticMesh )

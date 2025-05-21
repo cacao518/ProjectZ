@@ -36,7 +36,7 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 	if( !world )
 		return;
 
-	const auto& npcInfo = GetGgDataInfoManager().GetNPCInfos().Find( controllingChar->InfoId );
+	const auto& npcInfo = GetGgDataInfoManager().GetInfo<FNPCInfo>( controllingChar->InfoId );
 	if( !npcInfo )
 		return;
 

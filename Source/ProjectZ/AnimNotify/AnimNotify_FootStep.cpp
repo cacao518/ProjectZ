@@ -32,7 +32,7 @@ void UAnimNotify_FootStep::Notify( USkeletalMeshComponent* MeshComp, UAnimSequen
 	FVector worldSpawnPos = UKismetMathLibrary::TransformLocation( spawnPosComp->GetComponentTransform(), relativeSpawnPos );
 
 	EMaterialState matState = UtilMaterial::ConvertMatAssetToMatState( UtilMaterial::GetSteppedMatrialInterface( owner ) );
-	const auto& matInfo = GetGgDataInfoManager().GetMaterialInfos().Find( matState );
+	const auto& matInfo = GetGgDataInfoManager().GetInfo<FMaterialInfo>( matState );
 	if( !matInfo )
 		return;
 
