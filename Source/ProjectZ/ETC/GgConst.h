@@ -155,6 +155,10 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
 	float HitStopTime;
 
+	// 피격시 출력할 이펙트
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	TSoftObjectPtr<UNiagaraSystem> HitEffect;
+
 	/* Box */
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Box", meta = ( EditCondition = "Shape == ECollShapeType::BOX" ) )
 	FVector Extent;

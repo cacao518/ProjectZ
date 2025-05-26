@@ -147,7 +147,7 @@ protected:
 	virtual void _ProcessDie();
 
 	// 피격 처리를 한다.
-	virtual void _ProcessHit( FActorPtr InOtherActor );
+	virtual float _ProcessHit( FActorPtr InOtherActor );
 
 private:
 	// 초기화 한다.

@@ -234,17 +234,17 @@ void UGgObjectComp::_ProcessDie()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 피격 처리를 한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGgObjectComp::_ProcessHit( FActorPtr InOtherActor )
+float UGgObjectComp::_ProcessHit( FActorPtr InOtherActor )
 {
 	auto othetObjectComp = InOtherActor.IsValid() ? InOtherActor->FindComponentByClass<UGgObjectComp>() : nullptr;
 	if( !othetObjectComp )
-		return;
+		return -1;
 
 	if ( othetObjectComp->GetTeamType() == ETeamType::MAX || TeamType == ETeamType::MAX )
-		return;
+		return -1;
 
 	if ( othetObjectComp->GetTeamType() == TeamType && !othetObjectComp->Stat.IsTyrant )
-		return;
+		return -1;
 
 	othetObjectComp->OnAttackSuccess();
 
@@ -257,6 +257,10 @@ void UGgObjectComp::_ProcessHit( FActorPtr InOtherActor )
 	Stat.Hp = decrease > 0 ? decrease : 0;
 
 	_ProcessCameraShake( InOtherActor );
+
+	GetGgObjectManager().SpawnParticle( othetObjectComp->GetAttackCollInfo().HitEffect, OwningActor, OwningActor->GetActorLocation(), OwningActor->GetActorRotation());
+
+	return totalDamage;
 
 	/*FString str = OwningActor->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
 	if ( GEngine )

@@ -310,14 +310,14 @@ void UGgCharacterComp::_ProcessDie()
 
 			OwningCharacter->GetMesh()->SetSimulatePhysics( true );
 			OwningCharacter->GetMesh()->SetCollisionEnabled( ECollisionEnabled::PhysicsOnly );
-			GetGgObjectManager().SpawnParticle( TEXT( "Die" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
+			//GetGgObjectManager().SpawnParticle( TEXT( "Die" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
 		}
 		break;
 		case  EObjectType::PC:
 		{
 			OwningCharacter->GetMesh()->SetSimulatePhysics( true );
 			OwningCharacter->GetMesh()->SetCollisionEnabled( ECollisionEnabled::PhysicsOnly );
-			GetGgObjectManager().SpawnParticle( TEXT( "Die" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
+			//GetGgObjectManager().SpawnParticle( TEXT( "Die" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
 			/*if( UMyAnimInstance* animInstance = Cast<UMyAnimInstance>( OwningCharacter->GetMesh()->GetAnimInstance() ) )
 			{
 				auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
@@ -357,62 +357,39 @@ void UGgCharacterComp::_ProcessDie()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 피격 처리를 한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGgCharacterComp::_ProcessHit( FActorPtr InOtherActor )
+float UGgCharacterComp::_ProcessHit( FActorPtr InOtherActor )
 {
+	float totalDamage = Super::_ProcessHit( InOtherActor );
+	if( totalDamage < 0 ) 
+		return -1;
+
 	auto othetObjectComp = InOtherActor.IsValid() ? InOtherActor->FindComponentByClass<UGgObjectComp>() : nullptr;
 	if( !othetObjectComp )
-		return;
-
-	if ( othetObjectComp->GetTeamType() == ETeamType::MAX || TeamType == ETeamType::MAX )
-		return;
-
-	if ( othetObjectComp->GetTeamType() == TeamType && !othetObjectComp->Stat.IsTyrant )
-		return;
-
-	othetObjectComp->OnAttackSuccess();
-
-	// 체력 감소
-	float totalDamage = othetObjectComp->GetAttackCollInfo().Power * othetObjectComp->GetStat().AttackPower;
-	totalDamage -= Stat.DefensePower;
-	totalDamage = totalDamage > 0 ? totalDamage : 1;
-
-	float decrease = Stat.Hp - totalDamage;
-	Stat.Hp = decrease > 0 ? decrease : 0;
+		return -1;
 
 	// 경직
-	auto othetMatComp = InOtherActor.IsValid() ? InOtherActor->FindComponentByClass<UGgMaterialComp>() : nullptr;
-	auto myMatComp = OwningActor.IsValid() ? OwningActor->FindComponentByClass<UGgMaterialComp>() : nullptr;
+	float addTimeToDamage = totalDamage / Stat.Hpm;
+	float subTimeToMyStrength = Stat.Strength * 0.01f;
+	float hitPlayRate = FMath::Clamp( 1.f - addTimeToDamage + subTimeToMyStrength, 0.3f, 1.f );
 
-	float myIntensity    = myMatComp    ? myMatComp->GetIntensity()    : 1.f;
-	float otherIntensity = othetMatComp ? othetMatComp->GetIntensity() : 1.f;
-	if( otherIntensity >= myIntensity )
+	UAnimMontage* hitAnim = HitAnim.IsValid() ? HitAnim.Get() : HitAnim.LoadSynchronous();
+	MontagePlay( hitAnim, hitPlayRate );
+	LookAt( Cast<ACharacter>( InOtherActor ) );
+
+	// 넉백
+	float knockbackPower = othetObjectComp->GetAttackCollInfo().KnockBackPower - ( Stat.Strength * 1.5f );
+	if( knockbackPower > 0 )
 	{
-		float addTimeToDamage = totalDamage / Stat.Hpm;
-		float subTimeToMyStrength = Stat.Strength * 0.01f;
-		float hitPlayRate = FMath::Clamp( 1.f - addTimeToDamage + subTimeToMyStrength, 0.3f, 1.f );
-		UAnimMontage* hitAnim = HitAnim.IsValid() ? HitAnim.Get() : HitAnim.LoadSynchronous();
-		MontagePlay( hitAnim, hitPlayRate );
-		LookAt( Cast<ACharacter>( InOtherActor ) );
-
-		// 넉백
-		float knockbackPower = othetObjectComp->GetAttackCollInfo().KnockBackPower - ( Stat.Strength * 1.5f );
-		if( knockbackPower > 0 )
-		{
-			SetMovePos( knockbackPower, true );
-			SetIsForceMove( true );
-		}
-
-		// 역경직 시간 추가
-		HoldTime += othetObjectComp->GetAttackCollInfo().HitStopTime;
+		SetMovePos( knockbackPower, true );
+		SetIsForceMove( true );
 	}
 
-	_ProcessCameraShake( InOtherActor );
+	// 역경직 시간 추가
+	HoldTime += othetObjectComp->GetAttackCollInfo().HitStopTime;
 
 	_UpdateHpBar();
 
-	//FString str = OwningActor->GetName() + TEXT( " : HitColl -> HP : " ) + FString::FromInt( (int)Stat.Hp );
-	//if ( GEngine )
-	//	GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
+	return totalDamage;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

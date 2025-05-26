@@ -128,7 +128,7 @@ protected:
 	virtual void _ProcessDie() override;
 
 	// 피격 처리를 한다.
-	virtual void _ProcessHit( FActorPtr InOtherActor ) override;
+	virtual float _ProcessHit( FActorPtr InOtherActor ) override;
 
 private:
 	// 초기화 한다.

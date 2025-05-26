@@ -83,22 +83,10 @@ AActor* FGgObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 파티클 생성
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void FGgObjectManager::SpawnParticle( const FString& InEffectName, const FActorPtr InUseActor, const FVector& InLocation, const FRotator& InRotator )
+void FGgObjectManager::SpawnParticle( TSoftObjectPtr<UNiagaraSystem> InEffectPath, const FActorPtr InUseActor, const FVector& InLocation, const FRotator& InRotator )
 {
-	FString path = FString( TEXT( "/Game/Particle/" ) ) + InEffectName;
-	UNiagaraSystem* effect = LoadObject<UNiagaraSystem>( NULL, *path, NULL, LOAD_None, NULL);
-	if( !effect )
-		return;
-
-	SpawnParticle( effect, InUseActor, InLocation, InRotator );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 파티클 생성
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void FGgObjectManager::SpawnParticle( UNiagaraSystem* InEffect, const FActorPtr InUseActor, const FVector& InLocation, const FRotator& InRotator )
-{
-	UNiagaraFunctionLibrary::SpawnSystemAttached( InEffect, InUseActor->GetRootComponent(), NAME_None, InLocation, InRotator, EAttachLocation::KeepWorldPosition, true, true, ENCPoolMethod::None );
+	UNiagaraSystem* effect = InEffectPath.IsValid() ? InEffectPath.Get() : InEffectPath.LoadSynchronous();
+	UNiagaraFunctionLibrary::SpawnSystemAttached( effect, InUseActor->GetRootComponent(), NAME_None, InLocation, InRotator, EAttachLocation::KeepWorldPosition, true, true, ENCPoolMethod::None );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
