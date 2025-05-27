@@ -83,10 +83,29 @@ AActor* FGgObjectManager::SpawnActor( UClass* InClass, const FVector& InLocation
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 파티클 생성
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void FGgObjectManager::SpawnParticle( TSoftObjectPtr<UNiagaraSystem> InEffectPath, const FActorPtr InUseActor, const FVector& InLocation, const FRotator& InRotator )
+void FGgObjectManager::SpawnParticle( TSoftObjectPtr<UNiagaraSystem> InEffectPath, const FActorPtr InUseActor, const FVector& InLocation, const FRotator& InRotator, const FVector InParam /*= FVector() */)
 {
+	if( InEffectPath.IsNull() ) return;
+
 	UNiagaraSystem* effect = InEffectPath.IsValid() ? InEffectPath.Get() : InEffectPath.LoadSynchronous();
-	UNiagaraFunctionLibrary::SpawnSystemAttached( effect, InUseActor->GetRootComponent(), NAME_None, InLocation, InRotator, EAttachLocation::KeepWorldPosition, true, true, ENCPoolMethod::None );
+	if( !effect ) return;
+
+	UNiagaraComponent* niagaraComp = UNiagaraFunctionLibrary::SpawnSystemAttached(
+		effect,
+		InUseActor->GetRootComponent(),
+		NAME_None,
+		InLocation,
+		InRotator,
+		EAttachLocation::KeepWorldPosition,
+		true,
+		true,
+		ENCPoolMethod::None
+	);
+
+	if( niagaraComp )
+	{
+		niagaraComp->SetVariableVec3( FName( "ParamVec" ), InParam );
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

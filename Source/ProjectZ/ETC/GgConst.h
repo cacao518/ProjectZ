@@ -69,7 +69,11 @@ enum class EMaterialState : uint8
 UENUM( BlueprintType )
 enum class EWeaponType : uint8
 {
-	DEFAULT          UMETA( DisplayName = "Default" ),
+	BEAM_SWORD          UMETA( DisplayName = "BeamSword" ),
+	GREAT_SWORD         UMETA( DisplayName = "GreatSword" ),
+	KATANA              UMETA( DisplayName = "Katana" ),
+	CLUB                UMETA( DisplayName = "Club" ),
+	SMALL_SWORD         UMETA( DisplayName = "SmallSword" ),
 
 	MAX,
 };
@@ -140,24 +144,13 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
 	ECollShapeType Shape;
 
+	/* Common */
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
 	FVector Pos;
 
+	/* Common */
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
 	FRotator Rotation;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
-	float Power;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
-	float KnockBackPower;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
-	float HitStopTime;
-
-	// 피격시 출력할 이펙트
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	TSoftObjectPtr<UNiagaraSystem> HitEffect;
 
 	/* Box */
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Box", meta = ( EditCondition = "Shape == ECollShapeType::BOX" ) )
@@ -167,12 +160,37 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Fan & Cylinder", meta = ( EditCondition = "Shape == ECollShapeType::FAN || Shape == ECollShapeType::CYLINDER" ) )
 	float Radius;
 
+	/* Fan & Cylinder */
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Fan & Cylinder", meta = ( EditCondition = "Shape == ECollShapeType::FAN || Shape == ECollShapeType::CYLINDER" ) )
 	float Height;
 
 	/* Fan */
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Fan", meta = ( ClampMin = "0", ClampMax = "180" ), meta = ( EditCondition = "Shape == ECollShapeType::FAN" ) )
 	float Angle;
+
+	// 공격력
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
+	float Power;
+
+	// 넉백 파워
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
+	float KnockBackPower;
+
+	// 역경직 시간
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
+	float HitStopTime;
+
+	// 무기 타격 이펙트를 출력할 지 여부
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
+	bool bUseWeaponEffect;
+
+	// 이펙트 방향
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
+	FVector EffectDir;
+
+	// 타격시 추가로 출력할 이펙트
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
+	TSoftObjectPtr<UNiagaraSystem> HitEffect;
 
 public:
 	FCollisionData()
@@ -187,6 +205,8 @@ public:
 		Radius = 0;
 		Height = 0;
 		Angle = 0;
+		bUseWeaponEffect = false;
+		EffectDir = FVector();
 	}
 };
 
@@ -297,17 +317,25 @@ struct FWeaponInfo : public FTableRowBase
 	GENERATED_BODY()
 
 public:
+	// 식별자
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int InfoId;                    // 식별자
+	int InfoId;                    
 
+	// 무기 종류
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	EWeaponType Type;         // 무기 종류
+	EWeaponType Type;        
 
+	// 스테틱 메쉬 컴포넌트 이름
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	FName ComponentName;        // 스테틱 메쉬 컴포넌트 이름
+	FName ComponentName;       
 
+	// 타격시 출력 할 이펙트
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	TSoftClassPtr<AGgProjectile> ThorwingBPClass;      // 무기 투척시 소환할 BP Class
+	TSoftObjectPtr<UNiagaraSystem> HitEffect;
+
+	// 무기 투척시 소환할 BP Class
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	TSoftClassPtr<AGgProjectile> ThorwingBPClass;    
 
 	/// 맵 키를 반환한다.
 	using KeyType = int;

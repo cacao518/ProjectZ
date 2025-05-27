@@ -48,7 +48,7 @@ public:
 	AActor* SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InTeamType = ETeamType::MAX, FActorSpawnerPtr InSpawner = nullptr );
 
 	// 파티클 생성
-	void SpawnParticle( TSoftObjectPtr<UNiagaraSystem> InEffectPath, const FActorPtr InUseActor, const FVector& InLocation, const FRotator& InRotator );
+	void SpawnParticle( TSoftObjectPtr<UNiagaraSystem> InEffectPath, const FActorPtr InUseActor, const FVector& InLocation, const FRotator& InRotator, const FVector InParam = FVector() );
 
 	// 액터 제거
 	void DestroyActor( FActorPtr InActor );

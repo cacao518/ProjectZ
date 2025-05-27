@@ -258,7 +258,31 @@ float UGgObjectComp::_ProcessHit( FActorPtr InOtherActor )
 
 	_ProcessCameraShake( InOtherActor );
 
-	GetGgObjectManager().SpawnParticle( othetObjectComp->GetAttackCollInfo().HitEffect, OwningActor, OwningActor->GetActorLocation(), OwningActor->GetActorRotation());
+	// 무기 이펙트 출력
+	if( othetObjectComp->GetAttackCollInfo().bUseWeaponEffect )
+	{
+		auto othetWeaponComp = InOtherActor.IsValid() ? InOtherActor->FindComponentByClass<UGgWeaponComp>() : nullptr;
+		if( othetWeaponComp )
+		{
+			if( const auto& weaponInfo = GetGgDataInfoManager().GetInfo<FWeaponInfo>( othetWeaponComp->GetCurWeaponInfoId() ) )
+			{
+				GetGgObjectManager().SpawnParticle( 
+					weaponInfo->HitEffect, 
+					OwningActor, 
+					OwningActor->GetActorLocation(), 
+					OwningActor->GetActorRotation(),
+					othetObjectComp->GetAttackCollInfo().EffectDir );
+			}
+		}
+	}
+
+	// 추가 이펙트 출력
+	GetGgObjectManager().SpawnParticle( 
+		othetObjectComp->GetAttackCollInfo().HitEffect, 
+		OwningActor, 
+		OwningActor->GetActorLocation(), 
+		OwningActor->GetActorRotation(),
+		othetObjectComp->GetAttackCollInfo().EffectDir );
 
 	return totalDamage;
 

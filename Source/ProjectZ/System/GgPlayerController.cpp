@@ -325,7 +325,7 @@ void AGgPlayerController::ProcessTab()
 	if ( !WeaponComp )
 		return;
 
-	if ( WeaponComp->GetWeaponType() == EWeaponType::DEFAULT )
+	if ( WeaponComp->GetWeaponType() == EWeaponType::MAX )
 		return;
 
 	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerWeaponSkillInfo>( WeaponComp->GetCurWeaponInfoId() );
