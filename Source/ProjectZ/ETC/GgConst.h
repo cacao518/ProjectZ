@@ -207,6 +207,7 @@ public:
 		Angle = 0;
 		bUseWeaponEffect = false;
 		EffectDir = FVector();
+		HitEffect = nullptr;
 	}
 };
 
