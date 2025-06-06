@@ -178,6 +178,12 @@ bool UGgCharacterComp::SkillPlay( int InSkillNum )
 
 	Stat.Mp = FMath::Clamp( Stat.Mp - skillInfo->CostMP, 0, Stat.Mpm );
 
+	// 서브 웨폰 장착
+	if( auto weaponComp = OwningActor->FindComponentByClass<UGgWeaponComp>() )
+	{
+		CurSkillInfo&& CurSkillInfo->EquipSubWeapon ? weaponComp->EquipSubWeapon() : weaponComp->UnEquipSubWeapon();
+	}
+
 	return true;
 }
 
@@ -438,13 +444,10 @@ void UGgCharacterComp::_AnimStateChange()
 		animInstance->AnimState = AnimState;
 		animInstance->AnimSubState = CurSkillInfo ? CurSkillInfo->AnimSubState : EAnimSubState::DEFAULT;
 
+		// 서브 웨폰 해제
 		if( auto weaponComp = OwningActor->FindComponentByClass<UGgWeaponComp>() )
 		{
-			if( AnimState == EAnimState::COMMON_ACTION )
-			{
-				CurSkillInfo && CurSkillInfo->EquipSubWeapon ? weaponComp->EquipSubWeapon() : weaponComp->UnEquipSubWeapon();
-			}
-			else
+			if( AnimState != EAnimState::COMMON_ACTION )
 			{
 				weaponComp->UnEquipSubWeapon();
 			}
