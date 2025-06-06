@@ -395,6 +395,12 @@ float UGgCharacterComp::_ProcessHit( FActorPtr InOtherActor )
 
 	_UpdateHpBar();
 
+	// 서브 웨폰 해제
+	if( auto weaponComp = OwningActor->FindComponentByClass<UGgWeaponComp>() )
+	{
+		weaponComp->UnEquipSubWeapon();
+	}
+
 	return totalDamage;
 }
 
