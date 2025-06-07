@@ -21,7 +21,7 @@ class PROJECTZ_API AGgPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 private:
-	using InputMap = TMap< EInputKeyType, function<void()> >;
+	using InputMap = TMap< EInputKeyType, TFunction<void()> >;
 
 private:
 	AGgCharacterPC*          MyPlayer;
@@ -30,7 +30,7 @@ private:
 
 	InputMap                 InputTypeAndFuncMap;  // Key:입력키종류, Value:입력키 함수
 	float                    ReadySkillResetTime;  // 발동 대기중인 스킬 초기화 시간
-	function<void()>         ReadySkillFunc;       // 발동 대기중인 마지막으로 입력한 스킬 함수
+	TFunction<void()>        ReadySkillFunc;       // 발동 대기중인 마지막으로 입력한 스킬 함수
 	EInputKeyType            ReadySkillInputKey;   // 발동 대기중인 마지막으로 입력한 키 종류
 						     
 	float				     BaseTurnRate;
@@ -62,6 +62,8 @@ public:
 	void ProcessWheelDown();
 	void ProcessSpace();
 	void ProcessTab();
+	void ProcessQ();
+	void ProcessE();
 	void ProcessF();
 	void ProcessR();
 	void Process1();

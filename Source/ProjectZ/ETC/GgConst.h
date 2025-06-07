@@ -102,6 +102,8 @@ enum class EInputKeyType : uint8
 	Tab                   UMETA( DisplayName = "Tab" ),
 	F                     UMETA( DisplayName = "F" ),
 	R                     UMETA( DisplayName = "R" ),
+	Q                     UMETA( DisplayName = "Q" ),
+	E                     UMETA( DisplayName = "E" ),
 	Num1                  UMETA( DisplayName = "Num1" ),
 	Num2                  UMETA( DisplayName = "Num2" ),
 	Num3                  UMETA( DisplayName = "Num3" ),

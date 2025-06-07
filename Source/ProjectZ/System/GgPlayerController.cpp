@@ -45,29 +45,35 @@ void AGgPlayerController::BeginPlay()
 	InputComponent->BindAxis( "Turn", MyPlayer, &APawn::AddControllerYawInput );
 	InputComponent->BindAxis( "LookUp", MyPlayer, &APawn::AddControllerPitchInput );
 
-	InputComponent->BindAction( "Alt",      IE_Pressed, this, &AGgPlayerController::JumpStart );
-	InputComponent->BindAction( "Alt",      IE_Released, this, &AGgPlayerController::JumpStop );
-	InputComponent->BindAction( "Shift",    IE_Pressed, this, &AGgPlayerController::DashStart );
-	InputComponent->BindAction( "Shift",    IE_Released, this, &AGgPlayerController::DashStop );
+	InputComponent->BindAction( "Alt", IE_Pressed, this, &AGgPlayerController::JumpStart );
+	InputComponent->BindAction( "Alt", IE_Released, this, &AGgPlayerController::JumpStop );
+	InputComponent->BindAction( "Shift", IE_Pressed, this, &AGgPlayerController::DashStart );
+	InputComponent->BindAction( "Shift", IE_Released, this, &AGgPlayerController::DashStop );
 
-	InputComponent->BindAction( "Space",      IE_Pressed, this, &AGgPlayerController::ProcessSpace);
-	InputComponent->BindAction( "Tab",        IE_Pressed, this, &AGgPlayerController::ProcessTab );
-	InputComponent->BindAction( "F",          IE_Pressed, this, &AGgPlayerController::ProcessF );
-	InputComponent->BindAction( "R",          IE_Pressed, this, &AGgPlayerController::ProcessR );
-	InputComponent->BindAction( "LeftClick",  IE_Pressed, this, &AGgPlayerController::ProcessLeftMouse );
+	InputComponent->BindAction( "Space", IE_Pressed, this, &AGgPlayerController::ProcessSpace );
+	InputComponent->BindAction( "Tab", IE_Pressed, this, &AGgPlayerController::ProcessTab );
+	InputComponent->BindAction( "Q", IE_Pressed, this, &AGgPlayerController::ProcessQ );
+	InputComponent->BindAction( "E", IE_Pressed, this, &AGgPlayerController::ProcessE );
+	InputComponent->BindAction( "F", IE_Pressed, this, &AGgPlayerController::ProcessF );
+	InputComponent->BindAction( "R", IE_Pressed, this, &AGgPlayerController::ProcessR );
+	InputComponent->BindAction( "LeftClick", IE_Pressed, this, &AGgPlayerController::ProcessLeftMouse );
 	InputComponent->BindAction( "RightClick", IE_Pressed, this, &AGgPlayerController::ProcessRightMouse );
 	InputComponent->BindAction( "WheelClick", IE_Pressed, this, &AGgPlayerController::ProcessWheelClick );
-	InputComponent->BindAction( "WheelUp",    IE_Pressed, this, &AGgPlayerController::ProcessWheelUp );
-	InputComponent->BindAction( "WheelDown",  IE_Pressed, this, &AGgPlayerController::ProcessWheelDown );
-	InputComponent->BindAction( "1",          IE_Pressed, this, &AGgPlayerController::Process1 );
-	InputComponent->BindAction( "2",          IE_Pressed, this, &AGgPlayerController::Process2 );
-	InputComponent->BindAction( "3",          IE_Pressed, this, &AGgPlayerController::Process3 );
+	InputComponent->BindAction( "WheelUp", IE_Pressed, this, &AGgPlayerController::ProcessWheelUp );
+	InputComponent->BindAction( "WheelDown", IE_Pressed, this, &AGgPlayerController::ProcessWheelDown );
+	InputComponent->BindAction( "1", IE_Pressed, this, &AGgPlayerController::Process1 );
+	InputComponent->BindAction( "2", IE_Pressed, this, &AGgPlayerController::Process2 );
+	InputComponent->BindAction( "3", IE_Pressed, this, &AGgPlayerController::Process3 );
 
 	InputTypeAndFuncMap.Empty();
-	InputTypeAndFuncMap.Add( EInputKeyType::LEFT_MOUSE,  bind( &AGgPlayerController::ProcessLeftMouse, this ) );
-	InputTypeAndFuncMap.Add( EInputKeyType::RIGHT_MOUSE, bind( &AGgPlayerController::ProcessRightMouse, this ) );
-	InputTypeAndFuncMap.Add( EInputKeyType::SPACE,       bind( &AGgPlayerController::ProcessSpace, this ) );
-	InputTypeAndFuncMap.Add( EInputKeyType::Tab,         bind( &AGgPlayerController::ProcessTab, this ) );
+	InputTypeAndFuncMap.Add( EInputKeyType::LEFT_MOUSE,   [ this ]() { ProcessLeftMouse(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::RIGHT_MOUSE,  [ this ]() { ProcessRightMouse(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::SPACE,        [ this ]() { ProcessSpace(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::Tab,          [ this ]() { ProcessTab(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::Q,            [ this ]() { ProcessQ(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::E,            [ this ]() { ProcessE(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::F,            [ this ]() { ProcessF(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::R,            [ this ]() { ProcessR(); } );
 
 	_ResetReadySkill();
 }
@@ -336,6 +342,30 @@ void AGgPlayerController::ProcessTab()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief Q 키 실행 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void AGgPlayerController::ProcessQ()
+{
+	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerDefaultSkillInfo>( EInputKeyType::Q );
+	if( !skillInfo )
+		return;
+
+	_SkillPlay( skillInfo->SkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::Q );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief E 키 실행 
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+void AGgPlayerController::ProcessE()
+{
+	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerDefaultSkillInfo>( EInputKeyType::E );
+	if( !skillInfo )
+		return;
+
+	_SkillPlay( skillInfo->SkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::E );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief F 키 실행 ( 재질 변경 )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGgPlayerController::ProcessF()
@@ -344,7 +374,7 @@ void AGgPlayerController::ProcessF()
 	if ( !skillInfo )
 		return;
 
-	_SkillPlay( skillInfo->SkillId );
+	_SkillPlay( skillInfo->SkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::F );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -355,6 +385,8 @@ void AGgPlayerController::ProcessR()
 	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerDefaultSkillInfo>( EInputKeyType::R );
 	if ( !skillInfo )
 		return;
+
+	_SkillPlay( skillInfo->SkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::R );
 
 	//if ( MatComp && MatComp->GetMatState() != EMaterialState::JELLY )
 	//{
