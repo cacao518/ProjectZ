@@ -373,14 +373,29 @@ float UGgCharacterComp::_ProcessHit( FActorPtr InOtherActor )
 	if( !othetObjectComp )
 		return -1;
 
-	// 경직
-	float addTimeToDamage = totalDamage / Stat.Hpm;
-	float subTimeToMyStrength = Stat.Strength * 0.01f;
-	float hitPlayRate = FMath::Clamp( 1.f - addTimeToDamage + subTimeToMyStrength, 0.3f, 1.f );
+	UGgAnimInstance* animInstance = Cast<UGgAnimInstance>( OwningCharacter->GetMesh()->GetAnimInstance() );
+	if( !animInstance ) 
+		return -1;
 
-	UAnimMontage* hitAnim = HitAnim.IsValid() ? HitAnim.Get() : HitAnim.LoadSynchronous();
-	MontagePlay( hitAnim, hitPlayRate );
-	LookAt( Cast<ACharacter>( InOtherActor ) );
+	// 에어리얼
+	float aerialPower = othetObjectComp->GetAttackCollInfo().AerialPower;
+	if( aerialPower > 0 )
+	{
+		animInstance->IsAerial = true;
+		aerialPower = ( CONST::MAX_MASS - Stat.Weight ) * aerialPower;
+		OwningCharacter->LaunchCharacter( FVector( 0,0, aerialPower ), true, true );
+	}
+	else if( animInstance->IsAerial == false )
+	{
+		// 경직
+		float addTimeToDamage = totalDamage / Stat.Hpm;
+		float subTimeToMyStrength = Stat.Strength * 0.01f;
+		float hitPlayRate = FMath::Clamp( 1.f - addTimeToDamage + subTimeToMyStrength, 0.3f, 1.f );
+
+		UAnimMontage* hitAnim = HitAnim.IsValid() ? HitAnim.Get() : HitAnim.LoadSynchronous();
+		MontagePlay( hitAnim, hitPlayRate );
+		LookAt( Cast<ACharacter>( InOtherActor ) );
+	}
 
 	// 넉백
 	float knockbackPower = othetObjectComp->GetAttackCollInfo().KnockBackPower - ( Stat.Strength * 1.5f );
@@ -441,7 +456,17 @@ void UGgCharacterComp::_AnimStateChange()
 	else
 	{
 		if( auto moveComponent = OwningCharacter->GetMovementComponent(); moveComponent )
-			moveComponent->IsFalling() ? nextState = EAnimState::JUMP : nextState = EAnimState::IDLE_RUN;
+		{
+			if( moveComponent->IsFalling() )
+			{
+				if( animInstance->IsJump ) nextState = EAnimState::JUMP;
+				else if( animInstance->IsAerial ) nextState = EAnimState::AERIAL;
+			}
+			else
+			{
+				nextState = EAnimState::IDLE_RUN;
+			}
+		}
 	}
 
 	if( nextState != AnimState )
