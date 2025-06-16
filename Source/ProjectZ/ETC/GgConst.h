@@ -32,7 +32,7 @@ enum class EAnimState : uint8
 {
 	IDLE_RUN            UMETA( DisplayName = "Idle_Run" ),
 	JUMP                UMETA( DisplayName = "Jump" ),
-	AERIAL              UMETA( DisplayName = "Aerial" ),
+	AIRBORNE            UMETA( DisplayName = "Airborne" ),
 	DIE                 UMETA( DisplayName = "Die" ),
 	COMMON_ACTION       UMETA( DisplayName = "Common_Action" ),
 
@@ -181,7 +181,7 @@ public:
 
 	// 공중 띄우기 파워
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
-	float AerialPower;
+	float AirbornePower;
 
 	// 역경직 시간
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Common" )
@@ -207,6 +207,7 @@ public:
 		Rotation = FRotator();
 		Power = 0;
 		KnockBackPower = 0;
+		AirbornePower = 0;
 		HitStopTime = 0;
 		Extent = FVector();
 		Radius = 0;
@@ -553,6 +554,7 @@ namespace CONST
 	constexpr float DEFAULT_JUMP_POWER        = 750.f;     // 기본 점프력
 	constexpr float DEFAULT_ROTATION_RATE     = 1000.f;    // 기본 캐릭터 방향 전환 비율
 	constexpr float FLY_ROTATION_RATE         = 100.f;     // 날기 캐릭터 방향 전환 비율
+	constexpr float DEFAULT_AIRBORNEPOWER     = 50.f;      // 기본 에어본 파워
 	constexpr float WATER_FALL_ANIM_TIME      = 0.01f;     // 물에 빠지는 애니메이션 속도
 	constexpr float READY_SKILL_ROTATION_RATE = 100000.f;  // 발동 대기 스킬 보유 캐릭터 방향 전환 비율
 	constexpr float READY_SKILL_DURATION      = 0.4f;      // 발동 대기중인 스킬 저장 지속시간

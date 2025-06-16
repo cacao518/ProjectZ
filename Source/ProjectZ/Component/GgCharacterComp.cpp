@@ -377,24 +377,31 @@ float UGgCharacterComp::_ProcessHit( FActorPtr InOtherActor )
 	if( !animInstance ) 
 		return -1;
 
-	// 에어리얼
-	float aerialPower = othetObjectComp->GetAttackCollInfo().AerialPower;
-	if( aerialPower > 0 )
+	// 에어본
+	float airbornePower = othetObjectComp->GetAttackCollInfo().AirbornePower;
+	if( airbornePower > 0 || animInstance->IsAirborne )
 	{
-		animInstance->IsAerial = true;
-		aerialPower = ( CONST::MAX_MASS - Stat.Weight ) * aerialPower;
-		OwningCharacter->LaunchCharacter( FVector( 0,0, aerialPower ), true, true );
+		ResetInfo( true );
+		animInstance->StopAllMontages( 0 );
+		animInstance->IsAirborne = true;
+		airbornePower = airbornePower > 0 ? airbornePower : CONST::DEFAULT_AIRBORNEPOWER;
+		airbornePower = ( CONST::MAX_MASS - Stat.Weight ) * airbornePower;
+		LookAt( Cast<ACharacter>( InOtherActor ) );
+		OwningCharacter->LaunchCharacter( FVector( 0,0, airbornePower ), true, true );
 	}
-	else if( animInstance->IsAerial == false )
+	else if( !animInstance->IsAirborne )
 	{
 		// 경직
 		float addTimeToDamage = totalDamage / Stat.Hpm;
 		float subTimeToMyStrength = Stat.Strength * 0.01f;
 		float hitPlayRate = FMath::Clamp( 1.f - addTimeToDamage + subTimeToMyStrength, 0.3f, 1.f );
-
+		   
 		UAnimMontage* hitAnim = HitAnim.IsValid() ? HitAnim.Get() : HitAnim.LoadSynchronous();
 		MontagePlay( hitAnim, hitPlayRate );
 		LookAt( Cast<ACharacter>( InOtherActor ) );
+
+		// 역경직 시간 추가
+		HoldTime += othetObjectComp->GetAttackCollInfo().HitStopTime;
 	}
 
 	// 넉백
@@ -404,9 +411,6 @@ float UGgCharacterComp::_ProcessHit( FActorPtr InOtherActor )
 		SetMovePos( knockbackPower, true );
 		SetIsForceMove( true );
 	}
-
-	// 역경직 시간 추가
-	HoldTime += othetObjectComp->GetAttackCollInfo().HitStopTime;
 
 	_UpdateHpBar();
 
@@ -457,10 +461,13 @@ void UGgCharacterComp::_AnimStateChange()
 	{
 		if( auto moveComponent = OwningCharacter->GetMovementComponent(); moveComponent )
 		{
-			if( moveComponent->IsFalling() )
+			if( animInstance->IsJump )
 			{
-				if( animInstance->IsJump ) nextState = EAnimState::JUMP;
-				else if( animInstance->IsAerial ) nextState = EAnimState::AERIAL;
+				nextState = EAnimState::JUMP;
+			}
+			else if( animInstance->IsAirborne )
+			{
+				nextState = EAnimState::AIRBORNE;
 			}
 			else
 			{
@@ -509,7 +516,7 @@ void UGgCharacterComp::_ProcessMove()
 		{
 			float dest_X = FMath::Lerp( characterMovement->GetActorLocation().X, MovePos.X, GetWorld()->GetDeltaSeconds() * CONST::ANIM_LERP_MULITPLIER );
 			float dest_Y = FMath::Lerp( characterMovement->GetActorLocation().Y, MovePos.Y, GetWorld()->GetDeltaSeconds() * CONST::ANIM_LERP_MULITPLIER );
-			float dest_Z = FMath::Lerp( characterMovement->GetActorLocation().Z, MovePos.Z, GetWorld()->GetDeltaSeconds() * CONST::ANIM_LERP_MULITPLIER );
+			float dest_Z = characterMovement->GetActorLocation().Z;
 			FVector dest = FVector( dest_X, dest_Y, dest_Z );
 
 			OwningCharacter->SetActorLocation( dest, true );

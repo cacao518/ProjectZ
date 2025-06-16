@@ -23,7 +23,7 @@ public:
 	bool         IsJump;                // 점프 중 여부
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
-	bool         IsAerial;              // 공중에 띄워짐 여부
+	bool         IsAirborne;            // 공중에 띄워짐 여부
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = Gameplay )
 	bool         IsFly;                 // 날기 중 여부
