@@ -27,6 +27,9 @@ public:
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Default, meta = ( AllowPrivateAccess = "true" ) )
 	class USceneComponent* SpawnPosComp;
 
+	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Default, meta = ( AllowPrivateAccess = "true" ) )
+	class UGgAirborneDecalComp* AirborneDecalComp;
+
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = ( AllowPrivateAccess = "true" ) )
 	class UBoxComponent* HitColl;
 

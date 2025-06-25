@@ -4,38 +4,30 @@
 
 #include "CoreMinimal.h"
 #include "ETC/GgConst.h"
-#include "Components/WidgetComponent.h"
-#include "GgFloatingBarComp.generated.h"
+#include "Components/DecalComponent.h"
+#include "GgAirborneDecalComp.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECTZ_API UGgFloatingBarComp : public UWidgetComponent
+class PROJECTZ_API UGgAirborneDecalComp : public UDecalComponent
 {
 	GENERATED_BODY()
 
 private:
-	FActorPtr OwningActor;
-
-	class UUserWidget*  UserWidget;
-	class UProgressBar* HpProgressBar;
-
-	float ShowTime;
+	FCharacterPtr OwningCharacter;
 
 public:
 	// 생성자 함수
-	UGgFloatingBarComp();
+	UGgAirborneDecalComp();
 
 	// 소멸자 함수
-	virtual ~UGgFloatingBarComp();
+	virtual ~UGgAirborneDecalComp();
 
 	// Begin 함수
 	virtual void BeginPlay() override;
 
 	// Tick 함수
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
-
-	// HP바 업데이트 함수
-	void UpdateHpBar( float InPercent );
 };

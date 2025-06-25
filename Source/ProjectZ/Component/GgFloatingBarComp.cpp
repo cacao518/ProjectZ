@@ -42,6 +42,8 @@ void UGgFloatingBarComp::TickComponent( float DeltaTime, ELevelTick TickType, FA
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
+	if( !OwningActor.IsValid() ) return;
+
 	if( ShowTime > 0 )
 		ShowTime -= DeltaTime;
 	else

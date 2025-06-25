@@ -5,10 +5,12 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Component/GgCharacterComp.h"
 #include "Component/GgFloatingBarComp.h"
+#include "Component/GgAirborneDecalComp.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SceneComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Components/DecalComponent.h"
 #include "ProceduralMeshComponent.h"
 
 
@@ -43,6 +45,14 @@ AGgCharacterNPC::AGgCharacterNPC()
 	LockOnMarkComp->SetWidgetClass( lockOnWidget.Class );
 	LockOnMarkComp->SetWidgetSpace( EWidgetSpace::Screen );
 	LockOnMarkComp->SetDrawSize( FVector2D( 30.f, 30.f ) );
+
+	// AirborneMark Component
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> decalMat( TEXT( "/Game/Material/M_AirborneMark" ) );
+	AirborneDecalComp = CreateDefaultSubobject<UGgAirborneDecalComp>( TEXT( "AirborneDecalComp" ) );
+	AirborneDecalComp->SetupAttachment( RootComponent );
+	AirborneDecalComp->DecalSize = FVector( 10, 50, 50 );
+	AirborneDecalComp->SetRelativeRotation( FRotator( 90, 0, 0 ) );
+	AirborneDecalComp->SetDecalMaterial(decalMat.Object);
 
 	// HpBar Component
 	static ConstructorHelpers::FClassFinder<UUserWidget> floatingBarWidget( TEXT( "/Game/UI/WBP_FloatingBar" ) );

@@ -3,6 +3,7 @@
 #include "GgCharacterPC.h"
 #include "Component/GgCharacterComp.h"
 #include "Component/GgWeaponComp.h"
+#include "Component/GgAirborneDecalComp.h"
 #include "Animation/AnimInstance.h"
 #include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
@@ -54,6 +55,14 @@ AGgCharacterPC::AGgCharacterPC()
 	// SpawnPosComp Component
 	SpawnPosComp = CreateDefaultSubobject<USceneComponent>( TEXT( "SpawnPosComp" ) );
 	SpawnPosComp->SetupAttachment( RootComponent );
+
+	// AirborneMark Component
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> decalMat( TEXT( "/Game/Material/M_AirborneMark" ) );
+	AirborneDecalComp = CreateDefaultSubobject<UGgAirborneDecalComp>( TEXT( "AirborneDecalComp" ) );
+	AirborneDecalComp->SetupAttachment( RootComponent );
+	AirborneDecalComp->DecalSize = FVector( 10, 50, 50 );
+	AirborneDecalComp->SetRelativeRotation( FRotator( 90, 0, 0 ) );
+	AirborneDecalComp->SetDecalMaterial( decalMat.Object );
 
 	// HitBox Component
 	HitColl = CreateDefaultSubobject<UBoxComponent>( TEXT( "HitColl" ) );
