@@ -57,7 +57,7 @@ AGgCharacterPC::AGgCharacterPC()
 	SpawnPosComp->SetupAttachment( RootComponent );
 
 	// AirborneMark Component
-	static ConstructorHelpers::FObjectFinder<UMaterialInterface> decalMat( TEXT( "/Game/Material/M_AirborneMark" ) );
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> decalMat( TEXT( "/Game/Material/M_AirborneMark_MyPC" ) );
 	AirborneDecalComp = CreateDefaultSubobject<UGgAirborneDecalComp>( TEXT( "AirborneDecalComp" ) );
 	AirborneDecalComp->SetupAttachment( RootComponent );
 	AirborneDecalComp->DecalSize = FVector( 10, 50, 50 );
