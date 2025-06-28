@@ -167,6 +167,9 @@ bool UGgCharacterComp::SkillPlay( int InSkillNum )
 			return false;
 	}
 
+	// 역경직 진행중일 경우에는 초기화 시켜주어야한다.
+	HoldTime = 0;
+
 	if ( skillInfo->PlaySpeedType == ESkillPlaySpeedType::DEFAULT )
 		MontagePlay( skillInfo->AnimMontage );
 	else
