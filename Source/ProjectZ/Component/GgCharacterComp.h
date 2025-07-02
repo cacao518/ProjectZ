@@ -32,6 +32,7 @@ private:
 	FCharacterPtr      OwningCharacter = nullptr;               // 부모 캐릭터 클래스
 	EAnimState         AnimState       = EAnimState::IDLE_RUN;  // 애니메이션 상태
 	FVector            MovePos;                                 // 이동할 위치
+	FVector            AirborneDir;                             // 에어본 중 날아가는 벡터
 	CooltimeMap        CoolingSkills;                           // 쿨타임 돌고 있는 스킬 정보		
 	const FSkillInfo*  CurSkillInfo    = nullptr;               // 현재 스킬 정보     
 

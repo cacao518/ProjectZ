@@ -555,6 +555,7 @@ namespace CONST
 	constexpr float DEFAULT_ROTATION_RATE     = 1000.f;    // 기본 캐릭터 방향 전환 비율
 	constexpr float FLY_ROTATION_RATE         = 100.f;     // 날기 캐릭터 방향 전환 비율
 	constexpr float DEFAULT_AIRBORNEPOWER     = 50.f;      // 기본 에어본 파워
+	constexpr float AIRBORNE_KNOCKBACK_MULITPLIER = 0.03f; // 에어본 넉백 보정 값 
 	constexpr float WATER_FALL_ANIM_TIME      = 0.01f;     // 물에 빠지는 애니메이션 속도
 	constexpr float READY_SKILL_ROTATION_RATE = 100000.f;  // 발동 대기 스킬 보유 캐릭터 방향 전환 비율
 	constexpr float READY_SKILL_DURATION      = 0.4f;      // 발동 대기중인 스킬 저장 지속시간

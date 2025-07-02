@@ -242,9 +242,14 @@ void UGgCharacterComp::SetMovePos( float InMovePower, bool InIsKnockBack )
 	const FVector  direction = FRotationMatrix( yawRotation ).GetUnitAxis( EAxis::X );
 
 	if( InIsKnockBack )
+	{
 		MovePos = OwningCharacter->GetActorLocation() - ( direction * InMovePower );
+		AirborneDir = direction * InMovePower * CONST::AIRBORNE_KNOCKBACK_MULITPLIER * -1;
+	}
 	else
+	{
 		MovePos = OwningCharacter->GetActorLocation() + ( direction * ( InMovePower * Stat.MoveSpeed ) );
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -512,6 +517,14 @@ void UGgCharacterComp::_ProcessMove()
 	if( AnimState == EAnimState::IDLE_RUN || AnimState == EAnimState::JUMP )
 	{
 		characterMovement->MaxWalkSpeed = Stat.MoveSpeed * ( IsDash ? CONST::DEFAULT_DASH_SPEED : CONST::DEFAULT_MOVE_SPEED );
+	}
+	else if( AnimState == EAnimState::AIRBORNE )
+	{
+		float dest_X = characterMovement->GetActorLocation().X + AirborneDir.X;
+		float dest_Y = characterMovement->GetActorLocation().Y + AirborneDir.Y;
+		float dest_Z = characterMovement->GetActorLocation().Z;
+		FVector dest = FVector( dest_X, dest_Y, dest_Z );
+		OwningCharacter->SetActorLocation( dest, true );
 	}
 	else
 	{
