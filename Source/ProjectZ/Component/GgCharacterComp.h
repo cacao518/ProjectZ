@@ -138,9 +138,6 @@ private:
 	// 애니메이션 상태를 교체한다.
 	void _AnimStateChange();
 
-	// 이동 관련 로직을 수행한다.
-	void _ProcessMove();
-
 	// 스킬 쿨타임을 등록한다.
 	void _RegisterCoolTime( const FSkillInfo& InSkillInfo );
 
@@ -153,6 +150,9 @@ private:
 	// 물에 빠지는 처리를 한다.
 	void _FallingWater( float InDeltaTime );
 
+	// 이동 관련 로직을 수행한다.
+	void _ProcessMove();
+
 	// 착지 로직을 실행한다.
 	void _ProcessLand();
 
@@ -164,4 +164,7 @@ private:
 
 	// 누적시간 관련 로직 처리를 한다.
 	void _ProcessAccTime( float InDeltaTime );
+
+	// AI를 리셋 시킨다.
+	void _ResetAIController();
 };

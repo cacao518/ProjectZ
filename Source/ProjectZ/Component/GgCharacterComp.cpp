@@ -390,6 +390,7 @@ float UGgCharacterComp::_ProcessHit( FActorPtr InOtherActor )
 	if( airbornePower > 0 || animInstance->IsAirborne )
 	{
 		ResetInfo( true );
+		_ResetAIController();
 		animInstance->StopAllMontages( 0 );
 		animInstance->IsAirborne = true;
 		airbornePower = airbornePower > 0 ? airbornePower : CONST::DEFAULT_AIRBORNEPOWER;
@@ -407,6 +408,7 @@ float UGgCharacterComp::_ProcessHit( FActorPtr InOtherActor )
 		UAnimMontage* hitAnim = HitAnim.IsValid() ? HitAnim.Get() : HitAnim.LoadSynchronous();
 		MontagePlay( hitAnim, hitPlayRate );
 		LookAt( Cast<ACharacter>( InOtherActor ) );
+		_ResetAIController();
 
 		// 역경직 시간 추가
 		HoldTime += othetObjectComp->GetAttackCollInfo().HitStopTime;
@@ -502,45 +504,6 @@ void UGgCharacterComp::_AnimStateChange()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 이동 관련 로직을 수행한다.
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGgCharacterComp::_ProcessMove()
-{
-	if ( IsHold() )
-		return;
-
-	auto characterMovement = OwningCharacter.IsValid() ? OwningCharacter->GetCharacterMovement() : nullptr;
-
-	if( !characterMovement )
-		return;
-
-	if( AnimState == EAnimState::IDLE_RUN || AnimState == EAnimState::JUMP )
-	{
-		characterMovement->MaxWalkSpeed = Stat.MoveSpeed * ( IsDash ? CONST::DEFAULT_DASH_SPEED : CONST::DEFAULT_MOVE_SPEED );
-	}
-	else if( AnimState == EAnimState::AIRBORNE )
-	{
-		float dest_X = characterMovement->GetActorLocation().X + AirborneDir.X;
-		float dest_Y = characterMovement->GetActorLocation().Y + AirborneDir.Y;
-		float dest_Z = characterMovement->GetActorLocation().Z;
-		FVector dest = FVector( dest_X, dest_Y, dest_Z );
-		OwningCharacter->SetActorLocation( dest, true );
-	}
-	else
-	{
-		if( IsForceMove )
-		{
-			float dest_X = FMath::Lerp( characterMovement->GetActorLocation().X, MovePos.X, GetWorld()->GetDeltaSeconds() * CONST::ANIM_LERP_MULITPLIER );
-			float dest_Y = FMath::Lerp( characterMovement->GetActorLocation().Y, MovePos.Y, GetWorld()->GetDeltaSeconds() * CONST::ANIM_LERP_MULITPLIER );
-			float dest_Z = characterMovement->GetActorLocation().Z;
-			FVector dest = FVector( dest_X, dest_Y, dest_Z );
-
-			OwningCharacter->SetActorLocation( dest, true );
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 스킬 쿨타임을 등록한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgCharacterComp::_RegisterCoolTime( const FSkillInfo& InSkillInfo )
@@ -608,6 +571,45 @@ void UGgCharacterComp::_FallingWater( float InDeltaTime )
 	{
 		Stat.Hp = 0;
 		IsFallWater = false;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 이동 관련 로직을 수행한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGgCharacterComp::_ProcessMove()
+{
+	if( IsHold() )
+		return;
+
+	auto characterMovement = OwningCharacter.IsValid() ? OwningCharacter->GetCharacterMovement() : nullptr;
+
+	if( !characterMovement )
+		return;
+
+	if( AnimState == EAnimState::IDLE_RUN || AnimState == EAnimState::JUMP )
+	{
+		characterMovement->MaxWalkSpeed = Stat.MoveSpeed * ( IsDash ? CONST::DEFAULT_DASH_SPEED : CONST::DEFAULT_MOVE_SPEED );
+	}
+	else if( AnimState == EAnimState::AIRBORNE )
+	{
+		float dest_X = characterMovement->GetActorLocation().X + AirborneDir.X;
+		float dest_Y = characterMovement->GetActorLocation().Y + AirborneDir.Y;
+		float dest_Z = characterMovement->GetActorLocation().Z;
+		FVector dest = FVector( dest_X, dest_Y, dest_Z );
+		OwningCharacter->SetActorLocation( dest, true );
+	}
+	else
+	{
+		if( IsForceMove )
+		{
+			float dest_X = FMath::Lerp( characterMovement->GetActorLocation().X, MovePos.X, GetWorld()->GetDeltaSeconds() * CONST::ANIM_LERP_MULITPLIER );
+			float dest_Y = FMath::Lerp( characterMovement->GetActorLocation().Y, MovePos.Y, GetWorld()->GetDeltaSeconds() * CONST::ANIM_LERP_MULITPLIER );
+			float dest_Z = characterMovement->GetActorLocation().Z;
+			FVector dest = FVector( dest_X, dest_Y, dest_Z );
+
+			OwningCharacter->SetActorLocation( dest, true );
+		}
 	}
 }
 
@@ -698,5 +700,16 @@ void UGgCharacterComp::_ProcessAccTime( float InDeltaTime )
 	else if ( AnimState == EAnimState::DIE )
 	{
 		DeathTime += InDeltaTime;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief AI를 리셋 시킨다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGgCharacterComp::_ResetAIController()
+{
+	if( AGgAIController* aiController = Cast<AGgAIController>( OwningCharacter->GetController() ) )
+	{
+		aiController->Reset();
 	}
 }
