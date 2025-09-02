@@ -10,7 +10,7 @@
 const FName AGgAIController::PatrolPosKey( TEXT( "PatrolPos" ) );
 const FName AGgAIController::TargetKey( TEXT( "Target" ) );
 const FName AGgAIController::CurSkillNumKey( TEXT( "CurSkillNum" ) );
-const FName AGgAIController::IsCommonActionKey( TEXT( "IsCommonAction" ) );
+const FName AGgAIController::IsIdleKey( TEXT( "IsIdle" ) );
 
 
 AGgAIController::AGgAIController( FObjectInitializer const& object_initializer )
@@ -29,7 +29,7 @@ void AGgAIController::OnPossess( APawn* InPawn )
 	Super::OnPossess( InPawn );
 	if( blackboard )
 	{
-		//ºñÇìÀÌºñ¾îÆ®¸®¿¡ ÀÖ´Â ºí·¢º¸µå·Î ÃÊ±âÈ­
+		//ë¹„í—¤ì´ë¹„ì–´íŠ¸ë¦¬ì— ìžˆëŠ” ë¸”ëž™ë³´ë“œë¡œ ì´ˆê¸°í™”
 		blackboard->InitializeBlackboard( *BTAsset->BlackboardAsset );
 	}
 

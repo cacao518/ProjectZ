@@ -25,10 +25,10 @@ void UBTS_CheckState::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 	if( !characterComp )
 		return;
 
-	if( characterComp->GetAnimState() != EAnimState::COMMON_ACTION && OwnerComp.GetBlackboardComponent()->GetValueAsBool( AGgAIController::IsCommonActionKey ) )
-		OwnerComp.GetBlackboardComponent()->SetValueAsBool( AGgAIController::IsCommonActionKey, false );
-	else if( characterComp->GetAnimState() == EAnimState::COMMON_ACTION && !OwnerComp.GetBlackboardComponent()->GetValueAsBool( AGgAIController::IsCommonActionKey ) )
-		OwnerComp.GetBlackboardComponent()->SetValueAsBool( AGgAIController::IsCommonActionKey, true );
+	if( characterComp->GetAnimState() != EAnimState::IDLE_RUN && OwnerComp.GetBlackboardComponent()->GetValueAsBool( AGgAIController::IsIdleKey ) )
+		OwnerComp.GetBlackboardComponent()->SetValueAsBool( AGgAIController::IsIdleKey, false );
+	else if( characterComp->GetAnimState() == EAnimState::IDLE_RUN && !OwnerComp.GetBlackboardComponent()->GetValueAsBool( AGgAIController::IsIdleKey ) )
+		OwnerComp.GetBlackboardComponent()->SetValueAsBool( AGgAIController::IsIdleKey, true );
 
 	return;
 }
