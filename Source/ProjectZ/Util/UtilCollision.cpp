@@ -273,5 +273,10 @@ namespace UtilCollision
 			}
 #endif
 		}
+		else
+		{
+			InPMC->ClearAllMeshSections();
+			InPMC->ClearCollisionConvexMeshes();
+		}
 	}
 }

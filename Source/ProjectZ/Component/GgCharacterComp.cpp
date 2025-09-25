@@ -80,7 +80,10 @@ void UGgCharacterComp::ResetInfo( bool InForceReset )
 		IsEnableDerivedKey = false;
 		IsForceMove = false;
 		CurSkillInfo = nullptr;
+		HoldTime = 0;
 		MontagePlayTime = 0;
+		MontagePlayRate = 0;
+		HitObjIds.Empty();
 	}
 }
 
@@ -114,6 +117,8 @@ void UGgCharacterComp::MontagePlay( UAnimMontage* InMontage, float InScale )
 	ResetInfo( true );
 
 	animInstance->Montage_Play( InMontage, InScale );
+
+	MontagePlayRate = InScale;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,8 +198,10 @@ bool UGgCharacterComp::SkillPlay( int InSkillNum )
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 공격 성공 처리를 한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGgCharacterComp::OnAttackSuccess()
+void UGgCharacterComp::OnAttackSuccess( int64 InHitObjId )
 {
+	Super::OnAttackSuccess( InHitObjId );
+
 	auto WeaponComp = OwningActor.IsValid() ? OwningActor->FindComponentByClass<UGgWeaponComp>() : nullptr;
 	if( !WeaponComp )
 		return;
@@ -385,11 +392,12 @@ float UGgCharacterComp::_ProcessHit( FActorPtr InOtherActor )
 	if( !animInstance ) 
 		return -1;
 
+	ResetInfo( true );
+
 	// 에어본
 	float airbornePower = othetObjectComp->GetAttackCollInfo().AirbornePower;
 	if( airbornePower > 0 || animInstance->IsAirborne )
 	{
-		ResetInfo( true );
 		_ResetAIController();
 		animInstance->StopAllMontages( 0 );
 		animInstance->IsAirborne = true;
@@ -411,7 +419,7 @@ float UGgCharacterComp::_ProcessHit( FActorPtr InOtherActor )
 		_ResetAIController();
 
 		// 역경직 시간 추가
-		HoldTime += othetObjectComp->GetAttackCollInfo().HitStopTime;
+		HoldTime = othetObjectComp->GetAttackCollInfo().HitStopTime;
 	}
 
 	// 넉백
@@ -672,11 +680,11 @@ void UGgCharacterComp::_ProcessHold( float InDeltaTime )
 	if ( HoldTime <= 0 )
 	{
 		HoldTime = 0;
-		animInstance->Montage_Resume( curMontage );
+		animInstance->Montage_SetPlayRate( curMontage, MontagePlayRate );
 		return;
 	}
 
-	animInstance->Montage_Pause( curMontage );
+	animInstance->Montage_SetPlayRate( curMontage, 0.01f );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

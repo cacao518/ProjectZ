@@ -37,7 +37,7 @@ public:
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
 	// 공격 성공 처리를 한다.
-	virtual void OnAttackSuccess() override;
+	virtual void OnAttackSuccess( int64 InHitObjId ) override;
 
 private:
 	// 초기화 한다.

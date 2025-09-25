@@ -8,6 +8,9 @@
 #include "GgObjectComp.generated.h"
 
 
+using HitObjSet = TSet<int>;
+
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTZ_API UGgObjectComp : public UActorComponent
 {
@@ -26,6 +29,7 @@ protected:
 	ETeamType          TeamType          = ETeamType::MAX;     // 팀 타입
 	FCollisionData     AttackCollData;                         // 공격 콜리전 정보
 	FStatusData        InitStat;                               // 초기기본 능력치
+	HitObjSet          HitObjIds;                              // 공격한 오브젝트아이디 셋
 
 	bool               bEnableAttackColl = false;              // 공격 컬리전 활성화 여부
 	bool               IsSpawnedInEditor = true;               // 에디터로 스폰되었는지 여부
@@ -49,7 +53,7 @@ public:
 	void LookAt( FCharacterPtr InTarget );
 
 	// 공격 성공 처리를 한다.
-	virtual void OnAttackSuccess() {};
+	virtual void OnAttackSuccess( int64 InHitObjId );
 
 	///////////////////////////////////////////////////////////////////////
 	// Setter

@@ -44,6 +44,7 @@ private:
 	float              HoldTime        = 0;         // 역경직 시간 누적
 	float              FallWaterTime   = 0;         // 물에 빠져있는 시간 누적
 	float              MontagePlayTime = 0;         // 몽타주 재생시간 누적
+	float              MontagePlayRate = 0;         // 몽타주 재생속도
 	float              DeathTime       = 0;         // 사망 시간 누적
 
 public:
@@ -72,7 +73,7 @@ public:
 	bool SkillPlay( int InSkillNum );
 
 	// 공격 성공 처리를 한다.
-	virtual void OnAttackSuccess() override;
+	virtual void OnAttackSuccess( int64 InHitObjId ) override;
 
 	///////////////////////////////////////////////////////////////////////
 	// Setter

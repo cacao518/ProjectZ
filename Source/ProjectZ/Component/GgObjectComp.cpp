@@ -76,10 +76,20 @@ void UGgObjectComp::LookAt( FCharacterPtr InTarget )
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 공격 성공 처리를 한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGgObjectComp::OnAttackSuccess( int64 InHitObjId )
+{
+	HitObjIds.Add( InHitObjId );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 공격 콜리전 정보를 셋팅한다.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void UGgObjectComp::SetAttackCollData( const FCollisionData& InAttackCollData )
 {
+	HitObjIds.Empty();
+
 	AttackCollData = InAttackCollData;
 
 	auto attackColl = OwningActor.IsValid() ? Cast<UProceduralMeshComponent>(OwningActor->GetDefaultSubobjectByName(TEXT("AttackColl"))) : nullptr;
@@ -115,6 +125,12 @@ void UGgObjectComp::SetIsEnabledAttackColl( bool InIsEnabled )
 	bEnableAttackColl = InIsEnabled;
 
 	attackColl->SetCollisionEnabled( InIsEnabled ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision );
+	
+	if( !InIsEnabled )
+	{
+		attackColl->ClearAllMeshSections();
+		attackColl->ClearCollisionConvexMeshes();
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -246,7 +262,10 @@ float UGgObjectComp::_ProcessHit( FActorPtr InOtherActor )
 	if ( othetObjectComp->GetTeamType() == TeamType && !othetObjectComp->Stat.IsTyrant )
 		return -1;
 
-	othetObjectComp->OnAttackSuccess();
+	if( othetObjectComp->HitObjIds.Contains( ObjId ) )
+		return -1;
+
+	othetObjectComp->OnAttackSuccess( ObjId );
 
 	// 체력 감소
 	float totalDamage = othetObjectComp->GetAttackCollInfo().Power * othetObjectComp->GetStat().AttackPower;

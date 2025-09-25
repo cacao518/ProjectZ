@@ -31,16 +31,6 @@ void UAnimNotifyState_Attack::NotifyBegin( USkeletalMeshComponent* MeshComp, UAn
 	UGgCharacterComp* charComp = MeshComp->GetOwner()->FindComponentByClass<UGgCharacterComp>();
 	if( !charComp ) return;
 
-	if( charComp->IsHold() )
-	{
-		return;
-	}
-
-	if( charComp->IsEnableAttackColl() )
-	{
-		return;
-	}
-
 	charComp->SetAttackCollData( Coll );
 	charComp->SetIsEnabledAttackColl( true );
 }
@@ -57,11 +47,6 @@ void UAnimNotifyState_Attack::NotifyEnd( USkeletalMeshComponent* MeshComp, UAnim
 
 	UGgCharacterComp* charComp = MeshComp->GetOwner()->FindComponentByClass<UGgCharacterComp>();
 	if( !charComp ) return;
-
-	if( charComp->IsHold() )
-	{
-		return;
-	}
 
 	charComp->SetIsEnabledAttackColl( false );
 }
