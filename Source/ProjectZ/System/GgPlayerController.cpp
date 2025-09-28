@@ -42,10 +42,10 @@ void AGgPlayerController::BeginPlay()
 	InputComponent->BindAxis( "Turn", MyPlayer, &APawn::AddControllerYawInput );
 	InputComponent->BindAxis( "LookUp", MyPlayer, &APawn::AddControllerPitchInput );
 
-	InputComponent->BindAction( "Alt", IE_Pressed, this, &AGgPlayerController::JumpStart );
-	InputComponent->BindAction( "Alt", IE_Released, this, &AGgPlayerController::JumpStop );
-	InputComponent->BindAction( "Shift", IE_Pressed, this, &AGgPlayerController::DashStart );
-	InputComponent->BindAction( "Shift", IE_Released, this, &AGgPlayerController::DashStop );
+	//InputComponent->BindAction( "Alt", IE_Pressed, this, &AGgPlayerController::DashStart );
+	//InputComponent->BindAction( "Alt", IE_Released, this, &AGgPlayerController::DashStop );
+	InputComponent->BindAction( "Shift", IE_Pressed, this, &AGgPlayerController::JumpStart );
+	InputComponent->BindAction( "Shift", IE_Released, this, &AGgPlayerController::JumpStop );
 
 	InputComponent->BindAction( "Space", IE_Pressed, this, &AGgPlayerController::ProcessSpace );
 	InputComponent->BindAction( "Tab", IE_Pressed, this, &AGgPlayerController::ProcessTab );
@@ -213,10 +213,17 @@ void AGgPlayerController::ProcessLeftMouse()
 		return;
 
 	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerWeaponSkillInfo>( WeaponComp->GetCurWeaponInfoId() );
-	if ( !skillInfo )
+	if( !skillInfo )
 		return;
 
-	_SkillPlay( skillInfo->L_SkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::LEFT_MOUSE );
+	if( MyPlayer && CharacterComp && CharacterComp->GetAnimState() == EAnimState::JUMP )
+	{
+		_SkillPlay( skillInfo->L_JumpSkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::LEFT_MOUSE );
+	}
+	else
+	{
+		_SkillPlay( skillInfo->L_SkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::LEFT_MOUSE );
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -228,10 +235,17 @@ void AGgPlayerController::ProcessRightMouse()
 		return;
 
 	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerWeaponSkillInfo>( WeaponComp->GetCurWeaponInfoId() );
-	if ( !skillInfo )
+	if( !skillInfo )
 		return;
 
-	_SkillPlay( skillInfo->R_SkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::RIGHT_MOUSE );
+	if( MyPlayer && CharacterComp && CharacterComp->GetAnimState() == EAnimState::JUMP )
+	{
+		_SkillPlay( skillInfo->R_JumpSkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::RIGHT_MOUSE );
+	}
+	else
+	{
+		_SkillPlay( skillInfo->R_SkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::RIGHT_MOUSE );
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -344,7 +358,7 @@ void AGgPlayerController::ProcessTab()
 	if ( !skillInfo )
 		return;
 
-	_SkillPlay( skillInfo->ThrowSkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::Tab );
+	//_SkillPlay( skillInfo->ThrowSkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::Tab );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

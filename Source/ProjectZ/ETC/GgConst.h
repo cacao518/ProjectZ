@@ -457,7 +457,10 @@ public:
 	int R_SkillId;                          // 강공격 
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int ThrowSkillId;                       // 무기 투척
+	int L_JumpSkillId;                       // 점프 약공격
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int R_JumpSkillId;                       // 점프 강공격
 
 	/// 맵 키를 반환한다.
 	using KeyType = int;

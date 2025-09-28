@@ -597,7 +597,7 @@ void UGgCharacterComp::_ProcessMove()
 
 	if( AnimState == EAnimState::IDLE_RUN || AnimState == EAnimState::JUMP )
 	{
-		characterMovement->MaxWalkSpeed = Stat.MoveSpeed * ( IsDash ? CONST::DEFAULT_DASH_SPEED : CONST::DEFAULT_MOVE_SPEED );
+		characterMovement->MaxWalkSpeed = Stat.MoveSpeed * ( IsDash ? CONST::DEFAULT_MOVE_SPEED : CONST::DEFAULT_DASH_SPEED );
 	}
 	else if( AnimState == EAnimState::AIRBORNE )
 	{
@@ -633,8 +633,6 @@ void UGgCharacterComp::_ProcessLand()
 	if( !animInstance )
 		return;
 
-	auto curMontage = OwningCharacter.IsValid() ? OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage() : nullptr;
-
 	auto moveComponent = OwningCharacter->GetMovementComponent();
 	if( moveComponent )
 	{
@@ -644,11 +642,8 @@ void UGgCharacterComp::_ProcessLand()
 		}
 		else if( LandOnce )
 		{
-			if( !curMontage )
-			{
-				UAnimMontage* randAnim = LandAnim.IsValid() ? LandAnim.Get() : LandAnim.LoadSynchronous();
-				MontagePlay( randAnim );
-			}
+			UAnimMontage* randAnim = LandAnim.IsValid() ? LandAnim.Get() : LandAnim.LoadSynchronous();
+			MontagePlay( randAnim );
 
 			GetGgCameraManager().CameraShake( OwningCharacter, 1.f, true );
 			LandOnce = false;
