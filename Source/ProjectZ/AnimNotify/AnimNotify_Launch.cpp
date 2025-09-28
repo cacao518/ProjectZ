@@ -24,7 +24,20 @@ void UAnimNotify_Launch::Notify( USkeletalMeshComponent* MeshComp, UAnimSequence
 	UGgCharacterComp* obj = MeshComp->GetOwner()->FindComponentByClass<UGgCharacterComp>();
 	if ( !obj )
 		return;
-	
+
 	const FVector vec = ( CONST::MAX_MASS - obj->GetStat().Weight ) * Vec;
-	owner->LaunchCharacter( vec, true, true );
+
+	if( bUseOwnerBaseDir )
+	{
+		FVector forward = owner->GetActorForwardVector();
+		FVector right = owner->GetActorRightVector();
+		FVector up = owner->GetActorUpVector();
+
+		FVector direction = ( forward * vec.X ) + ( right * vec.Y ) + ( up * vec.Z );
+		owner->LaunchCharacter( direction, true, true );
+	}
+	else
+	{
+		owner->LaunchCharacter( vec, true, true );
+	}
 }

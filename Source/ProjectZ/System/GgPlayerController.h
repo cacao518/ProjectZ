@@ -19,7 +19,7 @@ UCLASS()
 class PROJECTZ_API AGgPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
 private:
 	using InputMap = TMap< EInputKeyType, TFunction<void()> >;
 
@@ -32,10 +32,14 @@ private:
 	float                    ReadySkillResetTime;  // 발동 대기중인 스킬 초기화 시간
 	TFunction<void()>        ReadySkillFunc;       // 발동 대기중인 마지막으로 입력한 스킬 함수
 	EInputKeyType            ReadySkillInputKey;   // 발동 대기중인 마지막으로 입력한 키 종류
-						     
-	float				     BaseTurnRate;
-	float				     BaseLookUpRate;
-	bool				     IsDownBothMoustButton;
+
+	float				     BaseTurnRate = 45.f;
+	float				     BaseLookUpRate = 45.f;
+	float                    ForwardValue = 0;
+	float                    RightValue = 0;
+
+	bool				     bIsDownBothMouseButton = false;  // 마우스 왼/오른키가 동시에 눌리고 있는지 여부
+	bool                     bIsMovingKeyPressed = false;     // 이동키가 눌리고 있는지 여부
 
 public:
 	AGgPlayerController();

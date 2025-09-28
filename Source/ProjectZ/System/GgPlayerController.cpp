@@ -18,9 +18,6 @@ AGgPlayerController::AGgPlayerController()
 {
 	//bShowMouseCursor = true;
 	//DefaultMouseCursor = EMouseCursor::Crosshairs;
-
-	BaseTurnRate = 45.f;
-	BaseLookUpRate = 45.f;
 }
 
 void AGgPlayerController::BeginPlay()
@@ -66,14 +63,15 @@ void AGgPlayerController::BeginPlay()
 	InputComponent->BindAction( "3", IE_Pressed, this, &AGgPlayerController::Process3 );
 
 	InputTypeAndFuncMap.Empty();
-	InputTypeAndFuncMap.Add( EInputKeyType::LEFT_MOUSE,   [ this ]() { ProcessLeftMouse(); } );
-	InputTypeAndFuncMap.Add( EInputKeyType::RIGHT_MOUSE,  [ this ]() { ProcessRightMouse(); } );
-	InputTypeAndFuncMap.Add( EInputKeyType::SPACE,        [ this ]() { ProcessSpace(); } );
-	InputTypeAndFuncMap.Add( EInputKeyType::Tab,          [ this ]() { ProcessTab(); } );
-	InputTypeAndFuncMap.Add( EInputKeyType::Q,            [ this ]() { ProcessQ(); } );
-	InputTypeAndFuncMap.Add( EInputKeyType::E,            [ this ]() { ProcessE(); } );
-	InputTypeAndFuncMap.Add( EInputKeyType::F,            [ this ]() { ProcessF(); } );
-	InputTypeAndFuncMap.Add( EInputKeyType::R,            [ this ]() { ProcessR(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::LEFT_MOUSE,    [ this ]() { ProcessLeftMouse(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::RIGHT_MOUSE,   [ this ]() { ProcessRightMouse(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::SPACE_MOVING,  [ this ]() { ProcessSpace(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::SPACE_STANDING,[ this ]() { ProcessSpace(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::Tab,           [ this ]() { ProcessTab(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::Q,             [ this ]() { ProcessQ(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::E,             [ this ]() { ProcessE(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::F,             [ this ]() { ProcessF(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::R,             [ this ]() { ProcessR(); } );
 
 	_ResetReadySkill();
 }
@@ -102,6 +100,9 @@ void AGgPlayerController::MoveForward( float Value )
 	if( !animInstance )
 		return;
 
+	ForwardValue = Value;
+	bIsMovingKeyPressed = ( ForwardValue != 0.f || RightValue != 0.f );
+
 	if( Value != 0.0f )
 	{
 		if( animInstance->AnimState    == EAnimState   ::IDLE_RUN ||
@@ -129,6 +130,9 @@ void AGgPlayerController::MoveRight( float Value )
 	UGgAnimInstance* animInstance = MyPlayer ? Cast<UGgAnimInstance>( MyPlayer->GetMesh()->GetAnimInstance() ) : nullptr;
 	if( !animInstance )
 		return;
+
+	RightValue = Value;
+	bIsMovingKeyPressed = ( ForwardValue != 0.f || RightValue != 0.f );
 
 	if( Value != 0.0f )
 	{
@@ -316,11 +320,13 @@ void AGgPlayerController::ProcessWheelDown()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGgPlayerController::ProcessSpace()
 {
-	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerDefaultSkillInfo>( EInputKeyType::SPACE );
-	if ( !skillInfo )
+	EInputKeyType keyType = bIsMovingKeyPressed ? EInputKeyType::SPACE_MOVING : EInputKeyType::SPACE_STANDING;
+
+	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerDefaultSkillInfo>( keyType );
+	if( !skillInfo )
 		return;
 
-	_SkillPlay( skillInfo->SkillId ) ? _ResetReadySkill() : _SetReadySkill( EInputKeyType::SPACE );
+	_SkillPlay( skillInfo->SkillId ) ? _ResetReadySkill() : _SetReadySkill( keyType );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -537,14 +543,14 @@ void AGgPlayerController::_ProcessRotationRate()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void AGgPlayerController::_ProcessInputBothKey()
 {
-	if( !IsDownBothMoustButton && IsInputKeyDown( EKeys::LeftMouseButton ) && IsInputKeyDown( EKeys::RightMouseButton ) )
+	if( !bIsDownBothMouseButton && IsInputKeyDown( EKeys::LeftMouseButton ) && IsInputKeyDown( EKeys::RightMouseButton ) )
 	{
-		IsDownBothMoustButton = true;
+		bIsDownBothMouseButton = true;
 		ProcessBothMouseDown();
 	}
-	else if( IsDownBothMoustButton && !IsInputKeyDown( EKeys::LeftMouseButton ) && !IsInputKeyDown( EKeys::RightMouseButton ) )
+	else if( bIsDownBothMouseButton && !IsInputKeyDown( EKeys::LeftMouseButton ) && !IsInputKeyDown( EKeys::RightMouseButton ) )
 	{
-		IsDownBothMoustButton = false;
+		bIsDownBothMouseButton = false;
 		ProcessBothMouseUp();
 	}
 }

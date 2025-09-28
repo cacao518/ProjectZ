@@ -18,6 +18,9 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify" )
 	FVector Vec;
 
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "AnimNotify" )
+	bool bUseOwnerBaseDir = false;
+
 public:
 	virtual FString GetNotifyName_Implementation() const override;
 
