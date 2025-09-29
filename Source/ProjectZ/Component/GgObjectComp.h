@@ -72,10 +72,10 @@ public:
 	void SetHp( float InHp ){ Stat.Hp = InHp; Stat.Hpm = InHp; };
 	
 	// 이동속도를 설정한다.
-	virtual void SetMoveSpeed( float InMoveSpeed );
+	void SetMoveSpeed( float InMoveSpeed );
 
 	// 점프력을 설정한다.
-	virtual void SetJumpPower( float InJumpPower );
+	void SetJumpPower( float InJumpPower );
 
 	// 공격속도를 설정한다.
 	void SetAttackSpeed( float InAttackSpeed ){ Stat.AttackSpeed = InAttackSpeed; };

@@ -80,10 +80,10 @@ public:
 	///////////////////////////////////////////////////////////////////////
 
 	// 이동속도를 설정한다.
-	virtual void SetMoveSpeed( float InMoveSpeed ) override;
+	void SetMoveSpeed( float InMoveSpeed );
 
 	// 점프력을 설정한다.
-	virtual void SetJumpPower( float InJumpPower ) override;
+	void SetJumpPower( float InJumpPower );
 
 	// 강제 이동 여부를 셋팅한다.
 	void SetIsForceMove( bool InIsForceMove ){ IsForceMove = InIsForceMove; };

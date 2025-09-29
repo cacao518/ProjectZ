@@ -64,7 +64,7 @@ public:
 	void ProcessWheelClick();
 	void ProcessWheelUp();
 	void ProcessWheelDown();
-	void ProcessSpace();
+	void ProcessShift();
 	void ProcessTab();
 	void ProcessQ();
 	void ProcessE();

@@ -44,10 +44,10 @@ void AGgPlayerController::BeginPlay()
 
 	//InputComponent->BindAction( "Alt", IE_Pressed, this, &AGgPlayerController::DashStart );
 	//InputComponent->BindAction( "Alt", IE_Released, this, &AGgPlayerController::DashStop );
-	InputComponent->BindAction( "Shift", IE_Pressed, this, &AGgPlayerController::JumpStart );
-	InputComponent->BindAction( "Shift", IE_Released, this, &AGgPlayerController::JumpStop );
+	InputComponent->BindAction( "Space", IE_Pressed, this, &AGgPlayerController::JumpStart );
+	InputComponent->BindAction( "Space", IE_Released, this, &AGgPlayerController::JumpStop );
 
-	InputComponent->BindAction( "Space", IE_Pressed, this, &AGgPlayerController::ProcessSpace );
+	InputComponent->BindAction( "Shift", IE_Pressed, this, &AGgPlayerController::ProcessShift );
 	InputComponent->BindAction( "Tab", IE_Pressed, this, &AGgPlayerController::ProcessTab );
 	InputComponent->BindAction( "Q", IE_Pressed, this, &AGgPlayerController::ProcessQ );
 	InputComponent->BindAction( "E", IE_Pressed, this, &AGgPlayerController::ProcessE );
@@ -65,8 +65,8 @@ void AGgPlayerController::BeginPlay()
 	InputTypeAndFuncMap.Empty();
 	InputTypeAndFuncMap.Add( EInputKeyType::LEFT_MOUSE,    [ this ]() { ProcessLeftMouse(); } );
 	InputTypeAndFuncMap.Add( EInputKeyType::RIGHT_MOUSE,   [ this ]() { ProcessRightMouse(); } );
-	InputTypeAndFuncMap.Add( EInputKeyType::SPACE_MOVING,  [ this ]() { ProcessSpace(); } );
-	InputTypeAndFuncMap.Add( EInputKeyType::SPACE_STANDING,[ this ]() { ProcessSpace(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::SHIFT_MOVING,  [ this ]() { ProcessShift(); } );
+	InputTypeAndFuncMap.Add( EInputKeyType::SHIFT_STANDING,[ this ]() { ProcessShift(); } );
 	InputTypeAndFuncMap.Add( EInputKeyType::Tab,           [ this ]() { ProcessTab(); } );
 	InputTypeAndFuncMap.Add( EInputKeyType::Q,             [ this ]() { ProcessQ(); } );
 	InputTypeAndFuncMap.Add( EInputKeyType::E,             [ this ]() { ProcessE(); } );
@@ -330,11 +330,11 @@ void AGgPlayerController::ProcessWheelDown()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 스페이스 키 실행 (구르기)
+//// @brief 쉬프트 키 실행 (구르기)
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void AGgPlayerController::ProcessSpace()
+void AGgPlayerController::ProcessShift()
 {
-	EInputKeyType keyType = bIsMovingKeyPressed ? EInputKeyType::SPACE_MOVING : EInputKeyType::SPACE_STANDING;
+	EInputKeyType keyType = bIsMovingKeyPressed ? EInputKeyType::SHIFT_MOVING : EInputKeyType::SHIFT_STANDING;
 
 	const auto& skillInfo = GetGgDataInfoManager().GetInfo<FPlayerDefaultSkillInfo>( keyType );
 	if( !skillInfo )

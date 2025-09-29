@@ -448,6 +448,9 @@ void UGgCharacterComp::_Init()
 {
 	OwningCharacter = Cast<ACharacter>( OwningActor );
 
+	SetMoveSpeed( Stat.MoveSpeed );
+	SetJumpPower( Stat.JumpPower );
+
 	ResetInfo( true );
 }
 
@@ -595,11 +598,7 @@ void UGgCharacterComp::_ProcessMove()
 	if( !characterMovement )
 		return;
 
-	if( AnimState == EAnimState::IDLE_RUN || AnimState == EAnimState::JUMP )
-	{
-		characterMovement->MaxWalkSpeed = Stat.MoveSpeed * ( IsDash ? CONST::DEFAULT_MOVE_SPEED : CONST::DEFAULT_DASH_SPEED );
-	}
-	else if( AnimState == EAnimState::AIRBORNE )
+	if( AnimState == EAnimState::AIRBORNE )
 	{
 		float dest_X = characterMovement->GetActorLocation().X + AirborneDir.X;
 		float dest_Y = characterMovement->GetActorLocation().Y + AirborneDir.Y;
