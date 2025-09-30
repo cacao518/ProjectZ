@@ -40,7 +40,7 @@ public:
 
 private:
 	// 락온 기능 수행
-	void _ProcessLockOn();
+	void _ProcessLockOn( float InDeltaTime );
 
 };
 inline FGgLockOnManager& GetGgLockOnManager() { return FGgLockOnManager::GetInstance(); };

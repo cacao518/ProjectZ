@@ -32,7 +32,7 @@ FGgLockOnManager::~FGgLockOnManager()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void FGgLockOnManager::Tick( float InDeltaTime )
 {
-	_ProcessLockOn();
+	_ProcessLockOn( InDeltaTime );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,7 +168,7 @@ void FGgLockOnManager::LockOnRelease()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// @brief 락온 기능 수행
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void FGgLockOnManager::_ProcessLockOn()
+void FGgLockOnManager::_ProcessLockOn( float InDeltaTime )
 {
 	if( !LockOnTarget.IsValid() )
 		return;
@@ -202,10 +202,13 @@ void FGgLockOnManager::_ProcessLockOn()
 		return;
 	}
 
-	FRotator rotator = UKismetMathLibrary::FindLookAtRotation( myPlayer->GetActorLocation(), LockOnTarget->GetActorLocation() );
-	rotator.Pitch = CONST::LOCKON_CAMERA_FIX_PITCH;
+	FRotator currentRot = myPlayer->GetController()->GetControlRotation();
+	FRotator targetRot = UKismetMathLibrary::FindLookAtRotation( myPlayer->GetActorLocation(), LockOnTarget->GetActorLocation() );
+	targetRot.Pitch = CONST::LOCKON_CAMERA_FIX_PITCH;
 
-	myPlayer->GetController()->SetControlRotation( rotator );
+	FRotator newRot = FMath::RInterpTo( currentRot, targetRot, InDeltaTime, CONST::LOCKON_START_ROTAION_SPEED );
+
+	myPlayer->GetController()->SetControlRotation( newRot );
 	
 	// 락온 상태에서 스킬 사용 시 내 캐릭터가 적을 바라보게 할 것 인지 확인
 	auto skillInfo = ownerGgObjectComp->GetCurSkillInfo();

@@ -568,15 +568,19 @@ namespace CONST
 	constexpr float HOLD_TIME_INCREASE_VALUE  = 0.1f;      // 역경직 시간 증가 값
 	constexpr float MP_RECOVERY_VALUE         = 20.f;      // MP 회복 상수 
 
+	// Camera
 	constexpr float DEFAULT_TARGET_ARM_LENGTH = 280.f;     // 기본 카메라 암 길이
 	constexpr float FLY_TARGET_ARM_LENGTH     = 400.f;     // 날기 카메라 암 길이
 
-	constexpr float DEFAULT_GRAVITY_SCALE     = 2.0f;      // 기본 중력
-	constexpr float FLY_GRAVITY_SCALE         = 0.3f;      // 날기 중력
-
 	constexpr float LOCKON_RANGE              = 800.f;      // 락온 범위
 	constexpr float LOCKON_CAMERA_ROTAION_LAG_SPEED = 5.f;  // 락온 카메라 회전 딜레이 속도
-	constexpr float LOCKON_CAMERA_FIX_PITCH   = 5.f;      // 락온 카메라 pitch 고정 값
+	constexpr float LOCKON_CAMERA_FIX_PITCH   = 5.f;        // 락온 카메라 pitch 고정 값
+	constexpr float LOCKON_START_ROTAION_SPEED = 20.f;      // 락온 시작 회전 보간 속도 계수 (클수록 빠름)
+
+
+	// Material
+	constexpr float DEFAULT_GRAVITY_SCALE     = 2.0f;      // 기본 중력
+	constexpr float FLY_GRAVITY_SCALE         = 0.3f;      // 날기 중력
 
 	constexpr float MAX_MASS                  = 2.f;       // 최대 질량
 	constexpr float MAX_INTENSITY             = 2.f;       // 최대 강도
