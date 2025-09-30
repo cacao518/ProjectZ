@@ -351,9 +351,6 @@ void UGgObjectComp::_Init()
 	auto hitColl = OwningActor.IsValid() ? Cast<UBoxComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "HitColl" ) ) ) : nullptr;
 	if( hitColl )
 		hitColl->OnComponentBeginOverlap.AddDynamic( this, &UGgObjectComp::HitCollBeginOverlap );
-
-	SetMoveSpeed( Stat.MoveSpeed );
-	SetJumpPower( Stat.JumpPower );
 	
 	if( GetTeamType() == ETeamType::MAX )
 	{
