@@ -81,7 +81,7 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 			continue;
 
 		// 물 상태가 아닐 경우 탐색한 적 발밑에 깊은물이 있으면 가지 않는다.
-		bool bWater = false;
+		/*bool bWater = false;
 
 		auto matComp = controllingChar->FindComponentByClass<UGgMaterialComp>();
 		bWater = matComp && ( matComp->GetMatState() == EMaterialState::WATER || matComp->GetMatState() == EMaterialState::DEEPWATER );
@@ -93,7 +93,7 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject( AGgAIController::TargetKey, nullptr );
 				return;
 			}
-		}
+		}*/
 
 		OwnerComp.GetBlackboardComponent()->SetValueAsObject( AGgAIController::TargetKey, detectedChar );
 		return;
