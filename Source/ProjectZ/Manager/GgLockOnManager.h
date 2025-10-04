@@ -22,6 +22,8 @@ class FGgLockOnManager final : public FGgSingletonBase< FGgLockOnManager >
 private:
 	FCharacterPtr LockOnTarget;         // 락온 된 대상 
 
+	bool bUseInterp = false;           // 락온 시작시 보간 사용 여부
+
 public:
 	FGgLockOnManager();
 	~FGgLockOnManager();

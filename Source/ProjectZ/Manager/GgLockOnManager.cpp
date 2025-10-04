@@ -145,6 +145,7 @@ void FGgLockOnManager::LockOnStart( ELockOnMode InMode )
 			userWidget->CallFunctionByNameWithArguments( TEXT( "AnimStart" ), ar, NULL, true );
 			userWidget->SetVisibility( ESlateVisibility::SelfHitTestInvisible );
 
+			bUseInterp = true;
 			LockOnTarget = selectLockOnTarget;
 			return;
 		}
@@ -162,6 +163,7 @@ void FGgLockOnManager::LockOnRelease()
 			userWidget->SetVisibility( ESlateVisibility::Collapsed );
 	}
 
+	bUseInterp = false;
 	LockOnTarget = nullptr;
 }
 
@@ -201,14 +203,26 @@ void FGgLockOnManager::_ProcessLockOn( float InDeltaTime )
 		LockOnStart(); // 락온 된 적이 죽을 경우, 근처 적을 다시 락온.
 		return;
 	}
-
-	FRotator currentRot = myPlayer->GetController()->GetControlRotation();
+	
 	FRotator targetRot = UKismetMathLibrary::FindLookAtRotation( myPlayer->GetActorLocation(), LockOnTarget->GetActorLocation() );
 	targetRot.Pitch = CONST::LOCKON_CAMERA_FIX_PITCH;
 
-	FRotator newRot = FMath::RInterpTo( currentRot, targetRot, InDeltaTime, CONST::LOCKON_START_ROTAION_SPEED );
+	// 락온 시작 시 보간을 사용하여 부드럽게 카메라를 이동한다.
+	if( bUseInterp )
+	{
+		FRotator currentRot = myPlayer->GetController()->GetControlRotation();
+		FRotator newRot = FMath::RInterpTo( currentRot, targetRot, InDeltaTime, CONST::LOCKON_START_ROTAION_SPEED );
+		myPlayer->GetController()->SetControlRotation( newRot );
 
-	myPlayer->GetController()->SetControlRotation( newRot );
+		if( newRot.Equals( currentRot, 1.0f ) )
+		{
+			bUseInterp = false;
+		}
+	}
+	else
+	{
+		myPlayer->GetController()->SetControlRotation( targetRot );
+	}
 	
 	// 락온 상태에서 스킬 사용 시 내 캐릭터가 적을 바라보게 할 것 인지 확인
 	auto skillInfo = ownerGgObjectComp->GetCurSkillInfo();
