@@ -45,11 +45,6 @@ void UGgObjectComp::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if( IsSpawnedInEditor )
-	{
-		GetGgObjectManager().RegisterActorInEditor( OwningActor );
-	}
-
 	_Init();
 }
 
@@ -414,6 +409,11 @@ void UGgObjectComp::_Init()
 	if( attackColl )
 		attackColl->OnComponentBeginOverlap.AddDynamic( this, &UGgObjectComp::OnAttackCollBeginOverlap );
 	
+	if( IsSpawnedInEditor )
+	{
+		GetGgObjectManager().RegisterActorInEditor( OwningActor );
+	}
+
 	if( GetTeamType() == ETeamType::MAX )
 	{
 		if( GetObjectType() == EObjectType::PC )
