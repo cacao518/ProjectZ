@@ -139,13 +139,23 @@ public:
 	// Delegate Function
 	///////////////////////////////////////////////////////////////////////
 	
-	// 충돌이 시작할시에 호출되는 델리게이트에 등록하는 함수
+	// HitColl이 충돌(Overlap)이 시작할시에 호출되는 델리게이트 함수
 	UFUNCTION()
-	void HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult );
+	void OnHitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult );
+
+	// AttackColl이 충돌(Overlap)이 시작할시에 호출되는 델리게이트 함수
+	UFUNCTION()
+	void OnAttackCollBeginOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult );
 
 protected:
 	// 카메라 쉐이크 처리를 한다.
 	void _ProcessCameraShake( FActorPtr InOtherActor );
+
+	// 타격 이펙트 처리를 한다.
+	void _ProcessHitEffect( FActorPtr InCaster, USceneComponent* InTargetRootComp, FTransform InTargetTransform );
+
+	// 폴리지 충돌 처리를 한다.
+	void _ProcessFoliageCollision( UInstancedStaticMeshComponent* InISMC, const FHitResult& InHitResult );
 
 	// 사망 관련 로직을 수행한다.
 	virtual void _ProcessDie();

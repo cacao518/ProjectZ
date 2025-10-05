@@ -20,6 +20,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/InstancedStaticMeshComponent.h"
 #include "ProceduralMeshComponent.h"
 #include "WaterBodyComponent.h"
 #include "LandscapeComponent.h"
@@ -176,9 +177,9 @@ bool UGgObjectComp::IsHeavyWeight()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//// @brief 충돌이 시작할시에 호출되는 델리게이트에 등록하는 함수
+//// @brief HitColl이 충돌(Overlap)이 시작할시에 호출되는 델리게이트 함수
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void UGgObjectComp::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
+void UGgObjectComp::OnHitCollBeginOverlap( UPrimitiveComponent* OverlappedComponent,
 									   AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
 									   bool bFromSweep, const FHitResult& SweepResult )
 {
@@ -197,6 +198,25 @@ void UGgObjectComp::HitCollBeginOverlap( UPrimitiveComponent* OverlappedComponen
 	}
 
 	_ProcessWaterHit( OtherActor );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief AtackCooll이 충돌(Overlap)이 시작할시에 호출되는 델리게이트 함수
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGgObjectComp::OnAttackCollBeginOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult )
+{
+	if( !OwningActor.IsValid() || IsDie || IsFallWater )
+		return;
+
+	// 자기 자신 충돌은 무시한다.
+	if( Cast<AActor>( OtherActor ) == OwningActor )
+		return;
+
+	// 폴리지 충돌 처리
+	if( UInstancedStaticMeshComponent* ismc = Cast<UInstancedStaticMeshComponent>( OtherComp ) )
+	{
+		_ProcessFoliageCollision( ismc, SweepResult );
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -228,6 +248,69 @@ void UGgObjectComp::_ProcessCameraShake( FActorPtr InOtherActor )
 	{
 		GetGgCameraManager().CameraShake( OwningActor );
 		return;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 타격 이펙트 처리를 한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGgObjectComp::_ProcessHitEffect( FActorPtr InCaster, USceneComponent* InTargetRootComp, FTransform InTargetTransform )
+{
+	if( !InCaster.IsValid() ) return;
+	if( !InTargetRootComp ) return;
+
+	auto othetObjectComp = InCaster.IsValid() ? InCaster->FindComponentByClass<UGgObjectComp>() : nullptr;
+	if( !othetObjectComp )
+		return;
+
+	// 무기 이펙트 출력
+	if( othetObjectComp->GetAttackCollInfo().bUseWeaponEffect )
+	{
+		auto othetWeaponComp = InCaster.IsValid() ? InCaster->FindComponentByClass<UGgWeaponComp>() : nullptr;
+		if( othetWeaponComp )
+		{
+			if( const auto& weaponInfo = GetGgDataInfoManager().GetInfo<FWeaponInfo>( othetWeaponComp->GetCurWeaponInfoId() ) )
+			{
+				GetGgObjectManager().SpawnParticle(
+					weaponInfo->HitEffect,
+					InTargetRootComp,
+					InTargetTransform,
+					othetObjectComp->GetAttackCollInfo().EffectDir );
+			}
+		}
+	}
+
+	// 추가 이펙트 출력
+	GetGgObjectManager().SpawnParticle(
+		othetObjectComp->GetAttackCollInfo().HitEffect,
+		InTargetRootComp,
+		InTargetTransform,
+		othetObjectComp->GetAttackCollInfo().EffectDir );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 폴리지 충돌 처리를 한다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void UGgObjectComp::_ProcessFoliageCollision( UInstancedStaticMeshComponent* InISMC, const FHitResult& InHitResult )
+{
+	if( !InISMC ) return;
+
+	// 폴리지 제거
+	int32 idx = InHitResult.Item;
+	if( idx != INDEX_NONE )
+	{
+		FTransform instanceTransform;
+		if( InISMC->GetInstanceTransform( idx, instanceTransform, true ) )
+		{
+			// 폴리지 스테틱 메쉬들은 중심점이 바닥에 있어서 살짝 높여서 파티클을 출력해야 잘보인다.. 추후에 데이터로 조정 필요해보임
+			FVector newLoc = instanceTransform.GetLocation();
+			newLoc.Z += 65.f;
+			instanceTransform.SetLocation( newLoc );
+
+			_ProcessHitEffect( OwningActor, InISMC, instanceTransform );
+		}
+
+		InISMC->RemoveInstance( idx );
 	}
 }
 
@@ -276,32 +359,7 @@ float UGgObjectComp::_ProcessHit( FActorPtr InOtherActor )
 	Stat.Hp = decrease > 0 ? decrease : 0;
 
 	_ProcessCameraShake( InOtherActor );
-
-	// 무기 이펙트 출력
-	if( othetObjectComp->GetAttackCollInfo().bUseWeaponEffect )
-	{
-		auto othetWeaponComp = InOtherActor.IsValid() ? InOtherActor->FindComponentByClass<UGgWeaponComp>() : nullptr;
-		if( othetWeaponComp )
-		{
-			if( const auto& weaponInfo = GetGgDataInfoManager().GetInfo<FWeaponInfo>( othetWeaponComp->GetCurWeaponInfoId() ) )
-			{
-				GetGgObjectManager().SpawnParticle( 
-					weaponInfo->HitEffect, 
-					OwningActor, 
-					OwningActor->GetActorLocation(), 
-					OwningActor->GetActorRotation(),
-					othetObjectComp->GetAttackCollInfo().EffectDir );
-			}
-		}
-	}
-
-	// 추가 이펙트 출력
-	GetGgObjectManager().SpawnParticle( 
-		othetObjectComp->GetAttackCollInfo().HitEffect, 
-		OwningActor, 
-		OwningActor->GetActorLocation(), 
-		OwningActor->GetActorRotation(),
-		othetObjectComp->GetAttackCollInfo().EffectDir );
+	_ProcessHitEffect( InOtherActor, OwningActor->GetRootComponent(), OwningActor->GetTransform() );
 
 	return totalDamage;
 
@@ -350,7 +408,11 @@ void UGgObjectComp::_Init()
 
 	auto hitColl = OwningActor.IsValid() ? Cast<UBoxComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "HitColl" ) ) ) : nullptr;
 	if( hitColl )
-		hitColl->OnComponentBeginOverlap.AddDynamic( this, &UGgObjectComp::HitCollBeginOverlap );
+		hitColl->OnComponentBeginOverlap.AddDynamic( this, &UGgObjectComp::OnHitCollBeginOverlap );
+
+	auto attackColl = OwningActor.IsValid() ? Cast<UProceduralMeshComponent>( OwningActor->GetDefaultSubobjectByName( TEXT( "AttackColl" ) ) ) : nullptr;
+	if( attackColl )
+		attackColl->OnComponentBeginOverlap.AddDynamic( this, &UGgObjectComp::OnAttackCollBeginOverlap );
 	
 	if( GetTeamType() == ETeamType::MAX )
 	{

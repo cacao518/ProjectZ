@@ -6,6 +6,7 @@
 #include "Actor/GgStaticObject.h"
 #include "System/GgGameInstance.h"
 #include "Component/GgObjectComp.h"
+#include "Components/SceneComponent.h"
 #include "Engine/BlueprintGeneratedClass.h"
 #include "UObject/ConstructorHelpers.h"
 #include "NiagaraSystem.h"
@@ -96,6 +97,34 @@ void FGgObjectManager::SpawnParticle( TSoftObjectPtr<UNiagaraSystem> InEffectPat
 		NAME_None,
 		InLocation,
 		InRotator,
+		EAttachLocation::KeepWorldPosition,
+		true,
+		true,
+		ENCPoolMethod::None
+	);
+
+	if( niagaraComp )
+	{
+		niagaraComp->SetVariableVec3( FName( "ParamVec" ), InParam );
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief 파티클 생성
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void FGgObjectManager::SpawnParticle( TSoftObjectPtr<UNiagaraSystem> InEffectPath, USceneComponent* InSceneComp, const FTransform InTrasnform, const FVector InParam /*= FVector() */ )
+{
+	if( InEffectPath.IsNull() ) return;
+
+	UNiagaraSystem* effect = InEffectPath.IsValid() ? InEffectPath.Get() : InEffectPath.LoadSynchronous();
+	if( !effect ) return;
+
+	UNiagaraComponent* niagaraComp = UNiagaraFunctionLibrary::SpawnSystemAttached(
+		effect,
+		InSceneComp,
+		NAME_None,
+		InTrasnform.GetLocation(),
+		InTrasnform.GetRotation().Rotator(),
 		EAttachLocation::KeepWorldPosition,
 		true,
 		true,

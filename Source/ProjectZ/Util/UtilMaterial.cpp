@@ -7,126 +7,124 @@
 #include "System/GgGameInstance.h"
 #include "Manager/GgDataInfoManager.h"
 
-namespace UtilMaterial
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @briefActor 발 밑에 있는 MaterialInterface을 알아낸다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+UMaterialInterface* UtilMaterial::GetSteppedMatrialInterface( FActorPtr InActor )
 {
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	//// @briefActor 발 밑에 있는 MaterialInterface을 알아낸다.
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	UMaterialInterface* GetSteppedMatrialInterface( FActorPtr InActor )
+	if( !InActor.IsValid() ) return nullptr;
+
+	FVector LineTraceStart = InActor->GetActorLocation();
+	FVector LineTraceEnd = FVector( InActor->GetActorLocation().X, InActor->GetActorLocation().Y, InActor->GetActorLocation().Z - 150.f );
+
+	/*DrawDebugLine(
+		GetWorld(),
+		LineTraceStart,
+		LineTraceEnd,
+		FColor( 255, 0, 0 ),
+		false,
+		0.f,
+		0.f,
+		10.f
+	);*/
+
+	// 쿼리 변수 설정
+	FCollisionQueryParams TraceParameters( FName( TEXT( "" ) ), false, InActor.Get() ); //Tag, Bool Trace Complex, Ignore 액터 (자신 제외)
+	FHitResult hitResult;
+	GetGgGameInstance().GetWorld()->LineTraceSingleByObjectType(
+		OUT hitResult,
+		LineTraceStart,
+		LineTraceEnd,
+		FCollisionObjectQueryParams( ECollisionChannel::ECC_WorldStatic ),
+		TraceParameters
+	);
+
+	AActor* hitActor = hitResult.GetActor();
+	if( hitActor )
 	{
-		if( !InActor.IsValid() ) return nullptr;
+		//FString str = InActor->GetName() + TEXT( "Set SteppedMatState" );
+		//if ( GEngine )
+		//	GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
 
-		FVector LineTraceStart = InActor->GetActorLocation();
-		FVector LineTraceEnd = FVector( InActor->GetActorLocation().X, InActor->GetActorLocation().Y, InActor->GetActorLocation().Z - 150.f );
-
-		/*DrawDebugLine(
-			GetWorld(),
-			LineTraceStart,
-			LineTraceEnd,
-			FColor( 255, 0, 0 ),
-			false,
-			0.f,
-			0.f,
-			10.f
-		);*/
-
-		// 쿼리 변수 설정
-		FCollisionQueryParams TraceParameters( FName( TEXT( "" ) ), false, InActor.Get() ); //Tag, Bool Trace Complex, Ignore 액터 (자신 제외)
-		FHitResult hitResult;
-		GetGgGameInstance().GetWorld()->LineTraceSingleByObjectType(
-			OUT hitResult,
-			LineTraceStart,
-			LineTraceEnd,
-			FCollisionObjectQueryParams( ECollisionChannel::ECC_WorldStatic ),
-			TraceParameters
-		);
-
-		AActor* hitActor = hitResult.GetActor();
-		if ( hitActor )
-		{
-			//FString str = InActor->GetName() + TEXT( "Set SteppedMatState" );
-			//if ( GEngine )
-			//	GEngine->AddOnScreenDebugMessage( -1, 3.0f, FColor::Yellow, str );
-
-			return GetMatrialInterface( hitActor );
-		}
-
-		return nullptr;
+		return GetMatrialInterface( hitActor );
 	}
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	//// @brief Actor가 가지고 있는 MaterialInterface를 알아낸다.
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	UMaterialInterface* GetMatrialInterface( FActorPtr InActor )
+	return nullptr;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief Actor가 가지고 있는 MaterialInterface를 알아낸다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+UMaterialInterface* UtilMaterial::GetMatrialInterface( FActorPtr InActor )
+{
+	if( !InActor.IsValid() ) return nullptr;
+
+	UMaterialInterface* matInterface = nullptr;
+
+	// 몬스터나 플레이어
+	if( Cast<ACharacter>( InActor ) )
 	{
-		if( !InActor.IsValid() ) return nullptr;
+		/*auto meshOnTile = Cast<ACharacter>( OtherActor )->GetMesh();
+		if( !meshOnTile )
+			return;
 
-		UMaterialInterface* matInterface = nullptr;
+		MatStateOnTile = _ConvertMatAssetToMatState( meshOnTile->GetMaterial( 0 ) );*/
+	}
+	else
+	{
+		// 스테틱 매쉬
+		auto staticMesh = Cast<UStaticMeshComponent>( InActor->GetComponentByClass( UStaticMeshComponent::StaticClass() ) );
+		if( staticMesh )
+			matInterface = staticMesh->GetMaterial( 0 );
 
-		// 몬스터나 플레이어
-		if ( Cast<ACharacter>( InActor ) )
+		// 워터 바디
+		auto waterBody = Cast<UWaterBodyComponent>( InActor->GetComponentByClass( UWaterBodyComponent::StaticClass() ) );
+		if( waterBody )
 		{
-			/*auto meshOnTile = Cast<ACharacter>( OtherActor )->GetMesh();
-			if( !meshOnTile )
-				return;
-
-			MatStateOnTile = _ConvertMatAssetToMatState( meshOnTile->GetMaterial( 0 ) );*/
-		}
-		else
-		{
-			// 스테틱 매쉬
-			auto staticMesh = Cast<UStaticMeshComponent>( InActor->GetComponentByClass( UStaticMeshComponent::StaticClass() ) );
-			if ( staticMesh )
-				matInterface = staticMesh->GetMaterial( 0 );
-
-			// 워터 바디
-			auto waterBody = Cast<UWaterBodyComponent>( InActor->GetComponentByClass( UWaterBodyComponent::StaticClass() ) );
-			if ( waterBody )
+			const auto& waterMatInfo = GetGgDataInfoManager().GetInfo<FMaterialInfo>( EMaterialState::WATER );
+			if( waterMatInfo )
 			{
-				const auto& waterMatInfo = GetGgDataInfoManager().GetInfo<FMaterialInfo>( EMaterialState::WATER );
-				if ( waterMatInfo )
-				{
-					FString path = waterMatInfo->MaterialAssetPaths[ 0 ];
-					matInterface = LoadObject<UMaterialInterface>( NULL, *path, NULL, LOAD_None, NULL );
-				}
+				FString path = waterMatInfo->MaterialAssetPaths[ 0 ];
+				matInterface = LoadObject<UMaterialInterface>( NULL, *path, NULL, LOAD_None, NULL );
 			}
-
-			// 랜드 스케이프
-			auto landScape = Cast<ULandscapeComponent>( InActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
-			if( landScape )
-			{
-				matInterface = landScape->GetMaterial( 0 );
-			}
-
-			//auto landScape = Cast<ALandscape>( InActor );
-			//if ( landScape )
-			//{
-			//	/*const auto& waterMatInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::DEEPWATER );
-			//	if ( waterMatInfo )
-			//	{
-			//		FString path = waterMatInfo->MaterialAssetPaths[ 0 ];
-			//		matInterface = LoadObject<UMaterialInterface>( NULL, *path, NULL, LOAD_None, NULL );
-			//	}*/
-			//}
 		}
 
-		return matInterface;
+		// 랜드 스케이프
+		auto landScape = Cast<ULandscapeComponent>( InActor->GetComponentByClass( ULandscapeComponent::StaticClass() ) );
+		if( landScape )
+		{
+			matInterface = landScape->GetMaterial( 0 );
+		}
+
+		//auto landScape = Cast<ALandscape>( InActor );
+		//if ( landScape )
+		//{
+		//	/*const auto& waterMatInfo = GetDataInfoManager().GetMaterialInfos().Find( EMaterialState::DEEPWATER );
+		//	if ( waterMatInfo )
+		//	{
+		//		FString path = waterMatInfo->MaterialAssetPaths[ 0 ];
+		//		matInterface = LoadObject<UMaterialInterface>( NULL, *path, NULL, LOAD_None, NULL );
+		//	}*/
+		//}
 	}
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	//// @brief MaterialInterface를 EMaterialState로 바꿔준다.
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	EMaterialState ConvertMatAssetToMatState( UMaterialInterface* InMaterial )
-	{
-		if ( !InMaterial )
-			return EMaterialState::DEFAULT;
+	return matInterface;
+}
 
-		for ( const auto& [state, matInfo] : GetGgDataInfoManager().GetInfos<FMaterialInfo>() )
-		{
-			if ( matInfo.MaterialAssetPaths.Find( InMaterial->GetPathName() ) != INDEX_NONE )
-				return state;
-		}
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//// @brief MaterialInterface를 EMaterialState로 바꿔준다.
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+EMaterialState UtilMaterial::ConvertMatAssetToMatState( UMaterialInterface* InMaterial )
+{
+	if( !InMaterial )
 		return EMaterialState::DEFAULT;
+
+	for( const auto& [state, matInfo] : GetGgDataInfoManager().GetInfos<FMaterialInfo>() )
+	{
+		if( matInfo.MaterialAssetPaths.Find( InMaterial->GetPathName() ) != INDEX_NONE )
+			return state;
 	}
+
+	return EMaterialState::DEFAULT;
 }
