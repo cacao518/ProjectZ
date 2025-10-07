@@ -29,6 +29,7 @@ void FGgDataInfoManager::DataCreate()
 	_Load< FNPCInfo                >( TEXT( "/Game/Data/DT_NPC" ) );
 	_Load< FProjectileInfo         >( TEXT( "/Game/Data/DT_Projectile" ) );
 	_Load< FStaticObjectInfo       >( TEXT( "/Game/Data/DT_StaticObject" ) );
+	_Load< FFoliageInfo            >( TEXT( "/Game/Data/DT_Foliage" ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

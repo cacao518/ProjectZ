@@ -34,6 +34,8 @@ public:
 	template<typename T>
 	const T* GetInfo( T::KeyType InKey )
 	{
+		if( !DataMaps.Contains( FName( typeid( T ).name() ) ) ) return nullptr;
+
 		void* found = DataMaps.FindRef( FName( typeid( T ).name() ) );
 		TMap<typename T::KeyType, T>& map = *( TMap<typename T::KeyType, T>* )found;
 		return map.Find( InKey );

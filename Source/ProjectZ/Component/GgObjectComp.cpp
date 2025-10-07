@@ -297,10 +297,21 @@ void UGgObjectComp::_ProcessFoliageCollision( UInstancedStaticMeshComponent* InI
 		FTransform instanceTransform;
 		if( InISMC->GetInstanceTransform( idx, instanceTransform, true ) )
 		{
-			// 폴리지 스테틱 메쉬들은 중심점이 바닥에 있어서 살짝 높여서 파티클을 출력해야 잘보인다.. 추후에 데이터로 조정 필요해보임
-			FVector newLoc = instanceTransform.GetLocation();
-			newLoc.Z += 65.f;
-			instanceTransform.SetLocation( newLoc );
+			TObjectPtr<UStaticMesh> staticMesh = InISMC->GetStaticMesh();
+			if( staticMesh )
+			{
+				FString smName = staticMesh->GetName();
+				if( const auto& foliageInfo = GetGgDataInfoManager().GetInfo<FFoliageInfo>( smName ) )
+				{
+					// 폴리지 스테틱 메쉬들은 중심점이 바닥에 있어서 살짝 높여서 파티클을 출력해야 잘보인다.
+					FVector newLoc = instanceTransform.GetLocation();
+					newLoc.Z += foliageInfo->OffsetZ;
+					instanceTransform.SetLocation( newLoc );
+
+					// 폴리지 파괴 이펙트 출력
+					GetGgObjectManager().SpawnParticle( foliageInfo->DestroyEffect, InISMC, instanceTransform );
+				}
+			}
 
 			_ProcessHitEffect( OwningActor, InISMC, instanceTransform );
 		}

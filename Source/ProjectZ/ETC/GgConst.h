@@ -545,6 +545,27 @@ public:
 	KeyType GetKey(){ return InfoId; };
 };
 
+// 폴리지 정보
+USTRUCT( Atomic, BlueprintType )
+struct FFoliageInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	FString StaticMeshName;                            // 스테틱 메쉬 이름
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float OffsetZ = 0;                                 // Z 오프셋
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	TSoftObjectPtr<UNiagaraSystem> DestroyEffect; 	   // 파괴시 출력할 이펙트
+
+	/// 맵 키를 반환한다.
+	using KeyType = FString;
+	KeyType GetKey(){ return StaticMeshName; };
+};
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// Const
 /////////////////////////////////////////////////////////////////////////////////////////////////////
