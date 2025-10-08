@@ -319,47 +319,41 @@ void UGgCharacterComp::_ProcessDie()
 
 	if( !IsDie && AnimState == EAnimState::DIE )
 	{
+		if( UGgAnimInstance* animInstance = Cast<UGgAnimInstance>( OwningCharacter->GetMesh()->GetAnimInstance() ) )
+		{
+			animInstance->StopAllMontages( 0.f );
+			animInstance->IsDie = true;
+		}
 		IsDie = true;
+		ResetInfo( true );
 
 		switch( GetObjectType() )
 		{
-		case  EObjectType::NPC:
-		{
-			AGgAIController* characterNPCController = Cast< AGgAIController >( OwningCharacter->GetController() );
-			if( characterNPCController )
-				characterNPCController->StopAI();
-
-			OwningCharacter->GetMesh()->SetSimulatePhysics( true );
-			OwningCharacter->GetMesh()->SetCollisionEnabled( ECollisionEnabled::PhysicsOnly );
-			//GetGgObjectManager().SpawnParticle( TEXT( "Die" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
-		}
-		break;
-		case  EObjectType::PC:
-		{
-			OwningCharacter->GetMesh()->SetSimulatePhysics( true );
-			OwningCharacter->GetMesh()->SetCollisionEnabled( ECollisionEnabled::PhysicsOnly );
-			//GetGgObjectManager().SpawnParticle( TEXT( "Die" ), OwningCharacter, OwningCharacter->GetActorLocation(), OwningCharacter->GetActorRotation() );
-			/*if( UMyAnimInstance* animInstance = Cast<UMyAnimInstance>( OwningCharacter->GetMesh()->GetAnimInstance() ) )
+			case  EObjectType::NPC:
 			{
-				auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
-				animInstance->Montage_Stop( 0.f, curMontage );
-				animInstance->IsDie = true;
-			}*/
-		}
-		break;
-		case  EObjectType::STATIC_OBJECT:
-		{
-			GetGgObjectManager().DestroyActor( OwningCharacter );
-		}
-		break;
+				if( AGgAIController* characterNPCController = Cast< AGgAIController >( OwningCharacter->GetController() ) )
+				{
+					characterNPCController->StopAI();
+				}
+
+				OwningCharacter->GetMesh()->SetSimulatePhysics( true );
+				OwningCharacter->GetMesh()->SetCollisionEnabled( ECollisionEnabled::PhysicsOnly );
+				OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( TEXT( "NoCollision" ) );
+				if( const auto& effectInfo = GetGgDataInfoManager().GetInfo<FCommonEffectInfo>( TEXT( "Die" ) ) )
+				{
+					GetGgObjectManager().SpawnParticle( effectInfo->Effect, OwningCharacter->GetRootComponent(), OwningCharacter->GetTransform() );
+				}
+				break;
+			}
+			case  EObjectType::PC:
+			{
+				OwningCharacter->GetMesh()->SetSimulatePhysics( true );
+				OwningCharacter->GetMesh()->SetCollisionEnabled( ECollisionEnabled::PhysicsOnly );
+				OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( TEXT( "NoCollision" ) );
+				break;
+			}
 		}
 
-		if( UGgAnimInstance* animInstance = Cast<UGgAnimInstance>( OwningCharacter->GetMesh()->GetAnimInstance() ) )
-		{
-			auto curMontage = OwningCharacter->GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
-			animInstance->Montage_Stop( 0.f, curMontage );
-		}
-		OwningCharacter->GetCapsuleComponent()->SetCollisionProfileName( TEXT( "NoCollision" ) );
 		_UpdateHpBar();
 	}
 

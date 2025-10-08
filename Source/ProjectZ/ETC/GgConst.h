@@ -566,6 +566,24 @@ public:
 	KeyType GetKey(){ return StaticMeshName; };
 };
 
+// 공통 이펙트 정보
+USTRUCT( Atomic, BlueprintType )
+struct FCommonEffectInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	FString Keyword;                                   // 키워드
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	TSoftObjectPtr<UNiagaraSystem> Effect; 	          // 출력할 이펙트
+
+	/// 맵 키를 반환한다.
+	using KeyType = FString;
+	KeyType GetKey(){ return Keyword; };
+};
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //// Const
 /////////////////////////////////////////////////////////////////////////////////////////////////////

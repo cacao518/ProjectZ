@@ -80,6 +80,9 @@ void FGgLockOnManager::LockOnStart( ELockOnMode InMode )
 		if ( !charComp )
 			continue;
 
+		if( charComp->GetIsDie() )
+			continue;
+
 		// 같은 팀은 제외한다.
 		if ( charComp->GetTeamType() == myPlayerCharComp->GetTeamType() )
 			continue;

@@ -30,6 +30,7 @@ void FGgDataInfoManager::DataCreate()
 	_Load< FProjectileInfo         >( TEXT( "/Game/Data/DT_Projectile" ) );
 	_Load< FStaticObjectInfo       >( TEXT( "/Game/Data/DT_StaticObject" ) );
 	_Load< FFoliageInfo            >( TEXT( "/Game/Data/DT_Foliage" ) );
+	_Load< FCommonEffectInfo       >( TEXT( "/Game/Data/DT_CommonEffect" ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

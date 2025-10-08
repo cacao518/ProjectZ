@@ -77,6 +77,9 @@ void UBTS_Detect::TickNode( UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		if( !detectedCharComp )
 			continue;
 
+		if( detectedCharComp->GetIsDie() )
+			continue;
+
 		if( detectedCharComp->GetTeamType() == characterComp->GetTeamType() )
 			continue;
 
