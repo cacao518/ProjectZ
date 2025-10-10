@@ -314,9 +314,18 @@ void UGgObjectComp::_ProcessFoliageCollision( UInstancedStaticMeshComponent* InI
 			}
 
 			_ProcessHitEffect( OwningActor, InISMC, instanceTransform );
-		}
 
-		InISMC->RemoveInstance( idx );
+			// Note : 크기를 0으로 만들어 일단 안보이게 하고, 오브젝트매니저에서 한번에 제거한다.
+			FTransform zeroTf;
+			zeroTf.SetScale3D( FVector::ZeroVector );
+			InISMC->UpdateInstanceTransform( idx, zeroTf, true );
+
+			GetGgObjectManager().ReserveRemoveFoliage( InISMC, idx );
+		}
+		else
+		{
+			UE_LOG( LogTemp, Warning, TEXT( "Fail : %d / %d" ), idx, InISMC->GetInstanceCount() );
+		}
 	}
 }
 

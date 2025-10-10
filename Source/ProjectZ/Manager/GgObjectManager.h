@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Components/InstancedStaticMeshComponent.h"
 #include "ETC/GgActorSpawner.h"
 #include "ETC/GgConst.h"
 #include "GgSingletonBase.h"
@@ -14,23 +15,20 @@ class AGgActorSpawner;
 class UNiagaraSystem;
 
 
-using ActorMap         = TMap< int, FActorPtr >;
-using SpawnerMap       = TMap< int, FActorSpawnerPtr >;
-using ActorSpawnerList = TArray< FActorSpawnerPtr >;
+using FActorMap                 = TMap< int, FActorPtr >;
+using FSpawnerMap               = TMap< int, FActorSpawnerPtr >;
+using FActorSpawnerList         = TArray< FActorSpawnerPtr >;
+using FPendingRemovalFoliageMap = TMap< UInstancedStaticMeshComponent*, TArray<int32> >;
 
 
 class FGgObjectManager final : public FGgSingletonBase< FGgObjectManager >
 {
 private:
-	UPROPERTY()
-	ActorMap         Objects;      // 모든 오브젝트 리스트
+	FActorMap                 Objects;                    // 모든 오브젝트 리스트
+	FActorSpawnerList         SpawnerList;                // 모든 스포너 리스트
+	FSpawnerMap               SpawnerMap;                 // key:소환된액터 아이디, value:스포너
+	FPendingRemovalFoliageMap PendingRemovalFoliageMap;   // 삭제 예정인 폴리지 인덱스 맵
 
-	UPROPERTY()
-	ActorSpawnerList SpawnerList;  // 모든 스포너 리스트
-
-	UPROPERTY()
-	SpawnerMap       SpawnerMap;   // key:소환된액터 아이디, value:스포너
-	
 	int ObjectId;                  // 오브젝트 고유 아이디
 
 public:
@@ -40,9 +38,9 @@ public:
 	// 틱 함수
 	virtual void Tick( float InDeltaTime ) override;
 
-	///////////////////////////////////////////////////////////////
+	//================================================================
 	/// 오브젝트
-	///////////////////////////////////////////////////////////////
+	//================================================================
 	
 	// 액터 생성
 	AActor* SpawnActor( UClass* InClass, const FVector& InLocation, const FRotator& InRotator, ETeamType InTeamType = ETeamType::MAX, FActorSpawnerPtr InSpawner = nullptr );
@@ -62,9 +60,19 @@ public:
 	// 에디터에서 소환된 액터를 등록한다.
 	void RegisterActorInEditor( FActorPtr InActor );
 
-	///////////////////////////////////////////////////////////////
+	//================================================================
+	/// 폴리지
+	//================================================================
+	
+	// 폴리지 제거 예약한다.
+	void ReserveRemoveFoliage( UInstancedStaticMeshComponent* InISMC, int32 InIdx );
+
+	// 제거 예약된 폴리지를 제거한다.
+	void ProcessFoliageRemove();
+
+	//================================================================
 	/// 스포너
-	///////////////////////////////////////////////////////////////
+	//================================================================
 	
 	//// 스포너 등록 함수
 	void RegisterSpawner( FActorSpawnerPtr InSpawner );
